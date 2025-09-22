@@ -316,6 +316,18 @@ const customDropdown = {
             e.preventDefault();
             e.stopPropagation();
             console.log('Dropdown trigger clicked');
+            
+            // Auto-select first option when opening (if nothing is selected)
+            if (!hiddenInput.value && options.children.length > 0) {
+                const firstOption = options.children[0];
+                const value = firstOption.getAttribute('data-value');
+                const text = firstOption.textContent;
+                
+                hiddenInput.value = value;
+                selectText.textContent = text;
+                firstOption.classList.add('selected');
+            }
+            
             customSelect.classList.toggle('open');
             console.log('Dropdown open state:', customSelect.classList.contains('open'));
             
