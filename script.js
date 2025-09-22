@@ -1,6 +1,6 @@
 // ===== CONFIGURATION =====
 const CONFIG = {
-    FORMSPREE_ID: 'YOUR_FORMSPREE_ID', // Replace with your actual Formspree ID from formspree.io
+    FORMSPREE_ID: 'xovkawkn', // Your Formspree ID
     EMAIL_FALLBACK: 'orders@spookybabysweets.com'
 };
 
