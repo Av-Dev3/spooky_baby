@@ -444,14 +444,17 @@ body {
   background-color: var(--bg-primary);
   border-radius: 16px;
   padding: var(--card-padding);
-  transition: var(--transition);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(207, 207, 207, 0.1);
+  transform: translateY(0) scale(1);
+  will-change: transform, box-shadow;
 }
 
-.menu-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  border-color: rgba(246, 182, 207, 0.2);
+.menu-card:hover,
+.menu-card.hovered {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(246, 182, 207, 0.25);
+  border-color: rgba(246, 182, 207, 0.3);
 }
 
 .card-title {
@@ -1416,9 +1419,6 @@ textarea:focus {
   }
 }
 
-.menu-card:hover {
-  animation: float 2s ease-in-out infinite;
-}
 
 /* Button pulse animation */
 @keyframes pulse {

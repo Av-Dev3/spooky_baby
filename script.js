@@ -448,14 +448,14 @@ const cardInteractions = {
 
     handleMouseEnter(e) {
         const card = e.currentTarget;
-        card.style.transform = 'translateY(-8px) scale(1.02)';
-        card.style.boxShadow = '0 20px 40px rgba(246, 182, 207, 0.3)';
+        // Let CSS handle the hover animation for smoother transitions
+        card.classList.add('hovered');
     },
 
     handleMouseLeave(e) {
         const card = e.currentTarget;
-        card.style.transform = 'translateY(0) scale(1)';
-        card.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+        // Let CSS handle the hover animation for smoother transitions
+        card.classList.remove('hovered');
     }
 };
 
