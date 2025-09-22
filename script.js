@@ -377,6 +377,11 @@ const customDropdown = {
             // Close dropdown
             customSelect.classList.remove('open');
             
+            // Trigger change event to update flavor dropdown
+            const changeEvent = new Event('change', { bubbles: true });
+            hiddenInput.dispatchEvent(changeEvent);
+            console.log('Change event dispatched for item selection');
+            
             // Trigger validation if needed
             if (hiddenInput.checkValidity) {
                 hiddenInput.checkValidity();
@@ -484,6 +489,7 @@ const customDropdown = {
         const itemInput = document.getElementById('item');
         itemInput.addEventListener('change', () => {
             const selectedItem = itemInput.value;
+            console.log('Item changed to:', selectedItem);
             this.updateFlavorOptions(flavorData, selectedItem, flavorOptions, flavorGroup, flavorText, flavorInput);
         });
 
@@ -524,6 +530,9 @@ const customDropdown = {
     },
 
     updateFlavorOptions(flavorData, selectedItem, flavorOptions, flavorGroup, flavorText, flavorInput) {
+        console.log('updateFlavorOptions called with:', selectedItem);
+        console.log('Available flavor data:', flavorData);
+        
         // Clear existing options
         flavorOptions.innerHTML = '';
         
@@ -532,10 +541,14 @@ const customDropdown = {
         flavorText.textContent = 'Select a flavor...';
         
         if (selectedItem && flavorData[selectedItem]) {
+            console.log('Showing flavor group for:', selectedItem);
+            console.log('Flavors available:', flavorData[selectedItem]);
+            
             // Show flavor group with animation
             flavorGroup.style.display = 'block';
             setTimeout(() => {
                 flavorGroup.classList.add('show');
+                console.log('Flavor group should now be visible');
             }, 10);
             
             // Add flavor options
@@ -546,7 +559,10 @@ const customDropdown = {
                 option.textContent = flavor.text;
                 flavorOptions.appendChild(option);
             });
+            
+            console.log('Added', flavorData[selectedItem].length, 'flavor options');
         } else {
+            console.log('Hiding flavor group');
             // Hide flavor group with animation
             flavorGroup.classList.remove('show');
             setTimeout(() => {
