@@ -395,11 +395,20 @@ const customDropdown = {
         const hiddenInput = document.getElementById('item');
         const selectText = customSelect?.querySelector('.custom-select-text');
         
-        if (!customSelect || !trigger || !options || !hiddenInput) return;
+        console.log('Custom dropdown elements:', { customSelect, trigger, options, hiddenInput, selectText });
+        
+        if (!customSelect || !trigger || !options || !hiddenInput) {
+            console.error('Custom dropdown elements not found');
+            return;
+        }
         
         // Toggle dropdown
-        trigger.addEventListener('click', () => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Dropdown trigger clicked');
             customSelect.classList.toggle('open');
+            console.log('Dropdown open state:', customSelect.classList.contains('open'));
             
             // Close other dropdowns if any
             document.querySelectorAll('.custom-select').forEach(select => {
@@ -412,13 +421,16 @@ const customDropdown = {
         // Handle option selection
         options.addEventListener('click', (e) => {
             const option = e.target.closest('.custom-option');
+            console.log('Option clicked:', option);
             if (!option || option.classList.contains('disabled')) return;
             
             const value = option.getAttribute('data-value');
             const text = option.textContent;
+            console.log('Selected option:', { value, text });
             
             // Update hidden input
             hiddenInput.value = value;
+            console.log('Hidden input value set to:', hiddenInput.value);
             
             // Update display text
             selectText.textContent = text;
