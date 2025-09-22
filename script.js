@@ -620,16 +620,19 @@ const scrollAnimations = {
         if (!hero) return;
 
         let ticking = false;
+        let lastScrollY = 0;
 
         const updateParallax = () => {
             const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
+            const rate = scrolled * -0.3; // Reduced intensity for smoother motion
             
             // Smooth parallax with boundary checks
             if (scrolled < window.innerHeight) {
                 hero.style.transform = `translate3d(0, ${rate}px, 0)`;
+                hero.style.willChange = 'transform';
             }
             
+            lastScrollY = scrolled;
             ticking = false;
         };
 
@@ -640,10 +643,11 @@ const scrollAnimations = {
             }
         };
 
-        window.addEventListener('scroll', requestTick);
+        // Use passive listener for better performance
+        window.addEventListener('scroll', requestTick, { passive: true });
         
         // Reset hero when scrolling back to top
-        window.addEventListener('scroll', this.resetHeroOnScroll.bind(this));
+        window.addEventListener('scroll', this.resetHeroOnScroll.bind(this), { passive: true });
     },
 
     resetHeroOnScroll() {
@@ -667,7 +671,10 @@ const scrollAnimations = {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
+                    // Use requestAnimationFrame for smoother animation triggering
+                    requestAnimationFrame(() => {
+                        entry.target.classList.add('animate');
+                    });
                 }
             });
         }, {

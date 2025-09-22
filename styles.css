@@ -18,9 +18,12 @@
   --section-padding: 4rem 1rem;
   --card-padding: 2rem;
   
-  /* Transitions */
-  --transition: all 0.3s ease;
-  --transition-fast: all 0.2s ease;
+  /* Smooth Transitions */
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-fast: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slow: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-elastic: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* ===== RESET & BASE ===== */
@@ -444,13 +447,15 @@ body {
   background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(38, 38, 38, 0.95) 100%);
   border-radius: 24px;
   padding: 2.5rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   border: 2px solid transparent;
   transform: translateY(0) scale(1);
-  will-change: transform, box-shadow;
+  will-change: transform, box-shadow, border-color;
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
 .menu-card::before {
@@ -483,6 +488,7 @@ body {
   transform: translateY(-12px) scale(1.03);
   box-shadow: 0 25px 50px rgba(246, 182, 207, 0.4);
   border-color: var(--accent-pink);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .menu-card:hover::before,
@@ -564,14 +570,17 @@ body {
   color: var(--text-primary);
   padding: 0.5rem 0.5rem 0.5rem 1.5rem;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   border-radius: 6px;
   font-weight: 500;
+  will-change: transform, background-color;
+  backface-visibility: hidden;
 }
 
 .flavor-list li:hover {
   background: rgba(246, 182, 207, 0.1);
   transform: translateX(4px);
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .flavor-list li::before {
@@ -791,7 +800,9 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, visibility, transform;
+  backface-visibility: hidden;
 }
 
 .custom-select.open .custom-select-options {
@@ -938,9 +949,11 @@ select.form-select option:hover,
 
 /* Flavor dropdown styling */
 #flavorGroup {
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   opacity: 0;
   transform: translateY(-10px);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 #flavorGroup.show {
@@ -1028,21 +1041,118 @@ select.form-select option:hover,
   width: 100%;
   max-width: 540px;
   margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(38, 38, 38, 0.95) 100%);
+}
+
+.instagram-embed-container:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(246, 182, 207, 0.3);
 }
 
 .instagram-embed-container blockquote {
   margin: 0 !important;
   padding: 0 !important;
-  border: none !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
-  border-radius: 12px !important;
+  border: 2px solid transparent !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 20px !important;
   overflow: hidden !important;
-  transition: all 0.3s ease !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(38, 38, 38, 0.95) 100%) !important;
+  position: relative !important;
+}
+
+.instagram-embed-container blockquote::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(246, 182, 207, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+  border-radius: 20px;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .instagram-embed-container blockquote:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 25px 50px rgba(246, 182, 207, 0.4) !important;
+  border-color: var(--accent-pink) !important;
+}
+
+/* Style the Instagram embed iframe */
+.instagram-embed-container iframe {
+  border-radius: 20px !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  position: relative;
+  z-index: 2;
+}
+
+.instagram-embed-container:hover iframe {
+  transform: scale(1.02) !important;
+}
+
+/* Add sparkle effect to Instagram embed */
+.instagram-embed-container::after {
+  content: '✨';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  opacity: 0.6;
+  z-index: 10;
+  animation: sparkle 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.instagram-embed-container:hover::after {
+  animation: sparkle 1s ease-in-out infinite;
+  opacity: 1;
+}
+
+/* Additional Instagram embed styling for better integration */
+.instagram-embed-container {
+  filter: drop-shadow(0 0 20px rgba(246, 182, 207, 0.2));
+}
+
+.instagram-embed-container:hover {
+  filter: drop-shadow(0 0 30px rgba(246, 182, 207, 0.4));
+}
+
+/* Style Instagram embed text elements */
+.instagram-embed-container blockquote a {
+  color: var(--accent-pink) !important;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.instagram-embed-container blockquote a:hover {
+  color: var(--accent-yellow) !important;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5) !important;
+}
+
+/* Add a subtle glow effect */
+.instagram-embed-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--accent-pink), var(--accent-yellow), var(--accent-pink));
+  border-radius: 22px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.instagram-embed-container:hover::before {
+  opacity: 0.3;
 }
 
 .instagram-post {
@@ -1391,7 +1501,9 @@ textarea:focus {
 .scroll-animate {
   opacity: 1;
   transform: translateY(0);
-  transition: all 0.8s ease-out;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .scroll-animate.animate {
@@ -1403,7 +1515,9 @@ textarea:focus {
 .scroll-animate-left {
   opacity: 1;
   transform: translateX(0);
-  transition: all 0.8s ease-out;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .scroll-animate-left.animate {
@@ -1415,7 +1529,9 @@ textarea:focus {
 .scroll-animate-right {
   opacity: 1;
   transform: translateX(0);
-  transition: all 0.8s ease-out;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .scroll-animate-right.animate {
@@ -1427,7 +1543,9 @@ textarea:focus {
 .scroll-animate-scale {
   opacity: 1;
   transform: scale(1);
-  transition: all 0.8s ease-out;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .scroll-animate-scale.animate {
@@ -1439,7 +1557,9 @@ textarea:focus {
 .scroll-animate-stagger {
   opacity: 1;
   transform: translateY(0);
-  transition: all 0.6s ease-out;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .scroll-animate-stagger.animate {
