@@ -235,6 +235,26 @@
                         <input type="hidden" id="item" name="item" required>
                     </div>
                 </div>
+
+                <div class="form-group" id="flavorGroup" style="display: none;">
+                    <label for="flavor" class="form-label">Flavor *</label>
+                    <div class="custom-select-wrapper">
+                        <div class="custom-select" id="flavorSelect">
+                            <div class="custom-select-trigger">
+                                <span class="custom-select-text">Select a flavor...</span>
+                                <div class="custom-select-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M4 6L8 10L12 6" stroke="#F6B6CF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="custom-select-options" id="flavorOptions">
+                                <!-- Flavor options will be populated dynamically -->
+                            </div>
+                        </div>
+                        <input type="hidden" id="flavor" name="flavor">
+                    </div>
+                </div>
                 
                 <div class="form-group">
                     <label for="amount" class="form-label">Amount *</label>

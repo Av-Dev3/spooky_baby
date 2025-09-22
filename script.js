@@ -209,6 +209,13 @@ const formHandler = {
 
     validateForm(data) {
         const requiredFields = ['name', 'email', 'item'];
+        
+        // Check if flavor field is visible and add it to required fields
+        const flavorGroup = document.getElementById('flavorGroup');
+        if (flavorGroup && flavorGroup.style.display !== 'none') {
+            requiredFields.push('flavor');
+        }
+        
         const missingFields = requiredFields.filter(field => !data[field] || data[field].trim() === '');
         
         if (missingFields.length > 0) {
@@ -298,6 +305,11 @@ This order was submitted via the website contact form.
 // ===== CUSTOM DROPDOWN =====
 const customDropdown = {
     init() {
+        this.initItemDropdown();
+        this.initFlavorDropdown();
+    },
+
+    initItemDropdown() {
         const customSelect = document.getElementById('customSelect');
         const trigger = customSelect?.querySelector('.custom-select-trigger');
         const options = customSelect?.querySelector('.custom-select-options');
@@ -420,6 +432,127 @@ const customDropdown = {
                     break;
             }
         });
+    },
+
+    initFlavorDropdown() {
+        const flavorSelect = document.getElementById('flavorSelect');
+        const flavorTrigger = flavorSelect?.querySelector('.custom-select-trigger');
+        const flavorOptions = document.getElementById('flavorOptions');
+        const flavorInput = document.getElementById('flavor');
+        const flavorText = flavorTrigger?.querySelector('.custom-select-text');
+        const flavorGroup = document.getElementById('flavorGroup');
+        
+        if (!flavorSelect || !flavorTrigger || !flavorOptions || !flavorInput) {
+            console.error('Flavor dropdown elements not found');
+            return;
+        }
+
+        // Flavor data based on menu items
+        const flavorData = {
+            'cupcakes': [
+                { value: 'lemon-burst', text: 'Lemon Burst' },
+                { value: 'orange-cranberry', text: 'Orange Cranberry' },
+                { value: 'key-lime-pie', text: 'Key Lime Pie' },
+                { value: 'chocolate-crunch', text: 'Chocolate Crunch' },
+                { value: 'cherry', text: 'Cherry' },
+                { value: 'grape', text: 'Grape' },
+                { value: 'orange', text: 'Orange' },
+                { value: 'strawberry', text: 'Strawberry' }
+            ],
+            'cake-pops': [
+                { value: 'vanilla-bean', text: 'Vanilla Bean' },
+                { value: 'rich-chocolate', text: 'Rich Chocolate' },
+                { value: 'red-velvet', text: 'Red Velvet' },
+                { value: 'pumpkin-spice', text: 'Pumpkin Spice' },
+                { value: 'caramel-apple', text: 'Caramel Apple' },
+                { value: 'gingerbread', text: 'Gingerbread' }
+            ],
+            'seasonal': [
+                { value: 'ghostly-meringues', text: 'Ghostly Meringues' },
+                { value: 'spiderweb-brownies', text: 'Spiderweb Brownies' },
+                { value: 'witchs-brew-cookies', text: 'Witch\'s Brew Cookies' },
+                { value: 'custom-cakes', text: 'Custom Cakes' },
+                { value: 'party-platters', text: 'Party Platters' },
+                { value: 'event-favors', text: 'Event Favors' }
+            ],
+            'custom': [
+                { value: 'custom-request', text: 'Custom Request - Describe in details below' }
+            ]
+        };
+
+        // Listen for item selection changes
+        const itemInput = document.getElementById('item');
+        itemInput.addEventListener('change', () => {
+            const selectedItem = itemInput.value;
+            this.updateFlavorOptions(flavorData, selectedItem, flavorOptions, flavorGroup, flavorText, flavorInput);
+        });
+
+        // Toggle flavor dropdown
+        flavorTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            flavorSelect.classList.toggle('open');
+        });
+
+        // Handle flavor option selection
+        flavorOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            flavorInput.value = value;
+            flavorText.textContent = text;
+            
+            // Update selected state
+            flavorOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            // Close dropdown
+            flavorSelect.classList.remove('open');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!flavorSelect.contains(e.target)) {
+                flavorSelect.classList.remove('open');
+            }
+        });
+    },
+
+    updateFlavorOptions(flavorData, selectedItem, flavorOptions, flavorGroup, flavorText, flavorInput) {
+        // Clear existing options
+        flavorOptions.innerHTML = '';
+        
+        // Reset flavor selection
+        flavorInput.value = '';
+        flavorText.textContent = 'Select a flavor...';
+        
+        if (selectedItem && flavorData[selectedItem]) {
+            // Show flavor group with animation
+            flavorGroup.style.display = 'block';
+            setTimeout(() => {
+                flavorGroup.classList.add('show');
+            }, 10);
+            
+            // Add flavor options
+            flavorData[selectedItem].forEach(flavor => {
+                const option = document.createElement('div');
+                option.className = 'custom-option';
+                option.setAttribute('data-value', flavor.value);
+                option.textContent = flavor.text;
+                flavorOptions.appendChild(option);
+            });
+        } else {
+            // Hide flavor group with animation
+            flavorGroup.classList.remove('show');
+            setTimeout(() => {
+                flavorGroup.style.display = 'none';
+            }, 300);
+        }
     },
 
     highlightOption(option) {
