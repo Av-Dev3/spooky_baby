@@ -452,7 +452,7 @@ const customDropdown = {
             return;
         }
 
-        // Flavor data based on menu items
+        // Flavor data based on menu items (custom requests don't need flavors)
         const flavorData = {
             'cupcakes': [
                 { value: 'lemon-burst', text: 'Lemon Burst' },
@@ -479,10 +479,8 @@ const customDropdown = {
                 { value: 'custom-cakes', text: 'Custom Cakes' },
                 { value: 'party-platters', text: 'Party Platters' },
                 { value: 'event-favors', text: 'Event Favors' }
-            ],
-            'custom': [
-                { value: 'custom-request', text: 'Custom Request - Describe in details below' }
             ]
+            // Note: 'custom' is intentionally excluded - no flavor dropdown for custom requests
         };
 
         // Listen for item selection changes
