@@ -739,7 +739,7 @@ const scrollAnimations = {
                     background: radial-gradient(circle, #F6B6CF 0%, transparent 70%);
                     border-radius: 50%;
                     pointer-events: none;
-                    z-index: 1;
+                    z-index: 2;
                     box-shadow: 0 0 10px rgba(246, 182, 207, 0.8);
                     animation: sparkleFloat 4s ease-in-out infinite;
                 }
