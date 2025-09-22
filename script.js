@@ -741,50 +741,69 @@ const scrollAnimations = {
                     pointer-events: none;
                     z-index: 1;
                     box-shadow: 0 0 10px rgba(246, 182, 207, 0.8);
-                    animation: sparkleFloat 3s ease-in-out infinite;
+                    animation: sparkleFloat 4s ease-in-out infinite;
                 }
                 
                 @keyframes sparkleFloat {
                     0%, 100% { 
-                        opacity: 0; 
+                        opacity: 0.3; 
                         transform: translateY(0) scale(0.5); 
+                    }
+                    25% { 
+                        opacity: 0.8; 
+                        transform: translateY(-15px) scale(0.8); 
                     }
                     50% { 
                         opacity: 1; 
-                        transform: translateY(-20px) scale(1); 
+                        transform: translateY(-25px) scale(1); 
+                    }
+                    75% { 
+                        opacity: 0.6; 
+                        transform: translateY(-10px) scale(0.7); 
                     }
                 }
             `;
             document.head.appendChild(style);
         }
 
-        // Create sparkles
-        const sparkleCount = 12;
+        // Create persistent sparkles
+        const sparkleCount = 15;
         for (let i = 0; i < sparkleCount; i++) {
-            setTimeout(() => {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            
+            // Random position within hero bounds
+            const heroRect = hero.getBoundingClientRect();
+            const x = Math.random() * (heroRect.width - 20);
+            const y = Math.random() * (heroRect.height - 20);
+            
+            sparkle.style.left = `${x}px`;
+            sparkle.style.top = `${y}px`;
+            sparkle.style.animationDelay = `${Math.random() * 4}s`;
+            sparkle.style.animationDuration = `${3 + Math.random() * 3}s`;
+            
+            hero.appendChild(sparkle);
+        }
+
+        // Continuously add new sparkles to replace any that might disappear
+        setInterval(() => {
+            const currentSparkles = hero.querySelectorAll('.sparkle');
+            if (currentSparkles.length < sparkleCount) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'sparkle';
                 
-                // Random position within hero bounds
                 const heroRect = hero.getBoundingClientRect();
                 const x = Math.random() * (heroRect.width - 20);
                 const y = Math.random() * (heroRect.height - 20);
                 
                 sparkle.style.left = `${x}px`;
                 sparkle.style.top = `${y}px`;
-                sparkle.style.animationDelay = `${Math.random() * 2}s`;
-                sparkle.style.animationDuration = `${2 + Math.random() * 2}s`;
+                sparkle.style.animationDelay = `${Math.random() * 4}s`;
+                sparkle.style.animationDuration = `${3 + Math.random() * 3}s`;
                 
                 hero.appendChild(sparkle);
-                
-                // Remove sparkle after animation
-                setTimeout(() => {
-                    if (sparkle.parentNode) {
-                        sparkle.remove();
-                    }
-                }, 4000);
-            }, i * 200);
-        }
+            }
+        }, 2000); // Add new sparkles every 2 seconds
     }
 };
 
