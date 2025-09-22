@@ -709,9 +709,12 @@ const scrollAnimations = {
         const buttons = document.querySelectorAll('.hero-btn-animate');
         buttons.forEach((button, index) => {
             const delay = button.dataset.delay || 1000 + (index * 200);
+            // Ensure buttons are visible immediately, then animate
+            button.style.opacity = '1';
+            button.style.transform = 'translateY(0) scale(1)';
+            // Add a subtle entrance animation
             setTimeout(() => {
-                button.style.opacity = '1';
-                button.style.transform = 'translateY(0) scale(1)';
+                button.style.animation = 'heroButtonReveal 0.6s ease-out forwards';
             }, delay);
         });
 

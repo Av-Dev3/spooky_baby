@@ -1366,6 +1366,8 @@ select.form-select option:hover,
   .hero-buttons .btn {
     width: 100%;
     max-width: 300px;
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
   }
   
   .section-title {
@@ -1421,6 +1423,11 @@ select.form-select option:hover,
   
   .hero-subtext {
     font-size: 1.1rem;
+  }
+  
+  .hero-buttons .btn {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
   }
   
   .section-title {
@@ -1576,8 +1583,8 @@ textarea:focus {
 /* Word-by-word animation */
 .word-animate {
   display: inline-block;
-  opacity: 0;
-  transform: translateY(30px) rotateX(90deg);
+  opacity: 1;
+  transform: translateY(0) rotateX(0deg);
   animation: wordReveal 0.8s ease-out forwards;
 }
 
@@ -1598,8 +1605,8 @@ textarea:focus {
 
 /* Hero button animations */
 .hero-btn-animate {
-  opacity: 0;
-  transform: translateY(20px) scale(0.8);
+  opacity: 1;
+  transform: translateY(0) scale(1);
   animation: heroButtonReveal 0.6s ease-out forwards;
   position: relative;
   z-index: 10;
@@ -1676,6 +1683,12 @@ textarea:focus {
 .hero-content {
   opacity: 1;
   transform: none;
+}
+
+/* Ensure hero buttons are always visible as fallback */
+.hero-buttons .btn {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
 }
 
 /* Floating animation for cards */
