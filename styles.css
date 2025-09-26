@@ -35,6 +35,15 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optimize for smooth scrolling */
+* {
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-transform-style: preserve-3d;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -410,9 +419,6 @@ body {
     var(--bg-primary);
   position: relative;
   overflow: hidden;
-  will-change: transform;
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
 }
 
 .hero-content {
@@ -470,15 +476,12 @@ body {
   background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(38, 38, 38, 0.95) 100%);
   border-radius: 24px;
   padding: 2.5rem;
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 2px solid transparent;
   transform: translateY(0) scale(1);
-  will-change: transform, box-shadow, border-color;
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
 }
 
 .menu-card::before {
@@ -1568,9 +1571,8 @@ textarea:focus {
 .scroll-animate {
   opacity: 1;
   transform: translateY(0);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: auto;
 }
 
 .scroll-animate.animate {
@@ -1582,9 +1584,8 @@ textarea:focus {
 .scroll-animate-left {
   opacity: 1;
   transform: translateX(0);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: auto;
 }
 
 .scroll-animate-left.animate {
@@ -1596,9 +1597,8 @@ textarea:focus {
 .scroll-animate-right {
   opacity: 1;
   transform: translateX(0);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: auto;
 }
 
 .scroll-animate-right.animate {
@@ -1610,9 +1610,8 @@ textarea:focus {
 .scroll-animate-scale {
   opacity: 1;
   transform: scale(1);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: auto;
 }
 
 .scroll-animate-scale.animate {
@@ -1624,9 +1623,8 @@ textarea:focus {
 .scroll-animate-stagger {
   opacity: 1;
   transform: translateY(0);
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
-  backface-visibility: hidden;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: auto;
 }
 
 .scroll-animate-stagger.animate {

@@ -619,38 +619,10 @@ const scrollAnimations = {
     },
 
     initParallax() {
-        const hero = document.querySelector('.hero');
-        if (!hero) return;
-
-        let ticking = false;
-        let lastScrollY = 0;
-
-        const updateParallax = () => {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.3; // Reduced intensity for smoother motion
-            
-            // Smooth parallax with boundary checks
-            if (scrolled < window.innerHeight) {
-                hero.style.transform = `translate3d(0, ${rate}px, 0)`;
-                hero.style.willChange = 'transform';
-            }
-            
-            lastScrollY = scrolled;
-            ticking = false;
-        };
-
-        const requestTick = () => {
-            if (!ticking) {
-                requestAnimationFrame(updateParallax);
-                ticking = true;
-            }
-        };
-
-        // Use passive listener for better performance
-        window.addEventListener('scroll', requestTick, { passive: true });
-        
-        // Reset hero when scrolling back to top
-        window.addEventListener('scroll', this.resetHeroOnScroll.bind(this), { passive: true });
+        // Disabled parallax for better scroll performance
+        // const hero = document.querySelector('.hero');
+        // if (!hero) return;
+        console.log('Parallax disabled for better scroll performance');
     },
 
     resetHeroOnScroll() {
@@ -674,15 +646,13 @@ const scrollAnimations = {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Use requestAnimationFrame for smoother animation triggering
-                    requestAnimationFrame(() => {
-                        entry.target.classList.add('animate');
-                    });
+                    // Simplified animation triggering for better performance
+                    entry.target.classList.add('animate');
                 }
             });
         }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
         });
 
         animatedElements.forEach(element => {
@@ -740,40 +710,33 @@ const scrollAnimations = {
             style.textContent = `
                 .sparkle {
                     position: absolute;
-                    width: 8px;
-                    height: 8px;
+                    width: 6px;
+                    height: 6px;
                     background: radial-gradient(circle, #F6B6CF 0%, transparent 70%);
                     border-radius: 50%;
                     pointer-events: none;
                     z-index: 2;
-                    box-shadow: 0 0 10px rgba(246, 182, 207, 0.8);
-                    animation: sparkleFloat 4s ease-in-out infinite;
+                    box-shadow: 0 0 8px rgba(246, 182, 207, 0.6);
+                    animation: sparkleFloat 6s ease-in-out infinite;
+                    will-change: transform, opacity;
                 }
                 
                 @keyframes sparkleFloat {
                     0%, 100% { 
-                        opacity: 0.3; 
+                        opacity: 0.2; 
                         transform: translateY(0) scale(0.5); 
                     }
-                    25% { 
-                        opacity: 0.8; 
-                        transform: translateY(-15px) scale(0.8); 
-                    }
                     50% { 
-                        opacity: 1; 
-                        transform: translateY(-25px) scale(1); 
-                    }
-                    75% { 
-                        opacity: 0.6; 
-                        transform: translateY(-10px) scale(0.7); 
+                        opacity: 0.8; 
+                        transform: translateY(-20px) scale(1); 
                     }
                 }
             `;
             document.head.appendChild(style);
         }
 
-        // Create persistent sparkles
-        const sparkleCount = 15;
+        // Create fewer, more optimized sparkles
+        const sparkleCount = 8; // Reduced from 15
         for (let i = 0; i < sparkleCount; i++) {
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
@@ -785,13 +748,13 @@ const scrollAnimations = {
             
             sparkle.style.left = `${x}px`;
             sparkle.style.top = `${y}px`;
-            sparkle.style.animationDelay = `${Math.random() * 4}s`;
-            sparkle.style.animationDuration = `${3 + Math.random() * 3}s`;
+            sparkle.style.animationDelay = `${Math.random() * 6}s`;
+            sparkle.style.animationDuration = `${4 + Math.random() * 4}s`;
             
             hero.appendChild(sparkle);
         }
 
-        // Continuously add new sparkles to replace any that might disappear
+        // Less frequent sparkle replacement for better performance
         setInterval(() => {
             const currentSparkles = hero.querySelectorAll('.sparkle');
             if (currentSparkles.length < sparkleCount) {
@@ -804,12 +767,12 @@ const scrollAnimations = {
                 
                 sparkle.style.left = `${x}px`;
                 sparkle.style.top = `${y}px`;
-                sparkle.style.animationDelay = `${Math.random() * 4}s`;
-                sparkle.style.animationDuration = `${3 + Math.random() * 3}s`;
+                sparkle.style.animationDelay = `${Math.random() * 6}s`;
+                sparkle.style.animationDuration = `${4 + Math.random() * 4}s`;
                 
                 hero.appendChild(sparkle);
             }
-        }, 2000); // Add new sparkles every 2 seconds
+        }, 5000); // Reduced frequency from 2s to 5s
     }
 };
 
