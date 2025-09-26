@@ -340,8 +340,12 @@ const customDropdown = {
                 firstOption.classList.add('selected');
             }
             
+            const isOpen = customSelect.classList.contains('open');
             customSelect.classList.toggle('open');
             console.log('Dropdown open state:', customSelect.classList.contains('open'));
+            console.log('Options element:', options);
+            console.log('Options visibility:', getComputedStyle(options).visibility);
+            console.log('Options opacity:', getComputedStyle(options).opacity);
             
             // Close other dropdowns if any
             document.querySelectorAll('.custom-select').forEach(select => {
