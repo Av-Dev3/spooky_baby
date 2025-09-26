@@ -1,7 +1,7 @@
 // ===== CONFIGURATION =====
 const CONFIG = {
     FORMSPREE_ID: 'xovkawkn', // Your Formspree ID
-    EMAIL_FALLBACK: 'orders@spookybabysweets.com'
+    EMAIL_FALLBACK: 'spookybabysweets@gmail.com'
 };
 
 // ===== DOM ELEMENTS =====

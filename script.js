@@ -1,7 +1,7 @@
 // ===== CONFIGURATION =====
 const CONFIG = {
     FORMSPREE_ID: 'xovkawkn', // Your Formspree ID
-    EMAIL_FALLBACK: 'orders@spookybabysweets.com'
+    EMAIL_FALLBACK: 'spookybabysweets@gmail.com'
 };
 
 // ===== DOM ELEMENTS =====
@@ -471,6 +471,9 @@ const customDropdown = {
                 { value: 'pumpkin-spice', text: 'Pumpkin Spice' },
                 { value: 'caramel-apple', text: 'Caramel Apple' },
                 { value: 'gingerbread', text: 'Gingerbread' }
+            ],
+            'cakes': [
+                { value: 'custom-cakes', text: 'Custom Cakes' }
             ],
             'seasonal': [
                 { value: 'ghostly-meringues', text: 'Ghostly Meringues' },
