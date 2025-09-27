@@ -312,9 +312,10 @@ const customDropdown = {
     initItemDropdown() {
         // Using standard HTML select - no custom dropdown needed
         const itemSelect = document.getElementById('item');
+        const flavorSelect = document.getElementById('flavor');
         
-        if (!itemSelect) {
-            console.error('Item select not found');
+        if (!itemSelect || !flavorSelect) {
+            console.error('Select elements not found');
             return;
         }
         
@@ -325,26 +326,26 @@ const customDropdown = {
             
             if (selectedValue && selectedValue !== 'custom') {
                 flavorGroup.style.display = 'block';
-                // Trigger flavor dropdown update
+                // Update flavor options
                 this.updateFlavorOptions(selectedValue);
             } else {
                 flavorGroup.style.display = 'none';
+                flavorSelect.value = '';
             }
         });
     },
 
     initFlavorDropdown() {
-        const flavorSelect = document.getElementById('flavorSelect');
-        const flavorTrigger = flavorSelect?.querySelector('.custom-select-trigger');
-        const flavorOptions = document.getElementById('flavorOptions');
-        const flavorInput = document.getElementById('flavor');
-        const flavorText = flavorTrigger?.querySelector('.custom-select-text');
-        const flavorGroup = document.getElementById('flavorGroup');
+        // Using standard HTML select - no custom dropdown needed
+        const flavorSelect = document.getElementById('flavor');
         
-        if (!flavorSelect || !flavorTrigger || !flavorOptions || !flavorInput) {
-            console.error('Flavor dropdown elements not found');
+        if (!flavorSelect) {
+            console.error('Flavor select not found');
             return;
         }
+        
+        // No additional setup needed for standard select
+        console.log('Flavor select initialized');
 
         // Flavor data based on menu items (custom requests don't need flavors)
         const flavorData = {

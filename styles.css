@@ -974,12 +974,9 @@ select.form-select option:hover,
 }
 
 /* Hidden inputs for form submission - no styling needed */
-#flavor {
-  display: none !important;
-}
 
-/* FORCE STYLE THE ITEM SELECT */
-select#item {
+/* STYLE ALL SELECT ELEMENTS */
+select.form-select {
   display: block !important;
   width: 100% !important;
   height: auto !important;
@@ -1005,20 +1002,20 @@ select#item {
   margin: 0 !important;
 }
 
-select#item:hover {
+select.form-select:hover {
   border-color: #F6B6CF !important;
   background-color: rgba(38, 38, 38, 0.9) !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 4px 12px rgba(246, 182, 207, 0.15) !important;
 }
 
-select#item:focus {
+select.form-select:focus {
   outline: none !important;
   border-color: #F6B6CF !important;
   box-shadow: 0 0 0 3px rgba(246, 182, 207, 0.2) !important;
 }
 
-select#item option {
+select.form-select option {
   background-color: #262626 !important;
   color: #ffffff !important;
   padding: 0.75rem 1rem !important;
