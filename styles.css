@@ -789,6 +789,24 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Form groups containing dropdowns get higher z-index when dropdowns are open */
+.form-group:has(.custom-dropdown.open) {
+  z-index: 9997;
+}
+
+/* Fallback for browsers that don't support :has() */
+.form-group.dropdown-open {
+  z-index: 9997;
+}
+
+/* Ensure submit button has low z-index */
+.order-form .btn-full {
+  position: relative;
+  z-index: 1;
 }
 
 .form-label {
@@ -1418,6 +1436,8 @@ select option {
     0 0 0 1px rgba(246, 182, 207, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .form-input:hover,

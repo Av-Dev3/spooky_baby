@@ -326,10 +326,22 @@ const customDropdown = {
             e.stopPropagation();
             itemDropdown.classList.toggle('open');
             
+            // Add/remove dropdown-open class to form group for z-index
+            const formGroup = itemDropdown.closest('.form-group');
+            if (itemDropdown.classList.contains('open')) {
+                formGroup.classList.add('dropdown-open');
+            } else {
+                formGroup.classList.remove('dropdown-open');
+            }
+            
             // Close other dropdowns
             const flavorDropdown = document.getElementById('flavorDropdown');
             if (flavorDropdown) {
                 flavorDropdown.classList.remove('open');
+                const flavorFormGroup = flavorDropdown.closest('.form-group');
+                if (flavorFormGroup) {
+                    flavorFormGroup.classList.remove('dropdown-open');
+                }
             }
         });
         
@@ -354,6 +366,10 @@ const customDropdown = {
             
             // Close dropdown
             itemDropdown.classList.remove('open');
+            const formGroup = itemDropdown.closest('.form-group');
+            if (formGroup) {
+                formGroup.classList.remove('dropdown-open');
+            }
             
             // Handle flavor dropdown visibility
             const flavorGroup = document.getElementById('flavorGroup');
@@ -401,10 +417,22 @@ const customDropdown = {
             e.stopPropagation();
             flavorDropdown.classList.toggle('open');
             
+            // Add/remove dropdown-open class to form group for z-index
+            const formGroup = flavorDropdown.closest('.form-group');
+            if (flavorDropdown.classList.contains('open')) {
+                formGroup.classList.add('dropdown-open');
+            } else {
+                formGroup.classList.remove('dropdown-open');
+            }
+            
             // Close item dropdown
             const itemDropdown = document.getElementById('itemDropdown');
             if (itemDropdown) {
                 itemDropdown.classList.remove('open');
+                const itemFormGroup = itemDropdown.closest('.form-group');
+                if (itemFormGroup) {
+                    itemFormGroup.classList.remove('dropdown-open');
+                }
             }
         });
         
@@ -429,6 +457,10 @@ const customDropdown = {
             
             // Close dropdown
             flavorDropdown.classList.remove('open');
+            const formGroup = flavorDropdown.closest('.form-group');
+            if (formGroup) {
+                formGroup.classList.remove('dropdown-open');
+            }
         });
         
         console.log('Flavor dropdown initialized');
@@ -826,10 +858,18 @@ document.addEventListener('click', (e) => {
     
     if (itemDropdown && !itemDropdown.contains(e.target)) {
         itemDropdown.classList.remove('open');
+        const itemFormGroup = itemDropdown.closest('.form-group');
+        if (itemFormGroup) {
+            itemFormGroup.classList.remove('dropdown-open');
+        }
     }
     
     if (flavorDropdown && !flavorDropdown.contains(e.target)) {
         flavorDropdown.classList.remove('open');
+        const flavorFormGroup = flavorDropdown.closest('.form-group');
+        if (flavorFormGroup) {
+            flavorFormGroup.classList.remove('dropdown-open');
+        }
     }
 });
 
