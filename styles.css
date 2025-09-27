@@ -1766,32 +1766,54 @@ textarea:focus {
   text-decoration: none !important;
 }
 
-/* Ensure dropdown appears above everything */
+/* NUCLEAR OPTION: Force dropdown above everything */
 .custom-select-wrapper {
-  position: relative;
-  z-index: 1000;
+  position: relative !important;
+  z-index: 9998 !important;
 }
 
 .custom-select {
-  position: relative;
-  z-index: 1001;
+  position: relative !important;
+  z-index: 9999 !important;
 }
 
 .custom-select-options {
-  position: absolute;
-  z-index: 10000;
+  position: absolute !important;
+  z-index: 99999 !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
 }
 
-/* Force all form elements to stay below dropdown */
+.custom-option {
+  position: relative !important;
+  z-index: 100000 !important;
+}
+
+/* Force ALL form elements to stay below dropdown */
 .form-group {
-  position: relative;
-  z-index: 1;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .form-input,
 .form-textarea {
-  position: relative;
-  z-index: 1;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Specifically target the problematic inputs */
+#amount,
+#notes {
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Ensure no parent containers clip the dropdown */
+.order,
+.order-form,
+.container {
+  overflow: visible !important;
 }
 
 /* Floating animation for cards */
