@@ -706,6 +706,8 @@ body {
 .order {
   padding: var(--section-padding);
   background-color: var(--bg-primary);
+  position: relative;
+  z-index: 1;
 }
 
 .order-intro {
@@ -755,12 +757,13 @@ body {
 .custom-select-wrapper {
   position: relative;
   width: 100%;
+  z-index: 10001;
 }
 
 .custom-select {
   position: relative;
   width: 100%;
-  z-index: 9998;
+  z-index: 10002;
 }
 
 .custom-select-trigger {
@@ -779,7 +782,7 @@ body {
   transition: var(--transition);
   user-select: none;
   position: relative;
-  z-index: 9999;
+  z-index: 10003;
 }
 
 .custom-select-trigger:hover {
@@ -822,7 +825,7 @@ body {
   border-top: none;
   border-radius: 0 0 12px 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  z-index: 9999;
+  z-index: 10004;
   max-height: 200px;
   overflow-y: auto;
   opacity: 0;
@@ -848,7 +851,7 @@ body {
   transition: var(--transition);
   border-bottom: 1px solid rgba(207, 207, 207, 0.1);
   position: relative;
-  z-index: 10000;
+  z-index: 10005;
 }
 
 .custom-option:last-child {
@@ -1760,6 +1763,24 @@ textarea:focus {
 .hero-btn-animate:hover {
   color: var(--bg-primary) !important;
   text-decoration: none !important;
+}
+
+/* Ensure dropdown appears above all content */
+.custom-select-wrapper,
+.custom-select,
+.custom-select-trigger,
+.custom-select-options,
+.custom-option {
+  position: relative !important;
+}
+
+.custom-select-options {
+  position: absolute !important;
+  z-index: 99999 !important;
+}
+
+.custom-option {
+  z-index: 99999 !important;
 }
 
 /* Floating animation for cards */
