@@ -974,9 +974,22 @@ select.form-select option:hover,
 }
 
 /* Hidden inputs for form submission - no styling needed */
-#item,
 #flavor {
   display: none !important;
+}
+
+/* Ensure the item select is visible and styled */
+#item {
+  display: block !important;
+  width: 100% !important;
+  padding: 1rem !important;
+  border: 2px solid rgba(207, 207, 207, 0.2) !important;
+  border-radius: 12px !important;
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
 }
 
 /* Flavor dropdown styling */
