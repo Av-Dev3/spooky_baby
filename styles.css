@@ -1870,6 +1870,30 @@ select option {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     max-width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .menu-card {
+    padding: 2rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .menu-card .card-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .flavor-group {
+    margin-bottom: 0.75rem;
+  }
+  
+  .flavor-list {
+    gap: 0.25rem;
+  }
+  
+  .flavor-list li {
+    padding: 0.4rem 0.4rem 0.4rem 1rem;
+    font-size: 0.9rem;
   }
   
   .pricing-grid {
@@ -1937,6 +1961,48 @@ select option {
   .section-title {
     font-size: 1.75rem;
   }
+  
+  /* Enhanced mobile menu styling for very small screens */
+  .menu-grid {
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .menu-card {
+    padding: 1.5rem 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .menu-card .card-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .flavor-group {
+    margin-bottom: 0.5rem;
+  }
+  
+  .flavor-line-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .flavor-list {
+    gap: 0.2rem;
+  }
+  
+  .flavor-list li {
+    padding: 0.3rem 0.3rem 0.3rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .price-highlight {
+    font-size: 1.1rem;
+  }
+  
+  .price-item {
+    padding: 0.5rem;
+  }
 }
 
 /* Medium screens (tablets) */
@@ -1954,6 +2020,20 @@ select option {
   
   .social-text {
     font-size: 0.7rem;
+  }
+  
+  /* Tablet menu styling */
+  .menu-grid {
+    gap: 1.25rem;
+    padding: 0 0.75rem;
+  }
+  
+  .menu-card {
+    padding: 2rem 1.25rem;
+  }
+  
+  .menu-card .card-title {
+    font-size: 1.4rem;
   }
 }
 
