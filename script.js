@@ -327,10 +327,14 @@ const customDropdown = {
             if (selectedValue && selectedValue !== 'custom') {
                 // Show flavor dropdown and populate options
                 flavorGroup.style.display = 'block';
+                flavorGroup.classList.add('show');
                 updateFlavorOptions(selectedValue);
             } else {
                 // Hide flavor dropdown
-                flavorGroup.style.display = 'none';
+                flavorGroup.classList.remove('show');
+                setTimeout(() => {
+                    flavorGroup.style.display = 'none';
+                }, 400); // Match CSS transition duration
                 const flavorSelect = document.getElementById('flavor');
                 flavorSelect.value = '';
             }
@@ -713,6 +717,12 @@ function updateFlavorOptions(selectedItem) {
     if (selectedItem && flavorData[selectedItem]) {
         console.log('Adding flavor options for:', selectedItem);
         
+        // Show flavor dropdown
+        flavorGroup.style.display = 'block';
+        setTimeout(() => {
+            flavorGroup.classList.add('show');
+        }, 10);
+        
         // Add flavor options to the select
         flavorData[selectedItem].forEach(flavor => {
             const option = document.createElement('option');
@@ -723,6 +733,11 @@ function updateFlavorOptions(selectedItem) {
         
         console.log('Flavor options added successfully');
     } else {
-        console.log('No flavor data for:', selectedItem);
+        console.log('Hiding flavor group for:', selectedItem);
+        // Hide flavor dropdown
+        flavorGroup.classList.remove('show');
+        setTimeout(() => {
+            flavorGroup.style.display = 'none';
+        }, 400);
     }
 }
