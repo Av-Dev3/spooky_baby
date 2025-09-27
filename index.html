@@ -229,22 +229,36 @@
                 
                 <div class="form-group">
                     <label for="item" class="form-label">Item *</label>
-                    <select id="item" name="item" class="form-select" required>
-                        <option value="">Select an item...</option>
-                        <option value="cupcakes">Cupcakes</option>
-                        <option value="cake-pops">Cake Pops</option>
-                        <option value="cakes">Cakes</option>
-                        <option value="seasonal">Seasonal & Specialty</option>
-                        <option value="custom">Custom Request</option>
-                    </select>
+                    <div class="custom-dropdown" id="itemDropdown">
+                        <div class="custom-dropdown-trigger" id="itemTrigger">
+                            <span class="dropdown-text">Select an item...</span>
+                            <span class="dropdown-arrow">👻</span>
+                        </div>
+                        <div class="custom-dropdown-options" id="itemOptions">
+                            <div class="custom-option" data-value="">Select an item...</div>
+                            <div class="custom-option" data-value="cupcakes">🧁 Cupcakes</div>
+                            <div class="custom-option" data-value="cake-pops">🍭 Cake Pops</div>
+                            <div class="custom-option" data-value="cakes">🎂 Cakes</div>
+                            <div class="custom-option" data-value="seasonal">🎃 Seasonal & Specialty</div>
+                            <div class="custom-option" data-value="custom">✨ Custom Request</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="item" name="item" required>
                 </div>
 
                 <div class="form-group" id="flavorGroup" style="display: none;">
                     <label for="flavor" class="form-label">Flavor *</label>
-                    <select id="flavor" name="flavor" class="form-select" required>
-                        <option value="">Select a flavor...</option>
-                        <!-- Flavor options will be populated dynamically -->
-                    </select>
+                    <div class="custom-dropdown" id="flavorDropdown">
+                        <div class="custom-dropdown-trigger" id="flavorTrigger">
+                            <span class="dropdown-text">Select a flavor...</span>
+                            <span class="dropdown-arrow">✨</span>
+                        </div>
+                        <div class="custom-dropdown-options" id="flavorOptions">
+                            <div class="custom-option" data-value="">Select a flavor...</div>
+                            <!-- Flavor options will be populated dynamically -->
+                        </div>
+                    </div>
+                    <input type="hidden" id="flavor" name="flavor" required>
                 </div>
                 
                 <div class="form-group">

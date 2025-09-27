@@ -959,6 +959,180 @@ body {
   background: rgba(246, 182, 207, 0.8);
 }
 
+/* Custom Dropdown Styling - Spooky Theme */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.custom-dropdown-trigger {
+  background: linear-gradient(135deg, 
+    rgba(38, 38, 38, 0.9) 0%, 
+    rgba(46, 46, 46, 0.95) 50%, 
+    rgba(38, 38, 38, 0.9) 100%);
+  border: 2px solid rgba(246, 182, 207, 0.3);
+  border-radius: 16px;
+  padding: 1.2rem 3.5rem 1.2rem 1.5rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(246, 182, 207, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-dropdown-trigger:hover {
+  border-color: var(--accent-pink);
+  background: linear-gradient(135deg, 
+    rgba(246, 182, 207, 0.1) 0%, 
+    rgba(46, 46, 46, 0.95) 50%, 
+    rgba(247, 213, 106, 0.1) 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 25px rgba(246, 182, 207, 0.3),
+    0 0 0 1px rgba(246, 182, 207, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.custom-dropdown.open .custom-dropdown-trigger {
+  border-color: var(--accent-yellow);
+  background: linear-gradient(135deg, 
+    rgba(247, 213, 106, 0.1) 0%, 
+    rgba(46, 46, 46, 0.95) 50%, 
+    rgba(246, 182, 207, 0.1) 100%);
+  box-shadow: 
+    0 0 0 3px rgba(247, 213, 106, 0.3),
+    0 8px 25px rgba(247, 213, 106, 0.2),
+    0 0 20px rgba(247, 213, 106, 0.1);
+  transform: translateY(-1px) scale(1.01);
+}
+
+.dropdown-arrow {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  transform: rotate(0deg);
+}
+
+.custom-dropdown.open .dropdown-arrow {
+  transform: rotate(180deg) scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(247, 213, 106, 0.6));
+}
+
+.custom-dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(26, 26, 26, 0.98);
+  border: 2px solid var(--accent-pink);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(246, 182, 207, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+  backdrop-filter: blur(10px);
+}
+
+.custom-dropdown.open .custom-dropdown-options {
+  display: block;
+  animation: dropdownAppear 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes dropdownAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.custom-option {
+  padding: 1rem 1.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: linear-gradient(135deg, 
+    rgba(38, 38, 38, 0.9) 0%, 
+    rgba(46, 46, 46, 0.95) 100%);
+  border-bottom: 1px solid rgba(246, 182, 207, 0.1);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-option:hover {
+  background: linear-gradient(135deg, 
+    var(--accent-pink) 0%, 
+    rgba(246, 182, 207, 0.9) 50%,
+    var(--accent-yellow) 100%);
+  color: var(--bg-primary);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transform: translateX(5px) scale(1.02);
+  box-shadow: 
+    inset 0 0 20px rgba(255, 255, 255, 0.1),
+    0 0 15px rgba(246, 182, 207, 0.3);
+}
+
+.custom-option.selected {
+  background: linear-gradient(135deg, 
+    rgba(247, 213, 106, 0.8) 0%, 
+    rgba(246, 182, 207, 0.6) 100%);
+  color: var(--bg-primary);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.custom-option:last-child {
+  border-bottom: none;
+  border-radius: 0 0 14px 14px;
+}
+
+.custom-option:first-child {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Special styling for flavor dropdown */
+#flavorDropdown .custom-dropdown-trigger {
+  border-color: var(--accent-yellow);
+  background: linear-gradient(135deg, 
+    rgba(247, 213, 106, 0.1) 0%, 
+    rgba(46, 46, 46, 0.95) 50%, 
+    rgba(246, 182, 207, 0.1) 100%);
+  box-shadow: 
+    0 4px 12px rgba(247, 213, 106, 0.2),
+    0 0 0 1px rgba(247, 213, 106, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+#flavorDropdown .custom-dropdown-options {
+  border-color: var(--accent-yellow);
+  box-shadow: 
+    0 15px 35px rgba(247, 213, 106, 0.3),
+    0 0 0 1px rgba(247, 213, 106, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
 /* Custom Select Dropdown Styling */
 select.form-select,
 .form-select {

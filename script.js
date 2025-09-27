@@ -310,41 +310,128 @@ const customDropdown = {
     },
 
     initItemDropdown() {
-        // Using standard HTML select - no custom dropdown needed
-        const itemSelect = document.getElementById('item');
-        const flavorSelect = document.getElementById('flavor');
+        const itemDropdown = document.getElementById('itemDropdown');
+        const itemTrigger = document.getElementById('itemTrigger');
+        const itemOptions = document.getElementById('itemOptions');
+        const itemInput = document.getElementById('item');
         
-        if (!itemSelect || !flavorSelect) {
-            console.error('Select elements not found');
+        if (!itemDropdown || !itemTrigger || !itemOptions || !itemInput) {
+            console.error('Custom dropdown elements not found');
             return;
         }
         
-        // Handle item selection to show/hide flavor dropdown
-        itemSelect.addEventListener('change', (e) => {
-            const selectedValue = e.target.value;
-            const flavorGroup = document.getElementById('flavorGroup');
+        // Toggle dropdown
+        itemTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            itemDropdown.classList.toggle('open');
             
-            if (selectedValue && selectedValue !== 'custom') {
+            // Close other dropdowns
+            const flavorDropdown = document.getElementById('flavorDropdown');
+            if (flavorDropdown) {
+                flavorDropdown.classList.remove('open');
+            }
+        });
+        
+        // Handle option selection
+        itemOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            // Update the trigger text and hidden input
+            const dropdownText = itemTrigger.querySelector('.dropdown-text');
+            dropdownText.textContent = text;
+            itemInput.value = value;
+            
+            // Update selected state
+            itemOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            // Close dropdown
+            itemDropdown.classList.remove('open');
+            
+            // Handle flavor dropdown visibility
+            const flavorGroup = document.getElementById('flavorGroup');
+            if (value && value !== 'custom') {
                 // Show flavor dropdown and populate options
                 flavorGroup.style.display = 'block';
-                flavorGroup.classList.add('show');
-                updateFlavorOptions(selectedValue);
+                setTimeout(() => {
+                    flavorGroup.classList.add('show');
+                }, 10);
+                updateFlavorOptions(value);
             } else {
                 // Hide flavor dropdown
                 flavorGroup.classList.remove('show');
                 setTimeout(() => {
                     flavorGroup.style.display = 'none';
-                }, 400); // Match CSS transition duration
-                const flavorSelect = document.getElementById('flavor');
-                flavorSelect.value = '';
+                }, 400);
+                const flavorInput = document.getElementById('flavor');
+                flavorInput.value = '';
+                // Reset flavor dropdown text
+                const flavorTrigger = document.getElementById('flavorTrigger');
+                if (flavorTrigger) {
+                    const flavorDropdownText = flavorTrigger.querySelector('.dropdown-text');
+                    if (flavorDropdownText) {
+                        flavorDropdownText.textContent = 'Select a flavor...';
+                    }
+                }
             }
         });
     },
 
     initFlavorDropdown() {
-        // Flavor dropdown is now handled by the item dropdown change event
-        // No additional initialization needed for standard HTML select
-        console.log('Flavor dropdown initialized - will be shown/hidden based on item selection');
+        const flavorDropdown = document.getElementById('flavorDropdown');
+        const flavorTrigger = document.getElementById('flavorTrigger');
+        const flavorOptions = document.getElementById('flavorOptions');
+        const flavorInput = document.getElementById('flavor');
+        
+        if (!flavorDropdown || !flavorTrigger || !flavorOptions || !flavorInput) {
+            console.log('Flavor dropdown elements not found - will be initialized when needed');
+            return;
+        }
+        
+        // Toggle flavor dropdown
+        flavorTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            flavorDropdown.classList.toggle('open');
+            
+            // Close item dropdown
+            const itemDropdown = document.getElementById('itemDropdown');
+            if (itemDropdown) {
+                itemDropdown.classList.remove('open');
+            }
+        });
+        
+        // Handle flavor option selection
+        flavorOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            // Update the trigger text and hidden input
+            const dropdownText = flavorTrigger.querySelector('.dropdown-text');
+            dropdownText.textContent = text;
+            flavorInput.value = value;
+            
+            // Update selected state
+            flavorOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            // Close dropdown
+            flavorDropdown.classList.remove('open');
+        });
+        
+        console.log('Flavor dropdown initialized');
     },
 
 
@@ -666,78 +753,83 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Add the updateFlavorOptions function
+// Add the updateFlavorOptions function for custom dropdowns
 function updateFlavorOptions(selectedItem) {
     console.log('updateFlavorOptions called with:', selectedItem);
     
-    const flavorSelect = document.getElementById('flavor');
+    const flavorOptions = document.getElementById('flavorOptions');
     const flavorGroup = document.getElementById('flavorGroup');
     
-    if (!flavorSelect || !flavorGroup) {
+    if (!flavorOptions || !flavorGroup) {
         console.error('Flavor elements not found');
         return;
     }
     
-    // Clear existing options
-    flavorSelect.innerHTML = '<option value="">Select a flavor...</option>';
+    // Clear existing options (keep the first placeholder option)
+    flavorOptions.innerHTML = '<div class="custom-option" data-value="">Select a flavor...</div>';
     
-    // Flavor data based on menu items from HTML
+    // Flavor data based on menu items from HTML with emojis
     const flavorData = {
         'cupcakes': [
             // Gourmet Heritage Line
-            { value: 'lemon-burst', text: 'Lemon Burst' },
-            { value: 'orange-cranberry', text: 'Orange Cranberry' },
-            { value: 'key-lime-pie', text: 'Key Lime Pie' },
-            { value: 'chocolate-crunch', text: 'Chocolate Crunch' },
+            { value: 'lemon-burst', text: '🍋 Lemon Burst' },
+            { value: 'orange-cranberry', text: '🍊 Orange Cranberry' },
+            { value: 'key-lime-pie', text: '🥧 Key Lime Pie' },
+            { value: 'chocolate-crunch', text: '🍫 Chocolate Crunch' },
             // Kool Aid Fruit Blast Line
-            { value: 'cherry-bomb', text: 'Cherry Bomb' },
-            { value: 'blue-razz-pop', text: 'Blue Razz Pop' },
-            { value: 'watermelon-splash', text: 'Watermelon Splash' },
-            { value: 'rainbow-variety-pack', text: 'Rainbow Variety Pack' }
+            { value: 'cherry-bomb', text: '🍒 Cherry Bomb' },
+            { value: 'blue-razz-pop', text: '💙 Blue Razz Pop' },
+            { value: 'watermelon-splash', text: '🍉 Watermelon Splash' },
+            { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' }
         ],
         'cake-pops': [
-            { value: 'red-velvet-bliss', text: 'Red Velvet Bliss' },
-            { value: 'birthday-confetti', text: 'Birthday Confetti' },
-            { value: 'spooky-pop', text: 'Spooky Pop' },
-            { value: 'cookies-cream-dream', text: 'Cookies & Cream Dream' }
+            { value: 'red-velvet-bliss', text: '❤️ Red Velvet Bliss' },
+            { value: 'birthday-confetti', text: '🎉 Birthday Confetti' },
+            { value: 'spooky-pop', text: '👻 Spooky Pop' },
+            { value: 'cookies-cream-dream', text: '🍪 Cookies & Cream Dream' }
         ],
         'cakes': [
-            { value: 'custom-cakes', text: 'Custom Cakes' }
+            { value: 'custom-cakes', text: '🎂 Custom Cakes' }
         ],
         'seasonal': [
-            { value: 'pumpkin-butterscotch-bundts', text: 'Pumpkin Butterscotch Bundts' },
-            { value: 'peppermint-mocha-pops', text: 'Peppermint Mocha Pops' },
-            { value: 'breakable-hearts', text: 'Breakable Hearts' },
-            { value: 'dubai-chocolate-bars', text: 'Dubai Chocolate Bars' },
-            { value: 'chocolate-dipped-strawberries', text: 'Chocolate-Dipped Strawberries' },
-            { value: 'seasonal-variety-packs', text: 'Seasonal Variety Packs' }
+            { value: 'pumpkin-butterscotch-bundts', text: '🎃 Pumpkin Butterscotch Bundts' },
+            { value: 'peppermint-mocha-pops', text: '🍃 Peppermint Mocha Pops' },
+            { value: 'breakable-hearts', text: '💔 Breakable Hearts' },
+            { value: 'dubai-chocolate-bars', text: '🇦🇪 Dubai Chocolate Bars' },
+            { value: 'chocolate-dipped-strawberries', text: '🍓 Chocolate-Dipped Strawberries' },
+            { value: 'seasonal-variety-packs', text: '🎁 Seasonal Variety Packs' }
         ]
     };
     
     if (selectedItem && flavorData[selectedItem]) {
         console.log('Adding flavor options for:', selectedItem);
         
-        // Show flavor dropdown
-        flavorGroup.style.display = 'block';
-        setTimeout(() => {
-            flavorGroup.classList.add('show');
-        }, 10);
-        
-        // Add flavor options to the select
+        // Add flavor options to the custom dropdown
         flavorData[selectedItem].forEach(flavor => {
-            const option = document.createElement('option');
-            option.value = flavor.value;
+            const option = document.createElement('div');
+            option.className = 'custom-option';
+            option.setAttribute('data-value', flavor.value);
             option.textContent = flavor.text;
-            flavorSelect.appendChild(option);
+            flavorOptions.appendChild(option);
         });
         
         console.log('Flavor options added successfully');
     } else {
-        console.log('Hiding flavor group for:', selectedItem);
-        // Hide flavor dropdown
-        flavorGroup.classList.remove('show');
-        setTimeout(() => {
-            flavorGroup.style.display = 'none';
-        }, 400);
+        console.log('No flavor data for:', selectedItem);
     }
 }
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', (e) => {
+    const itemDropdown = document.getElementById('itemDropdown');
+    const flavorDropdown = document.getElementById('flavorDropdown');
+    
+    if (itemDropdown && !itemDropdown.contains(e.target)) {
+        itemDropdown.classList.remove('open');
+    }
+    
+    if (flavorDropdown && !flavorDropdown.contains(e.target)) {
+        flavorDropdown.classList.remove('open');
+    }
+});
+
