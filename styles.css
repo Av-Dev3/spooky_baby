@@ -1846,7 +1846,7 @@ select option {
   }
   
   .hero {
-    padding: 5rem 1rem 3rem;
+    padding: 7rem 1rem 3rem; /* Increased top padding to account for fixed header */
   }
   
   .hero-buttons {
@@ -1952,6 +1952,10 @@ select option {
   .social-icon {
     width: 16px;
     height: 16px;
+  }
+  
+  .hero {
+    padding: 6rem 1rem 2rem; /* Extra top padding for very small screens */
   }
   
   .hero-headline {
