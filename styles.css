@@ -751,17 +751,21 @@ body {
   font-family: var(--font-body);
   font-size: 1rem;
   transition: var(--transition);
+  position: relative;
+  z-index: 1;
 }
 
 /* ===== CUSTOM SELECT DROPDOWN ===== */
 .custom-select-wrapper {
   position: relative;
   width: 100%;
+  z-index: 1000;
 }
 
 .custom-select {
   position: relative;
   width: 100%;
+  z-index: 1001;
 }
 
 .custom-select-trigger {
@@ -822,7 +826,7 @@ body {
   border-top: none;
   border-radius: 0 0 12px 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
+  z-index: 9999;
   max-height: 200px;
   overflow-y: auto;
   opacity: 0;
@@ -846,7 +850,7 @@ body {
   transition: var(--transition);
   border-bottom: 1px solid rgba(207, 207, 207, 0.1);
   position: relative;
-  z-index: 1001;
+  z-index: 10000;
 }
 
 .custom-option:last-child {
@@ -1760,7 +1764,33 @@ textarea:focus {
   text-decoration: none !important;
 }
 
-/* Dropdown styling is handled above */
+/* Force dropdown above all form elements */
+.custom-select-wrapper {
+  z-index: 1000 !important;
+}
+
+.custom-select {
+  z-index: 1001 !important;
+}
+
+.custom-select-options {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+.custom-option {
+  z-index: 10000 !important;
+}
+
+/* Ensure form inputs stay below dropdown */
+.form-group:not(:has(.custom-select-wrapper)) {
+  z-index: 1;
+}
+
+.form-input,
+.form-textarea {
+  z-index: 1 !important;
+}
 
 /* Floating animation for cards */
 @keyframes float {
