@@ -708,6 +708,7 @@ body {
   background-color: var(--bg-primary);
   position: relative;
   z-index: 1;
+  overflow: visible;
 }
 
 .order-intro {
@@ -726,6 +727,7 @@ body {
   gap: 1.5rem;
   position: relative;
   z-index: 1;
+  overflow: visible;
 }
 
 .form-group {
@@ -1764,46 +1766,15 @@ textarea:focus {
   text-decoration: none !important;
 }
 
-/* NUCLEAR OPTION: Force dropdown above ALL form elements */
+/* Proper dropdown z-index solution */
 .custom-select-wrapper {
-  z-index: 9998 !important;
-  position: relative !important;
-}
-
-.custom-select {
-  z-index: 9999 !important;
-  position: relative !important;
+  position: relative;
+  z-index: 10;
 }
 
 .custom-select-options {
-  z-index: 10000 !important;
-  position: absolute !important;
-}
-
-.custom-option {
-  z-index: 10001 !important;
-  position: relative !important;
-}
-
-/* Force ALL form elements to stay below dropdown */
-.form-group {
-  z-index: 1 !important;
-  position: relative !important;
-}
-
-.form-input,
-.form-textarea {
-  z-index: 1 !important;
-  position: relative !important;
-}
-
-/* Specifically target problematic inputs */
-#amount,
-#notes,
-.form-input,
-.form-textarea {
-  z-index: 1 !important;
-  position: relative !important;
+  position: absolute;
+  z-index: 1000;
 }
 
 /* Floating animation for cards */
