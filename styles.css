@@ -757,13 +757,13 @@ body {
 .custom-select-wrapper {
   position: relative;
   width: 100%;
-  z-index: 10001;
+  z-index: 999999 !important;
 }
 
 .custom-select {
   position: relative;
   width: 100%;
-  z-index: 10002;
+  z-index: 999999 !important;
 }
 
 .custom-select-trigger {
@@ -782,7 +782,7 @@ body {
   transition: var(--transition);
   user-select: none;
   position: relative;
-  z-index: 10003;
+  z-index: 999999 !important;
 }
 
 .custom-select-trigger:hover {
@@ -816,42 +816,46 @@ body {
 }
 
 .custom-select-options {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: var(--bg-secondary);
-  border: 2px solid var(--accent-pink);
-  border-top: none;
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  z-index: 10004;
-  max-height: 200px;
-  overflow-y: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, visibility, transform;
-  backface-visibility: hidden;
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  background-color: var(--bg-secondary) !important;
+  border: 2px solid var(--accent-pink) !important;
+  border-top: none !important;
+  border-radius: 0 0 12px 12px !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
+  z-index: 999999 !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(-10px) !important;
+  transition: all 0.3s ease !important;
+  pointer-events: none !important;
 }
 
 .custom-select.open .custom-select-options {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
 }
 
 .custom-option {
-  padding: 1rem;
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  cursor: pointer;
-  transition: var(--transition);
-  border-bottom: 1px solid rgba(207, 207, 207, 0.1);
-  position: relative;
-  z-index: 10005;
+  padding: 1rem !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  transition: var(--transition) !important;
+  border-bottom: 1px solid rgba(207, 207, 207, 0.1) !important;
+  position: relative !important;
+  z-index: 999999 !important;
+  background-color: var(--bg-secondary) !important;
+  display: block !important;
+  width: 100% !important;
 }
 
 .custom-option:last-child {

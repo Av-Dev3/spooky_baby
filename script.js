@@ -342,6 +342,22 @@ const customDropdown = {
             
             const isOpen = customSelect.classList.contains('open');
             customSelect.classList.toggle('open');
+            
+            // Position dropdown options dynamically
+            if (customSelect.classList.contains('open')) {
+                const triggerRect = trigger.getBoundingClientRect();
+                options.style.position = 'fixed';
+                options.style.top = `${triggerRect.bottom}px`;
+                options.style.left = `${triggerRect.left}px`;
+                options.style.width = `${triggerRect.width}px`;
+                options.style.zIndex = '999999';
+                console.log('Dropdown positioned at:', {
+                    top: triggerRect.bottom,
+                    left: triggerRect.left,
+                    width: triggerRect.width
+                });
+            }
+            
             console.log('Dropdown open state:', customSelect.classList.contains('open'));
             console.log('Options element:', options);
             console.log('Options visibility:', getComputedStyle(options).visibility);
@@ -396,6 +412,16 @@ const customDropdown = {
         document.addEventListener('click', (e) => {
             if (!customSelect.contains(e.target)) {
                 customSelect.classList.remove('open');
+            }
+        });
+        
+        // Reposition dropdown on window resize
+        window.addEventListener('resize', () => {
+            if (customSelect.classList.contains('open')) {
+                const triggerRect = trigger.getBoundingClientRect();
+                options.style.top = `${triggerRect.bottom}px`;
+                options.style.left = `${triggerRect.left}px`;
+                options.style.width = `${triggerRect.width}px`;
             }
         });
         
