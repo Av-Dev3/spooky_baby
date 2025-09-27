@@ -323,92 +323,14 @@ const customDropdown = {
             return;
         }
         
-        // Toggle dropdown
+        // Simple toggle dropdown
         trigger.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('Dropdown trigger clicked');
+            console.log('Item dropdown trigger clicked');
             
-            const isOpen = customSelect.classList.contains('open');
-            
-            if (!isOpen) {
-                // Open dropdown
-                customSelect.classList.add('open');
-                console.log('Dropdown opened');
-                
-                // Create portal overlay
-                const overlay = document.createElement('div');
-                overlay.className = 'item-dropdown-overlay';
-                overlay.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    z-index: 99999;
-                    background: transparent;
-                    pointer-events: none;
-                `;
-                
-                // Get trigger position
-                const triggerRect = trigger.getBoundingClientRect();
-                
-                // Create dropdown in overlay
-                const dropdownClone = options.cloneNode(true);
-                dropdownClone.style.cssText = `
-                    position: absolute;
-                    top: ${triggerRect.bottom}px;
-                    left: ${triggerRect.left}px;
-                    width: ${triggerRect.width}px;
-                    background-color: var(--bg-secondary);
-                    border: 2px solid var(--accent-pink);
-                    border-radius: 12px;
-                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-                    z-index: 100000;
-                    pointer-events: auto;
-                    opacity: 1;
-                    visibility: visible;
-                    transform: translateY(0);
-                `;
-                
-                overlay.appendChild(dropdownClone);
-                document.body.appendChild(overlay);
-                
-                // Handle clicks on cloned options
-                dropdownClone.addEventListener('click', (e) => {
-                    const option = e.target.closest('.custom-option');
-                    if (option) {
-                        const value = option.getAttribute('data-value');
-                        const text = option.textContent;
-                        
-                        // Update hidden input
-                        hiddenInput.value = value;
-                        
-                        // Update display text
-                        selectText.textContent = text;
-                        
-                        // Close dropdown
-                        customSelect.classList.remove('open');
-                        document.body.removeChild(overlay);
-                    }
-                });
-                
-                // Close on overlay click
-                overlay.addEventListener('click', (e) => {
-                    if (e.target === overlay) {
-                        customSelect.classList.remove('open');
-                        document.body.removeChild(overlay);
-                    }
-                });
-                
-            } else {
-                // Close dropdown
-                customSelect.classList.remove('open');
-                const existingOverlay = document.querySelector('.item-dropdown-overlay');
-                if (existingOverlay) {
-                    document.body.removeChild(existingOverlay);
-                }
-            }
+            customSelect.classList.toggle('open');
+            console.log('Item dropdown open state:', customSelect.classList.contains('open'));
             
             // Close other dropdowns if any
             document.querySelectorAll('.custom-select').forEach(select => {
