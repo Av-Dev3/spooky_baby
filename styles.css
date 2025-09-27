@@ -1846,7 +1846,11 @@ select option {
   }
   
   .hero {
-    padding: 7rem 1rem 3rem; /* Increased top padding to account for fixed header */
+    padding: 10rem 1rem 3rem; /* Significantly increased top padding for mobile header */
+  }
+  
+  .hero-headline {
+    margin-top: 1.5rem; /* Extra margin to ensure headline is visible on mobile */
   }
   
   .hero-buttons {
@@ -1955,11 +1959,12 @@ select option {
   }
   
   .hero {
-    padding: 6rem 1rem 2rem; /* Extra top padding for very small screens */
+    padding: 8rem 1rem 2rem; /* Extra top padding for very small screens with stacked nav */
   }
   
   .hero-headline {
     font-size: 2.25rem;
+    margin-top: 2rem; /* Extra margin to ensure headline is visible */
   }
   
   .hero-subtext {
