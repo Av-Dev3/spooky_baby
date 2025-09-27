@@ -229,26 +229,14 @@
                 
                 <div class="form-group">
                     <label for="item" class="form-label">Item *</label>
-                    <div class="custom-select-wrapper">
-                        <div class="custom-select" id="customSelect">
-                            <div class="custom-select-trigger">
-                                <span class="custom-select-text">Select an item...</span>
-                                <div class="custom-select-arrow">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M4 6L8 10L12 6" stroke="#F6B6CF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="custom-select-options">
-                                <div class="custom-option" data-value="cupcakes">Cupcakes</div>
-                                <div class="custom-option" data-value="cake-pops">Cake Pops</div>
-                                <div class="custom-option" data-value="cakes">Cakes</div>
-                                <div class="custom-option" data-value="seasonal">Seasonal & Specialty</div>
-                                <div class="custom-option" data-value="custom">Custom Request</div>
-                            </div>
-                        </div>
-                        <input type="hidden" id="item" name="item" required>
-                    </div>
+                    <select id="item" name="item" class="form-select" required>
+                        <option value="">Select an item...</option>
+                        <option value="cupcakes">Cupcakes</option>
+                        <option value="cake-pops">Cake Pops</option>
+                        <option value="cakes">Cakes</option>
+                        <option value="seasonal">Seasonal & Specialty</option>
+                        <option value="custom">Custom Request</option>
+                    </select>
                 </div>
 
                 <div class="form-group" id="flavorGroup" style="display: none;">

@@ -310,143 +310,25 @@ const customDropdown = {
     },
 
     initItemDropdown() {
-        const customSelect = document.getElementById('customSelect');
-        const trigger = customSelect?.querySelector('.custom-select-trigger');
-        const options = customSelect?.querySelector('.custom-select-options');
-        const hiddenInput = document.getElementById('item');
-        const selectText = customSelect?.querySelector('.custom-select-text');
+        // Using standard HTML select - no custom dropdown needed
+        const itemSelect = document.getElementById('item');
         
-        console.log('Custom dropdown elements:', { customSelect, trigger, options, hiddenInput, selectText });
-        
-        if (!customSelect || !trigger || !options || !hiddenInput) {
-            console.error('Custom dropdown elements not found');
+        if (!itemSelect) {
+            console.error('Item select not found');
             return;
         }
         
-        // Toggle dropdown with positioning
-        trigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Item dropdown trigger clicked');
+        // Handle item selection to show/hide flavor dropdown
+        itemSelect.addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            const flavorGroup = document.getElementById('flavorGroup');
             
-            const isOpen = customSelect.classList.contains('open');
-            
-            if (!isOpen) {
-                // Open dropdown
-                customSelect.classList.add('open');
-                
-                // Position dropdown correctly
-                const triggerRect = trigger.getBoundingClientRect();
-                const options = customSelect.querySelector('.custom-select-options');
-                
-                options.style.top = `${triggerRect.bottom + window.scrollY}px`;
-                options.style.left = `${triggerRect.left + window.scrollX}px`;
-                options.style.width = `${triggerRect.width}px`;
-                
-                console.log('Item dropdown opened and positioned');
+            if (selectedValue && selectedValue !== 'custom') {
+                flavorGroup.style.display = 'block';
+                // Trigger flavor dropdown update
+                this.updateFlavorOptions(selectedValue);
             } else {
-                // Close dropdown
-                customSelect.classList.remove('open');
-                console.log('Item dropdown closed');
-            }
-            
-            // Close other dropdowns if any
-            document.querySelectorAll('.custom-select').forEach(select => {
-                if (select !== customSelect) {
-                    select.classList.remove('open');
-                }
-            });
-        });
-        
-        // Handle option selection
-        options.addEventListener('click', (e) => {
-            const option = e.target.closest('.custom-option');
-            console.log('Option clicked:', option);
-            if (!option || option.classList.contains('disabled')) return;
-            
-            const value = option.getAttribute('data-value');
-            const text = option.textContent;
-            console.log('Selected option:', { value, text });
-            
-            // Update hidden input
-            hiddenInput.value = value;
-            console.log('Hidden input value set to:', hiddenInput.value);
-            
-            // Update display text
-            selectText.textContent = text;
-            
-            // Update selected state
-            options.querySelectorAll('.custom-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            option.classList.add('selected');
-            
-            // Close dropdown
-            customSelect.classList.remove('open');
-            
-            // Trigger change event to update flavor dropdown
-            const changeEvent = new Event('change', { bubbles: true });
-            hiddenInput.dispatchEvent(changeEvent);
-            console.log('Change event dispatched for item selection');
-            
-            // Trigger validation if needed
-            if (hiddenInput.checkValidity) {
-                hiddenInput.checkValidity();
-            }
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!customSelect.contains(e.target)) {
-                customSelect.classList.remove('open');
-            }
-        });
-        
-        // Simple resize handler - no repositioning needed
-        window.addEventListener('resize', () => {
-            // Dropdown will stay in place naturally
-        });
-        
-        // Keyboard navigation
-        customSelect.addEventListener('keydown', (e) => {
-            const isOpen = customSelect.classList.contains('open');
-            const optionElements = Array.from(options.querySelectorAll('.custom-option:not(.disabled)'));
-            const currentSelected = options.querySelector('.custom-option.selected');
-            let currentIndex = currentSelected ? optionElements.indexOf(currentSelected) : -1;
-            
-            switch (e.key) {
-                case 'Enter':
-                case ' ':
-                    e.preventDefault();
-                    if (!isOpen) {
-                        customSelect.classList.add('open');
-                    } else if (currentIndex >= 0) {
-                        optionElements[currentIndex].click();
-                    }
-                    break;
-                    
-                case 'Escape':
-                    customSelect.classList.remove('open');
-                    trigger.focus();
-                    break;
-                    
-                case 'ArrowDown':
-                    e.preventDefault();
-                    if (!isOpen) {
-                        customSelect.classList.add('open');
-                    } else {
-                        currentIndex = Math.min(currentIndex + 1, optionElements.length - 1);
-                        this.highlightOption(optionElements[currentIndex]);
-                    }
-                    break;
-                    
-                case 'ArrowUp':
-                    e.preventDefault();
-                    if (isOpen) {
-                        currentIndex = Math.max(currentIndex - 1, 0);
-                        this.highlightOption(optionElements[currentIndex]);
-                    }
-                    break;
+                flavorGroup.style.display = 'none';
             }
         });
     },
