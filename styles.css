@@ -1767,54 +1767,9 @@ textarea:focus {
 }
 
 /* NUCLEAR OPTION: Force dropdown above everything */
-.custom-select-wrapper {
-  position: relative !important;
-  z-index: 9998 !important;
-}
+/* REMOVED CONFLICTING RULES */
 
-.custom-select {
-  position: relative !important;
-  z-index: 9999 !important;
-}
-
-.custom-select-options {
-  position: absolute !important;
-  z-index: 99999 !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-}
-
-.custom-option {
-  position: relative !important;
-  z-index: 100000 !important;
-}
-
-/* Force ALL form elements to stay below dropdown */
-.form-group {
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-.form-input,
-.form-textarea {
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-/* Specifically target the problematic inputs */
-#amount,
-#notes {
-  z-index: 1 !important;
-  position: relative !important;
-}
-
-/* Ensure no parent containers clip the dropdown */
-.order,
-.order-form,
-.container {
-  overflow: visible !important;
-}
+/* REMOVED CONFLICTING RULES */
 
 /* Floating animation for cards */
 @keyframes float {
@@ -1826,33 +1781,32 @@ textarea:focus {
   }
 }
 
-/* FINAL DROPDOWN FIX - OVERRIDE EVERYTHING */
+/* CLEAN DROPDOWN FIX */
 #customSelect .custom-select-options {
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 999999 !important;
-  background-color: var(--bg-secondary) !important;
-  border: 2px solid var(--accent-pink) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateY(0) !important;
-  pointer-events: auto !important;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--accent-pink);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
 }
 
 #customSelect.open .custom-select-options {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateY(0) !important;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 #customSelect .custom-option {
-  z-index: 1000000 !important;
-  position: relative !important;
-  pointer-events: auto !important;
+  z-index: 1001;
+  position: relative;
 }
 
 
