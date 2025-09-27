@@ -323,14 +323,32 @@ const customDropdown = {
             return;
         }
         
-        // Simple toggle dropdown
+        // Toggle dropdown with positioning
         trigger.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             console.log('Item dropdown trigger clicked');
             
-            customSelect.classList.toggle('open');
-            console.log('Item dropdown open state:', customSelect.classList.contains('open'));
+            const isOpen = customSelect.classList.contains('open');
+            
+            if (!isOpen) {
+                // Open dropdown
+                customSelect.classList.add('open');
+                
+                // Position dropdown correctly
+                const triggerRect = trigger.getBoundingClientRect();
+                const options = customSelect.querySelector('.custom-select-options');
+                
+                options.style.top = `${triggerRect.bottom + window.scrollY}px`;
+                options.style.left = `${triggerRect.left + window.scrollX}px`;
+                options.style.width = `${triggerRect.width}px`;
+                
+                console.log('Item dropdown opened and positioned');
+            } else {
+                // Close dropdown
+                customSelect.classList.remove('open');
+                console.log('Item dropdown closed');
+            }
             
             // Close other dropdowns if any
             document.querySelectorAll('.custom-select').forEach(select => {

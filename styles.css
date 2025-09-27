@@ -1781,17 +1781,24 @@ textarea:focus {
   }
 }
 
-/* CLEAN DROPDOWN FIX */
+/* WORKING DROPDOWN - FINAL SOLUTION */
+#customSelect {
+  position: relative;
+  z-index: 10000;
+}
+
 #customSelect .custom-select-options {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: var(--bg-secondary);
-  border: 2px solid var(--accent-pink);
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: auto !important;
+  min-width: 200px !important;
+  background-color: var(--bg-secondary) !important;
+  border: 2px solid var(--accent-pink) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+  z-index: 999999 !important;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -1799,14 +1806,15 @@ textarea:focus {
 }
 
 #customSelect.open .custom-select-options {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
 }
 
 #customSelect .custom-option {
-  z-index: 1001;
-  position: relative;
+  z-index: 1000000 !important;
+  position: relative !important;
+  pointer-events: auto !important;
 }
 
 
