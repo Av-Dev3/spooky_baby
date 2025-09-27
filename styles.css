@@ -1764,32 +1764,46 @@ textarea:focus {
   text-decoration: none !important;
 }
 
-/* Force dropdown above all form elements */
+/* NUCLEAR OPTION: Force dropdown above ALL form elements */
 .custom-select-wrapper {
-  z-index: 1000 !important;
+  z-index: 9998 !important;
+  position: relative !important;
 }
 
 .custom-select {
-  z-index: 1001 !important;
+  z-index: 9999 !important;
+  position: relative !important;
 }
 
 .custom-select-options {
-  z-index: 9999 !important;
+  z-index: 10000 !important;
   position: absolute !important;
 }
 
 .custom-option {
-  z-index: 10000 !important;
+  z-index: 10001 !important;
+  position: relative !important;
 }
 
-/* Ensure form inputs stay below dropdown */
-.form-group:not(:has(.custom-select-wrapper)) {
-  z-index: 1;
+/* Force ALL form elements to stay below dropdown */
+.form-group {
+  z-index: 1 !important;
+  position: relative !important;
 }
 
 .form-input,
 .form-textarea {
   z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Specifically target problematic inputs */
+#amount,
+#notes,
+.form-input,
+.form-textarea {
+  z-index: 1 !important;
+  position: relative !important;
 }
 
 /* Floating animation for cards */
@@ -1882,3 +1896,4 @@ textarea:focus {
     white-space: normal !important;
   }
 }
+
