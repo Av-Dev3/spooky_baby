@@ -332,6 +332,17 @@ const customDropdown = {
             customSelect.classList.toggle('open');
             console.log('Dropdown open state:', customSelect.classList.contains('open'));
             
+            // Position dropdown correctly when opening
+            if (customSelect.classList.contains('open')) {
+                const triggerRect = trigger.getBoundingClientRect();
+                const options = customSelect.querySelector('.custom-select-options');
+                
+                // Position the dropdown below the trigger
+                options.style.top = `${triggerRect.bottom + window.scrollY}px`;
+                options.style.left = `${triggerRect.left + window.scrollX}px`;
+                options.style.width = `${triggerRect.width}px`;
+            }
+            
             // Close other dropdowns if any
             document.querySelectorAll('.custom-select').forEach(select => {
                 if (select !== customSelect) {

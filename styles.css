@@ -819,14 +819,15 @@ body {
 }
 
 .custom-select-options {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+  position: fixed;
+  top: auto;
+  left: auto;
+  right: auto;
+  width: auto;
+  min-width: 200px;
   background-color: var(--bg-secondary);
   border: 2px solid var(--accent-pink);
-  border-top: none;
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   z-index: 9999;
   max-height: 200px;
