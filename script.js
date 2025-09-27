@@ -325,11 +325,13 @@ const customDropdown = {
             const flavorGroup = document.getElementById('flavorGroup');
             
             if (selectedValue && selectedValue !== 'custom') {
+                // Show flavor dropdown and populate options
                 flavorGroup.style.display = 'block';
-                // Update flavor options
                 updateFlavorOptions(selectedValue);
             } else {
+                // Hide flavor dropdown
                 flavorGroup.style.display = 'none';
+                const flavorSelect = document.getElementById('flavor');
                 flavorSelect.value = '';
             }
         });
