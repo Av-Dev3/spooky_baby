@@ -327,7 +327,7 @@ const customDropdown = {
             if (selectedValue && selectedValue !== 'custom') {
                 flavorGroup.style.display = 'block';
                 // Update flavor options
-                this.updateFlavorOptions(selectedValue);
+                updateFlavorOptions(selectedValue);
             } else {
                 flavorGroup.style.display = 'none';
                 flavorSelect.value = '';
@@ -344,7 +344,6 @@ const customDropdown = {
             return;
         }
         
-        // No additional setup needed for standard select
         console.log('Flavor select initialized');
 
         // Flavor data based on menu items (custom requests don't need flavors)
@@ -784,3 +783,68 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('❌ Initialization error:', error);
     }
 });
+
+// Add the updateFlavorOptions function
+function updateFlavorOptions(selectedItem) {
+    console.log('updateFlavorOptions called with:', selectedItem);
+    
+    const flavorSelect = document.getElementById('flavor');
+    const flavorGroup = document.getElementById('flavorGroup');
+    
+    if (!flavorSelect || !flavorGroup) {
+        console.error('Flavor elements not found');
+        return;
+    }
+    
+    // Clear existing options
+    flavorSelect.innerHTML = '<option value="">Select a flavor...</option>';
+    
+    // Flavor data based on menu items
+    const flavorData = {
+        'cupcakes': [
+            { value: 'lemon-burst', text: 'Lemon Burst' },
+            { value: 'orange-cranberry', text: 'Orange Cranberry' },
+            { value: 'key-lime-pie', text: 'Key Lime Pie' },
+            { value: 'chocolate-crunch', text: 'Chocolate Crunch' },
+            { value: 'cherry', text: 'Cherry' },
+            { value: 'grape', text: 'Grape' },
+            { value: 'orange', text: 'Orange' },
+            { value: 'strawberry', text: 'Strawberry' }
+        ],
+        'cake-pops': [
+            { value: 'vanilla-bean', text: 'Vanilla Bean' },
+            { value: 'rich-chocolate', text: 'Rich Chocolate' },
+            { value: 'red-velvet', text: 'Red Velvet' },
+            { value: 'pumpkin-spice', text: 'Pumpkin Spice' },
+            { value: 'caramel-apple', text: 'Caramel Apple' },
+            { value: 'gingerbread', text: 'Gingerbread' }
+        ],
+        'cakes': [
+            { value: 'custom-cakes', text: 'Custom Cakes' }
+        ],
+        'seasonal': [
+            { value: 'ghostly-meringues', text: 'Ghostly Meringues' },
+            { value: 'spiderweb-brownies', text: 'Spiderweb Brownies' },
+            { value: 'witchs-brew-cookies', text: 'Witch\'s Brew Cookies' },
+            { value: 'custom-cakes', text: 'Custom Cakes' },
+            { value: 'party-platters', text: 'Party Platters' },
+            { value: 'event-favors', text: 'Event Favors' }
+        ]
+    };
+    
+    if (selectedItem && flavorData[selectedItem]) {
+        console.log('Adding flavor options for:', selectedItem);
+        
+        // Add flavor options to the select
+        flavorData[selectedItem].forEach(flavor => {
+            const option = document.createElement('option');
+            option.value = flavor.value;
+            option.textContent = flavor.text;
+            flavorSelect.appendChild(option);
+        });
+        
+        console.log('Flavor options added successfully');
+    } else {
+        console.log('No flavor data for:', selectedItem);
+    }
+}
