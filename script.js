@@ -329,89 +329,13 @@ const customDropdown = {
             e.stopPropagation();
             console.log('Dropdown trigger clicked');
             
-            // Auto-select first option when opening (if nothing is selected)
-            if (!hiddenInput.value && options.children.length > 0) {
-                const firstOption = options.children[0];
-                const value = firstOption.getAttribute('data-value');
-                const text = firstOption.textContent;
-                
-                hiddenInput.value = value;
-                selectText.textContent = text;
-                firstOption.classList.add('selected');
-            }
-            
-            const isOpen = customSelect.classList.contains('open');
             customSelect.classList.toggle('open');
-            
-            // Create a portal-like overlay for the dropdown
-            if (customSelect.classList.contains('open')) {
-                // Remove any existing overlay
-                const existingOverlay = document.querySelector('.dropdown-overlay');
-                if (existingOverlay) {
-                    existingOverlay.remove();
-                }
-                
-                // Create overlay
-                const overlay = document.createElement('div');
-                overlay.className = 'dropdown-overlay';
-                overlay.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    background: transparent;
-                    z-index: 999998;
-                    pointer-events: none;
-                `;
-                document.body.appendChild(overlay);
-                
-                // Position dropdown options in the overlay
-                const triggerRect = trigger.getBoundingClientRect();
-                options.style.cssText = `
-                    position: fixed !important;
-                    top: ${triggerRect.bottom}px !important;
-                    left: ${triggerRect.left}px !important;
-                    width: ${triggerRect.width}px !important;
-                    z-index: 999999 !important;
-                    background-color: var(--bg-secondary) !important;
-                    border: 2px solid var(--accent-pink) !important;
-                    border-radius: 0 0 12px 12px !important;
-                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
-                    max-height: 200px !important;
-                    overflow-y: auto !important;
-                    opacity: 1 !important;
-                    visibility: visible !important;
-                    transform: translateY(0) !important;
-                    pointer-events: auto !important;
-                `;
-                overlay.appendChild(options);
-                
-                console.log('Dropdown positioned in overlay at:', {
-                    top: triggerRect.bottom,
-                    left: triggerRect.left,
-                    width: triggerRect.width
-                });
-            } else {
-                // Remove overlay when closing
-                const overlay = document.querySelector('.dropdown-overlay');
-                if (overlay) {
-                    overlay.remove();
-                }
-                // Move options back to original position
-                customSelect.appendChild(options);
-            }
-            
             console.log('Dropdown open state:', customSelect.classList.contains('open'));
             
             // Close other dropdowns if any
             document.querySelectorAll('.custom-select').forEach(select => {
                 if (select !== customSelect) {
                     select.classList.remove('open');
-                    const otherOverlay = document.querySelector('.dropdown-overlay');
-                    if (otherOverlay) {
-                        otherOverlay.remove();
-                    }
                 }
             });
         });
@@ -439,14 +363,8 @@ const customDropdown = {
             });
             option.classList.add('selected');
             
-            // Close dropdown and clean up overlay
+            // Close dropdown
             customSelect.classList.remove('open');
-            const overlay = document.querySelector('.dropdown-overlay');
-            if (overlay) {
-                overlay.remove();
-            }
-            // Move options back to original position
-            customSelect.appendChild(options);
             
             // Trigger change event to update flavor dropdown
             const changeEvent = new Event('change', { bubbles: true });
@@ -461,25 +379,14 @@ const customDropdown = {
         
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
-            if (!customSelect.contains(e.target) && !e.target.closest('.dropdown-overlay')) {
+            if (!customSelect.contains(e.target)) {
                 customSelect.classList.remove('open');
-                const overlay = document.querySelector('.dropdown-overlay');
-                if (overlay) {
-                    overlay.remove();
-                }
-                // Move options back to original position
-                customSelect.appendChild(options);
             }
         });
         
-        // Reposition dropdown on window resize
+        // Simple resize handler - no repositioning needed
         window.addEventListener('resize', () => {
-            if (customSelect.classList.contains('open')) {
-                const triggerRect = trigger.getBoundingClientRect();
-                options.style.top = `${triggerRect.bottom}px`;
-                options.style.left = `${triggerRect.left}px`;
-                options.style.width = `${triggerRect.width}px`;
-            }
+            // Dropdown will stay in place naturally
         });
         
         // Keyboard navigation
