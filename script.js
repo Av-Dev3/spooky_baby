@@ -338,7 +338,7 @@ const customDropdown = {
                 
                 // Create portal overlay
                 const overlay = document.createElement('div');
-                overlay.className = 'dropdown-overlay';
+                overlay.className = 'item-dropdown-overlay';
                 overlay.style.cssText = `
                     position: fixed;
                     top: 0;
@@ -404,7 +404,7 @@ const customDropdown = {
             } else {
                 // Close dropdown
                 customSelect.classList.remove('open');
-                const existingOverlay = document.querySelector('.dropdown-overlay');
+                const existingOverlay = document.querySelector('.item-dropdown-overlay');
                 if (existingOverlay) {
                     document.body.removeChild(existingOverlay);
                 }
