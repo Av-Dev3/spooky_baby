@@ -68,18 +68,36 @@ class DriveGallery {
           <button class="btn btn-yellow" id="loadMoreButton">Load More Photos</button>
         </div>
       </div>
-      ${this.config.enableLightbox ? this.createLightboxHTML() : ''}
     `;
 
     this.grid = document.getElementById('driveGalleryGrid');
     this.loading = document.getElementById('driveGalleryLoading');
     this.error = document.getElementById('driveGalleryError');
     this.loadMore = document.getElementById('driveGalleryLoadMore');
+    
+    // Create lightbox and append to body
+    if (this.config.enableLightbox) {
+      this.createLightbox();
+    }
+  }
+
+  createLightbox() {
+    // Remove existing lightbox if any
+    const existingLightbox = document.getElementById('driveLightbox');
+    if (existingLightbox) {
+      existingLightbox.remove();
+    }
+
+    // Create new lightbox
+    const lightboxHTML = this.createLightboxHTML();
+    document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+    
     this.lightbox = document.getElementById('driveLightbox');
     
-    // Ensure lightbox is properly initialized
-    if (this.config.enableLightbox && !this.lightbox) {
-      console.error('Lightbox element not found after creation');
+    if (!this.lightbox) {
+      console.error('Failed to create lightbox element');
+    } else {
+      console.log('Lightbox created successfully');
     }
   }
 
@@ -349,11 +367,18 @@ class DriveGallery {
 
   // Lightbox methods
   openLightbox(index) {
-    if (!this.config.enableLightbox) return;
+    console.log('openLightbox called with index:', index);
+    console.log('enableLightbox:', this.config.enableLightbox);
+    console.log('lightbox element:', this.lightbox);
+    
+    if (!this.config.enableLightbox) {
+      console.log('Lightbox disabled');
+      return;
+    }
 
     // Validate index
     if (index < 0 || index >= this.currentImages.length) {
-      console.error('Invalid lightbox index:', index);
+      console.error('Invalid lightbox index:', index, 'Total images:', this.currentImages.length);
       return;
     }
     
@@ -361,11 +386,20 @@ class DriveGallery {
     this.lightboxOpen = true;
     
     if (this.lightbox) {
+      console.log('Showing lightbox');
       this.lightbox.style.display = 'flex';
       document.body.style.overflow = 'hidden';
       this.updateLightboxContent();
     } else {
-      console.error('Lightbox element not found');
+      console.error('Lightbox element not found, trying to recreate...');
+      this.createLightbox();
+      if (this.lightbox) {
+        this.lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        this.updateLightboxContent();
+      } else {
+        console.error('Still cannot create lightbox');
+      }
     }
   }
 
@@ -463,11 +497,22 @@ class DriveGallery {
   }
 
   updateLightboxContent() {
+    console.log('updateLightboxContent called');
     const image = document.getElementById('lightboxImage');
     const caption = document.getElementById('lightboxCaption');
 
-    if (!image || !this.currentImages[this.lightboxIndex]) {
-      console.error('Lightbox elements not found or invalid index:', this.lightboxIndex);
+    console.log('Lightbox image element:', image);
+    console.log('Lightbox caption element:', caption);
+    console.log('Current images:', this.currentImages);
+    console.log('Lightbox index:', this.lightboxIndex);
+
+    if (!image) {
+      console.error('Lightbox image element not found');
+      return;
+    }
+    
+    if (!this.currentImages[this.lightboxIndex]) {
+      console.error('Invalid lightbox index:', this.lightboxIndex, 'Total images:', this.currentImages.length);
       return;
     }
 
@@ -477,6 +522,8 @@ class DriveGallery {
     // Use the same image that's already working in the grid
     // Find the corresponding grid image and copy its src
     const gridImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"] img`);
+    console.log('Grid image element:', gridImage);
+    
     if (gridImage && gridImage.src) {
       console.log('Using grid image src:', gridImage.src);
       image.src = gridImage.src;
@@ -488,6 +535,8 @@ class DriveGallery {
     image.alt = photo.caption;
     
     if (caption) caption.textContent = photo.caption;
+    
+    console.log('Lightbox content updated');
   }
 
   loadImageWithFallbacks(imgElement, photo) {
