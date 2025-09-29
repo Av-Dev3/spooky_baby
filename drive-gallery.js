@@ -544,13 +544,18 @@ class DriveGallery {
     const gridImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"] img`);
     console.log('Grid image element:', gridImage);
     
-    if (gridImage && gridImage.src) {
-      console.log('Using grid image src:', gridImage.src);
-      image.src = gridImage.src;
+    // Get a larger version of the image
+    let largeImageSrc = photo.src;
+    
+    if (gridImage && gridImage.src && gridImage.src.includes('googleusercontent.com')) {
+      // Replace the thumbnail size (s220) with a larger size (s2048 for high quality)
+      largeImageSrc = gridImage.src.replace(/=s\d+/, '=s2048');
+      console.log('Using large Google Drive image:', largeImageSrc);
     } else {
-      console.log('Using photo src:', photo.src);
-      image.src = photo.src;
+      console.log('Using photo src:', largeImageSrc);
     }
+    
+    image.src = largeImageSrc;
     
     image.alt = photo.caption;
     
