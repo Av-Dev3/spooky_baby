@@ -373,7 +373,7 @@ const customDropdown = {
             
             // Handle flavor dropdown visibility
             const flavorGroup = document.getElementById('flavorGroup');
-            if (value && value !== 'custom') {
+            if (value && value !== 'custom' && value !== 'cakecicles') {
                 // Show flavor dropdown and populate options
                 flavorGroup.style.display = 'block';
                 setTimeout(() => {
