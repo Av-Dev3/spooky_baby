@@ -97,37 +97,40 @@ class DriveGallery {
 
   createLightbox() {
     // Remove existing lightbox if any
-    const existingLightbox = document.getElementById('driveLightbox');
+    const existingLightbox = document.getElementById('simpleLightbox');
     if (existingLightbox) {
       existingLightbox.remove();
     }
 
-    // Create new lightbox
-    const lightboxHTML = this.createLightboxHTML();
-    document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+    // Create simple lightbox from scratch
+    const lightbox = document.createElement('div');
+    lightbox.id = 'simpleLightbox';
+    lightbox.style.cssText = `
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 999999;
+      justify-content: center;
+      align-items: center;
+    `;
     
-    this.lightbox = document.getElementById('driveLightbox');
-    
-    if (!this.lightbox) {
-      console.error('Failed to create lightbox element');
-    } else {
-      console.log('Lightbox created successfully');
-    }
-  }
-
-  createLightboxHTML() {
-    return `
-      <div class="drive-lightbox" id="driveLightbox" style="display: none;">
-        <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
-        <div class="lightbox-container">
-          <button class="lightbox-close" id="lightboxClose">×</button>
-          <button class="lightbox-prev" id="lightboxPrev">‹</button>
-          <button class="lightbox-next" id="lightboxNext">›</button>
-          <img class="lightbox-image" id="lightboxImage" alt="">
-          <div class="lightbox-caption" id="lightboxCaption"></div>
-        </div>
+    lightbox.innerHTML = `
+      <div style="position: relative; background: white; padding: 30px; border-radius: 10px; max-width: 90%; max-height: 90%;">
+        <button id="closeBtn" style="position: absolute; top: 10px; right: 10px; background: #ccc; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 24px;">×</button>
+        <button id="prevBtn" style="position: absolute; left: -50px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">‹</button>
+        <button id="nextBtn" style="position: absolute; right: -50px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">›</button>
+        <img id="lightboxImg" style="max-width: 800px; max-height: 600px; display: block;">
+        <div id="lightboxCaption" style="margin-top: 15px; text-align: center; font-size: 16px; color: #333;"></div>
       </div>
     `;
+    
+    document.body.appendChild(lightbox);
+    this.lightbox = lightbox;
+    console.log('Simple lightbox created');
   }
 
   bindEvents() {
@@ -155,32 +158,23 @@ class DriveGallery {
   }
 
   bindLightboxEvents() {
-    // Click handlers
     document.addEventListener('click', (e) => {
-      if (e.target.id === 'lightboxClose' || e.target.id === 'lightboxBackdrop') {
+      if (e.target.id === 'closeBtn' || e.target.id === 'simpleLightbox') {
         this.closeLightbox();
       }
-      if (e.target.id === 'lightboxPrev') {
+      if (e.target.id === 'prevBtn') {
         this.previousImage();
       }
-      if (e.target.id === 'lightboxNext') {
+      if (e.target.id === 'nextBtn') {
         this.nextImage();
       }
     });
 
-    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (!this.lightboxOpen) return;
-      
-      if (e.key === 'Escape') {
-        this.closeLightbox();
-      }
-      if (e.key === 'ArrowLeft') {
-        this.previousImage();
-      }
-      if (e.key === 'ArrowRight') {
-        this.nextImage();
-      }
+      if (e.key === 'Escape') this.closeLightbox();
+      if (e.key === 'ArrowLeft') this.previousImage();
+      if (e.key === 'ArrowRight') this.nextImage();
     });
   }
 
@@ -403,42 +397,14 @@ class DriveGallery {
 
   // Lightbox methods
   openLightbox(index) {
-    console.log('=== openLightbox called ===');
-    console.log('Called from:', new Error().stack);
-    console.log('Index:', index);
-    console.log('enableLightbox:', this.config.enableLightbox);
-    console.log('lightbox element:', this.lightbox);
-    
-    if (!this.config.enableLightbox) {
-      console.log('Lightbox disabled');
-      return;
-    }
-
-    // Validate index
-    if (index < 0 || index >= this.currentImages.length) {
-      console.error('Invalid lightbox index:', index, 'Total images:', this.currentImages.length);
-      return;
-    }
+    if (!this.config.enableLightbox || !this.lightbox) return;
+    if (index < 0 || index >= this.currentImages.length) return;
     
     this.lightboxIndex = index;
     this.lightboxOpen = true;
-    
-    if (this.lightbox) {
-      console.log('Showing lightbox');
-      this.lightbox.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      this.updateLightboxContent();
-    } else {
-      console.error('Lightbox element not found, trying to recreate...');
-      this.createLightbox();
-      if (this.lightbox) {
-        this.lightbox.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        this.updateLightboxContent();
-      } else {
-        console.error('Still cannot create lightbox');
-      }
-    }
+    this.lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    this.updateLightboxContent();
   }
 
   createFallbackLightbox(index) {
@@ -513,17 +479,10 @@ class DriveGallery {
   }
 
   closeLightbox() {
-    console.log('closeLightbox called, lightboxOpen:', this.lightboxOpen);
-    if (!this.lightboxOpen) {
-      console.log('Lightbox already closed, returning');
-      return;
-    }
-
-    console.log('Closing lightbox...');
+    if (!this.lightboxOpen || !this.lightbox) return;
     this.lightboxOpen = false;
     this.lightbox.style.display = 'none';
     document.body.style.overflow = '';
-    console.log('Lightbox closed');
   }
 
   previousImage() {
@@ -541,74 +500,29 @@ class DriveGallery {
   }
 
   updateLightboxContent() {
-    console.log('updateLightboxContent called');
-    const image = document.getElementById('lightboxImage');
+    const image = document.getElementById('lightboxImg');
     const caption = document.getElementById('lightboxCaption');
-
-    console.log('Lightbox image element:', image);
-    console.log('Lightbox caption element:', caption);
-    console.log('Current images:', this.currentImages);
-    console.log('Lightbox index:', this.lightboxIndex);
-
-    if (!image) {
-      console.error('Lightbox image element not found');
-      return;
-    }
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
     
-    if (!this.currentImages[this.lightboxIndex]) {
-      console.error('Invalid lightbox index:', this.lightboxIndex, 'Total images:', this.currentImages.length);
-      return;
-    }
+    if (!image || !this.currentImages[this.lightboxIndex]) return;
 
     const photo = this.currentImages[this.lightboxIndex];
-    console.log('Lightbox photo:', photo);
-    
-    // Use the same image that's already working in the grid
-    // Find the corresponding grid image and copy its src
     const gridImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"] img`);
-    console.log('Grid image element:', gridImage);
-    console.log('Grid image src:', gridImage ? gridImage.src : 'none');
     
-    // Get a larger version of the image
-    let largeImageSrc = photo.src;
-    
-    if (gridImage && gridImage.src) {
-      console.log('Original src:', gridImage.src);
-      
-      if (gridImage.src.includes('googleusercontent.com')) {
-        // Replace the thumbnail size (s220) with a larger size (s2048 for high quality)
-        largeImageSrc = gridImage.src.replace(/=s\d+$/, '=s2048');
-        console.log('Using large Google Drive image:', largeImageSrc);
-      } else {
-        largeImageSrc = gridImage.src;
-        console.log('Using grid src as-is:', largeImageSrc);
-      }
-    } else {
-      console.log('Using photo.src:', largeImageSrc);
+    // Use large version of image
+    let imageSrc = photo.src;
+    if (gridImage && gridImage.src && gridImage.src.includes('googleusercontent.com')) {
+      imageSrc = gridImage.src.replace(/=s\d+$/, '=s2048');
     }
     
-    console.log('Final image src being set:', largeImageSrc);
-    
-    // Add error handler for debugging
-    image.onerror = () => {
-      console.error('❌ Failed to load large image:', largeImageSrc);
-      console.log('Trying original thumbnail...');
-      if (gridImage && gridImage.src) {
-        image.src = gridImage.src;
-      }
-    };
-    
-    image.onload = () => {
-      console.log('✅ Image loaded successfully!');
-    };
-    
-    image.src = largeImageSrc;
-    
+    image.src = imageSrc;
     image.alt = photo.caption;
-    
     if (caption) caption.textContent = photo.caption;
     
-    console.log('Lightbox content updated');
+    // Update button states
+    if (prevBtn) prevBtn.disabled = this.lightboxIndex === 0;
+    if (nextBtn) nextBtn.disabled = this.lightboxIndex === this.currentImages.length - 1;
   }
 
   loadImageWithFallbacks(imgElement, photo) {
