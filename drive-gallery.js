@@ -119,12 +119,12 @@ class DriveGallery {
     `;
     
     lightbox.innerHTML = `
-      <div style="position: relative; background: white; padding: 30px; border-radius: 10px; max-width: 90%; max-height: 90%;">
-        <button id="closeBtn" style="position: absolute; top: 10px; right: 10px; background: #ccc; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 24px;">×</button>
-        <button id="prevBtn" style="position: absolute; left: -50px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">‹</button>
-        <button id="nextBtn" style="position: absolute; right: -50px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">›</button>
-        <img id="lightboxImg" style="max-width: 800px; max-height: 600px; display: block;">
-        <div id="lightboxCaption" style="margin-top: 15px; text-align: center; font-size: 16px; color: #333;"></div>
+      <div style="position: relative; background: #ffffff; padding: 40px; border-radius: 10px; max-width: 900px; border: 5px solid red;">
+        <button id="closeBtn" style="position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px; z-index: 10;">×</button>
+        <button id="prevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: red; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 40px; z-index: 10;">‹</button>
+        <button id="nextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: red; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 40px; z-index: 10;">›</button>
+        <img id="lightboxImg" style="max-width: 800px; max-height: 600px; display: block; border: 3px solid blue;">
+        <div id="lightboxCaption" style="margin-top: 20px; text-align: center; font-size: 18px; color: #000; font-weight: bold;"></div>
       </div>
     `;
     
