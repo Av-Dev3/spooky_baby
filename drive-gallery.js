@@ -121,6 +121,8 @@ class DriveGallery {
         <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
         <div class="lightbox-container">
           <button class="lightbox-close" id="lightboxClose">×</button>
+          <button class="lightbox-prev" id="lightboxPrev">‹</button>
+          <button class="lightbox-next" id="lightboxNext">›</button>
           <img class="lightbox-image" id="lightboxImage" alt="">
           <div class="lightbox-caption" id="lightboxCaption"></div>
         </div>
@@ -153,17 +155,31 @@ class DriveGallery {
   }
 
   bindLightboxEvents() {
-    // Simple click handlers
+    // Click handlers
     document.addEventListener('click', (e) => {
       if (e.target.id === 'lightboxClose' || e.target.id === 'lightboxBackdrop') {
         this.closeLightbox();
       }
+      if (e.target.id === 'lightboxPrev') {
+        this.previousImage();
+      }
+      if (e.target.id === 'lightboxNext') {
+        this.nextImage();
+      }
     });
 
-    // Close on Escape key
+    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.lightboxOpen) {
+      if (!this.lightboxOpen) return;
+      
+      if (e.key === 'Escape') {
         this.closeLightbox();
+      }
+      if (e.key === 'ArrowLeft') {
+        this.previousImage();
+      }
+      if (e.key === 'ArrowRight') {
+        this.nextImage();
       }
     });
   }
