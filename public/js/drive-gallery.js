@@ -47,9 +47,15 @@ class DriveGallery {
   }
 
   init() {
+    console.log('DriveGallery init called');
+    console.log('Container:', this.container);
+    console.log('Config:', this.config);
+    
     this.createGalleryHTML();
     this.bindEvents();
     this.loadPhotos();
+    
+    console.log('DriveGallery initialization complete');
   }
 
   createGalleryHTML() {
@@ -308,9 +314,13 @@ class DriveGallery {
     if (this.config.enableLightbox) {
       photoDiv.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        console.log('=== PHOTO CLICKED ===');
         console.log('Photo clicked, index:', index, 'Total images:', this.currentImages.length);
         console.log('Photo data:', this.currentImages[index]);
         console.log('Grid image src:', photoDiv.querySelector('img').src);
+        console.log('enableLightbox:', this.config.enableLightbox);
+        console.log('lightbox element exists:', !!this.lightbox);
         this.openLightbox(index);
       });
       photoDiv.addEventListener('keydown', (e) => {
@@ -320,6 +330,8 @@ class DriveGallery {
           this.openLightbox(index);
         }
       });
+    } else {
+      console.log('Lightbox disabled in config');
     }
 
     photoDiv.appendChild(img);
@@ -655,16 +667,21 @@ class DriveGallery {
 
 // Initialize gallery when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, initializing DriveGallery...');
   // Wait a bit for any other scripts to load
   setTimeout(() => {
+    console.log('Creating DriveGallery instance...');
     const gallery = new DriveGallery('driveGallery', {
       limit: 24, // Adjust this to change number of photos loaded
       columns: {
         mobile: 2,
         tablet: 3,
         desktop: 4
-      }
+      },
+      enableLazyLoading: true,
+      enableLightbox: true
     });
+    console.log('DriveGallery instance created:', gallery);
 
     // Handle window resize
     let resizeTimeout;
