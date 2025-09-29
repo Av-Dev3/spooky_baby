@@ -425,10 +425,13 @@ class DriveGallery {
     // Update content
     this.updateLightboxContent();
     
-    // Animate to center
+    // Animate to center of viewport
     setTimeout(() => {
-      this.lightbox.style.left = '50%';
-      this.lightbox.style.top = '50%';
+      const viewportCenterX = window.innerWidth / 2;
+      const viewportCenterY = window.innerHeight / 2;
+      
+      this.lightbox.style.left = viewportCenterX + 'px';
+      this.lightbox.style.top = viewportCenterY + 'px';
       this.lightbox.style.transform = 'translate(-50%, -50%)';
       this.lightbox.style.width = 'auto';
       this.lightbox.style.height = 'auto';
