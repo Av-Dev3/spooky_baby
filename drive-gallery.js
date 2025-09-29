@@ -661,16 +661,16 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     console.log('=== CREATING GALLERY ===');
     try {
-      const gallery = new DriveGallery('driveGallery', {
-        limit: 24, // Adjust this to change number of photos loaded
-        columns: {
-          mobile: 2,
-          tablet: 3,
-          desktop: 4
-        },
-        enableLazyLoading: true,
-        enableLightbox: true
-      });
+    const gallery = new DriveGallery('driveGallery', {
+      limit: 24, // Adjust this to change number of photos loaded
+      columns: {
+        mobile: 2,
+        tablet: 3,
+        desktop: 4
+      },
+      enableLazyLoading: true,
+      enableLightbox: false  // LIGHTBOX DISABLED
+    });
       console.log('✅ DriveGallery instance created:', gallery);
     
     // Test if clicks work at all
