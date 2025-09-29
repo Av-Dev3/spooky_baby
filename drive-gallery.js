@@ -555,6 +555,17 @@ class DriveGallery {
       console.log('Using photo src:', largeImageSrc);
     }
     
+    // Add error handler for debugging
+    image.onerror = () => {
+      console.error('❌ Failed to load large image:', largeImageSrc);
+      console.log('Trying original thumbnail...');
+      image.src = gridImage.src;
+    };
+    
+    image.onload = () => {
+      console.log('✅ Image loaded successfully:', largeImageSrc);
+    };
+    
     image.src = largeImageSrc;
     
     image.alt = photo.caption;
