@@ -122,11 +122,13 @@ class DriveGallery {
       transition: all 0.3s ease;
     `;
     
+    const isMobile = window.innerWidth <= 768;
+    
     container.innerHTML = `
-      <img id="enlargedImg" style="display: block; max-width: 90vw; max-height: 90vh; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
-      <button id="closeBtn" style="position: absolute; top: -40px; right: -40px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 24px;">×</button>
-      <button id="prevBtn" style="position: absolute; left: -60px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">‹</button>
-      <button id="nextBtn" style="position: absolute; right: -60px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">›</button>
+      <img id="enlargedImg" style="display: block; max-width: ${isMobile ? '95vw' : '90vw'}; max-height: ${isMobile ? '70vh' : '90vh'}; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
+      <button id="closeBtn" style="position: absolute; top: ${isMobile ? '10px' : '-40px'}; right: ${isMobile ? '10px' : '-40px'}; background: white; border: none; border-radius: 50%; width: ${isMobile ? '45px' : '40px'}; height: ${isMobile ? '45px' : '40px'}; cursor: pointer; font-size: ${isMobile ? '28px' : '24px'}; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">×</button>
+      <button id="prevBtn" style="position: absolute; left: ${isMobile ? '10px' : '-60px'}; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: ${isMobile ? '45px' : '50px'}; height: ${isMobile ? '45px' : '50px'}; cursor: pointer; font-size: ${isMobile ? '28px' : '30px'}; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">‹</button>
+      <button id="nextBtn" style="position: absolute; right: ${isMobile ? '10px' : '-60px'}; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: ${isMobile ? '45px' : '50px'}; height: ${isMobile ? '45px' : '50px'}; cursor: pointer; font-size: ${isMobile ? '28px' : '30px'}; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">›</button>
     `;
     
     document.body.appendChild(overlay);
@@ -183,6 +185,29 @@ class DriveGallery {
       if (e.key === 'Escape') this.closeLightbox();
       if (e.key === 'ArrowLeft') this.previousImage();
       if (e.key === 'ArrowRight') this.nextImage();
+    });
+
+    // Touch swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+      if (!this.lightboxOpen) return;
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    document.addEventListener('touchend', (e) => {
+      if (!this.lightboxOpen) return;
+      touchEndX = e.changedTouches[0].screenX;
+      const swipeDistance = touchEndX - touchStartX;
+      
+      if (Math.abs(swipeDistance) > 50) { // Minimum swipe distance
+        if (swipeDistance > 0) {
+          this.previousImage(); // Swipe right = previous
+        } else {
+          this.nextImage(); // Swipe left = next
+        }
+      }
     });
   }
 
