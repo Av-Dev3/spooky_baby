@@ -233,10 +233,11 @@
   right: 0;
   bottom: 0;
   z-index: 9999;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.9);
+  overflow: hidden;
 }
 
 .lightbox-backdrop {
@@ -246,6 +247,7 @@
   right: 0;
   bottom: 0;
   cursor: pointer;
+  z-index: 1;
 }
 
 .lightbox-container {
@@ -255,7 +257,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   z-index: 10000;
+  margin: auto;
 }
 
 .lightbox-image {
