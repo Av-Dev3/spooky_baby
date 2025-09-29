@@ -125,10 +125,11 @@ class DriveGallery {
     const isMobile = window.innerWidth <= 768;
     
     container.innerHTML = `
-      <img id="enlargedImg" style="display: block; max-width: ${isMobile ? 'calc(100vw - 120px)' : '90vw'}; max-height: ${isMobile ? '65vh' : '90vh'}; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
-      <button id="closeBtn" style="position: absolute; top: ${isMobile ? '-50px' : '-40px'}; right: ${isMobile ? '0' : '-40px'}; background: white; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; font-size: 28px; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">×</button>
-      <button id="prevBtn" style="position: absolute; left: ${isMobile ? '-55px' : '-60px'}; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">‹</button>
-      <button id="nextBtn" style="position: absolute; right: ${isMobile ? '-55px' : '-60px'}; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">›</button>
+      <img id="enlargedImg" style="display: block; max-width: ${isMobile ? '90vw' : '90vw'}; max-height: ${isMobile ? '70vh' : '90vh'}; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
+      <button id="closeBtn" style="position: absolute; top: -45px; right: 0; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 26px; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">×</button>
+      ${isMobile ? '<div style="margin-top: 15px; color: white; font-size: 14px; opacity: 0.8;">Swipe to navigate</div>' : ''}
+      <button id="prevBtn" style="${isMobile ? 'display: none;' : 'position: absolute; left: -60px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;'}">‹</button>
+      <button id="nextBtn" style="${isMobile ? 'display: none;' : 'position: absolute; right: -60px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;'}">›</button>
     `;
     
     document.body.appendChild(overlay);
