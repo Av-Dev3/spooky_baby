@@ -96,41 +96,43 @@ class DriveGallery {
   }
 
   createLightbox() {
-    // Remove existing lightbox if any
-    const existingLightbox = document.getElementById('simpleLightbox');
-    if (existingLightbox) {
-      existingLightbox.remove();
-    }
-
-    // Create simple lightbox from scratch
-    const lightbox = document.createElement('div');
-    lightbox.id = 'simpleLightbox';
-    lightbox.style.cssText = `
+    // Create overlay backdrop
+    const overlay = document.createElement('div');
+    overlay.id = 'imageOverlay';
+    overlay.style.cssText = `
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.95);
       z-index: 999999;
-      justify-content: center;
-      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s;
     `;
     
-    lightbox.innerHTML = `
-      <div style="position: relative; background: #ffffff; padding: 40px; border-radius: 10px; max-width: 900px; border: 5px solid red;">
-        <button id="closeBtn" style="position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px; z-index: 10;">×</button>
-        <button id="prevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: red; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 40px; z-index: 10;">‹</button>
-        <button id="nextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: red; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 40px; z-index: 10;">›</button>
-        <img id="lightboxImg" style="max-width: 800px; max-height: 600px; display: block; border: 3px solid blue;">
-        <div id="lightboxCaption" style="margin-top: 20px; text-align: center; font-size: 18px; color: #000; font-weight: bold;"></div>
-      </div>
+    // Create enlarged image container
+    const container = document.createElement('div');
+    container.id = 'enlargedContainer';
+    container.style.cssText = `
+      position: fixed;
+      z-index: 1000000;
+      display: none;
+      transition: all 0.3s ease;
     `;
     
-    document.body.appendChild(lightbox);
-    this.lightbox = lightbox;
-    console.log('Simple lightbox created');
+    container.innerHTML = `
+      <img id="enlargedImg" style="display: block; max-width: 90vw; max-height: 90vh; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
+      <button id="closeBtn" style="position: absolute; top: -40px; right: -40px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 24px;">×</button>
+      <button id="prevBtn" style="position: absolute; left: -60px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">‹</button>
+      <button id="nextBtn" style="position: absolute; right: -60px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 30px;">›</button>
+    `;
+    
+    document.body.appendChild(overlay);
+    document.body.appendChild(container);
+    this.overlay = overlay;
+    this.lightbox = container;
   }
 
   bindEvents() {
@@ -159,19 +161,13 @@ class DriveGallery {
 
   bindLightboxEvents() {
     document.addEventListener('click', (e) => {
-      // Only close if clicking the backdrop (lightbox itself), not its children
-      if (e.target.id === 'simpleLightbox') {
-        this.closeLightbox();
-      }
-      if (e.target.id === 'closeBtn') {
+      if (e.target.id === 'imageOverlay' || e.target.id === 'closeBtn') {
         this.closeLightbox();
       }
       if (e.target.id === 'prevBtn') {
-        e.stopPropagation();
         this.previousImage();
       }
       if (e.target.id === 'nextBtn') {
-        e.stopPropagation();
         this.nextImage();
       }
     });
@@ -406,11 +402,39 @@ class DriveGallery {
     if (!this.config.enableLightbox || !this.lightbox) return;
     if (index < 0 || index >= this.currentImages.length) return;
     
+    // Get the clicked image position
+    const clickedImg = this.grid.querySelector(`[data-index="${index}"] img`);
+    if (!clickedImg) return;
+    
+    const rect = clickedImg.getBoundingClientRect();
+    
     this.lightboxIndex = index;
     this.lightboxOpen = true;
-    this.lightbox.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    
+    // Show overlay
+    this.overlay.style.display = 'block';
+    setTimeout(() => this.overlay.style.opacity = '1', 10);
+    
+    // Position enlarged image at clicked image location
+    this.lightbox.style.display = 'block';
+    this.lightbox.style.left = rect.left + 'px';
+    this.lightbox.style.top = rect.top + 'px';
+    this.lightbox.style.width = rect.width + 'px';
+    this.lightbox.style.height = rect.height + 'px';
+    
+    // Update content
     this.updateLightboxContent();
+    
+    // Animate to center
+    setTimeout(() => {
+      this.lightbox.style.left = '50%';
+      this.lightbox.style.top = '50%';
+      this.lightbox.style.transform = 'translate(-50%, -50%)';
+      this.lightbox.style.width = 'auto';
+      this.lightbox.style.height = 'auto';
+    }, 10);
+    
+    document.body.style.overflow = 'hidden';
   }
 
   createFallbackLightbox(index) {
@@ -485,9 +509,15 @@ class DriveGallery {
   }
 
   closeLightbox() {
-    if (!this.lightboxOpen || !this.lightbox) return;
+    if (!this.lightboxOpen) return;
     this.lightboxOpen = false;
-    this.lightbox.style.display = 'none';
+    this.overlay.style.opacity = '0';
+    this.lightbox.style.opacity = '0';
+    setTimeout(() => {
+      this.overlay.style.display = 'none';
+      this.lightbox.style.display = 'none';
+      this.lightbox.style.opacity = '1';
+    }, 300);
     document.body.style.overflow = '';
   }
 
@@ -506,8 +536,7 @@ class DriveGallery {
   }
 
   updateLightboxContent() {
-    const image = document.getElementById('lightboxImg');
-    const caption = document.getElementById('lightboxCaption');
+    const image = document.getElementById('enlargedImg');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     
@@ -524,11 +553,10 @@ class DriveGallery {
     
     image.src = imageSrc;
     image.alt = photo.caption;
-    if (caption) caption.textContent = photo.caption;
     
     // Update button states
-    if (prevBtn) prevBtn.disabled = this.lightboxIndex === 0;
-    if (nextBtn) nextBtn.disabled = this.lightboxIndex === this.currentImages.length - 1;
+    if (prevBtn) prevBtn.style.display = this.lightboxIndex === 0 ? 'none' : 'block';
+    if (nextBtn) nextBtn.style.display = this.lightboxIndex === this.currentImages.length - 1 ? 'none' : 'block';
   }
 
   loadImageWithFallbacks(imgElement, photo) {
@@ -669,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
         desktop: 4
       },
       enableLazyLoading: true,
-      enableLightbox: false  // LIGHTBOX DISABLED
+      enableLightbox: true  // Simple enlarge enabled
     });
       console.log('✅ DriveGallery instance created:', gallery);
     
