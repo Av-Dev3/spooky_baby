@@ -116,7 +116,9 @@ exports.handler = async (event, context) => {
         downloadSrc: downloadSrc,
         thumb: thumb,
         caption: caption,
-        ts: ts
+        ts: ts,
+        // Add webViewLink for direct access
+        webViewLink: file.webViewLink
       };
     });
 

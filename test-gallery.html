@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-image { max-width: 300px; margin: 10px; border: 1px solid #ccc; }
+        .url-test { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Gallery Test Page</h1>
+    <div id="test-results"></div>
+    
+    <script>
+        async function testGallery() {
+            try {
+                const response = await fetch('/.netlify/functions/drive-photos?limit=3');
+                const data = await response.json();
+                
+                console.log('API Response:', data);
+                
+                const resultsDiv = document.getElementById('test-results');
+                resultsDiv.innerHTML = '<h2>API Response:</h2><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                
+                if (data.items && data.items.length > 0) {
+                    const firstItem = data.items[0];
+                    resultsDiv.innerHTML += '<h2>First Image URLs:</h2>';
+                    resultsDiv.innerHTML += '<div class="url-test">src: ' + firstItem.src + '</div>';
+                    resultsDiv.innerHTML += '<div class="url-test">altSrc: ' + (firstItem.altSrc || 'undefined') + '</div>';
+                    resultsDiv.innerHTML += '<div class="url-test">downloadSrc: ' + (firstItem.downloadSrc || 'undefined') + '</div>';
+                    resultsDiv.innerHTML += '<div class="url-test">webViewLink: ' + (firstItem.webViewLink || 'undefined') + '</div>';
+                    resultsDiv.innerHTML += '<div class="url-test">thumb: ' + firstItem.thumb + '</div>';
+                    
+                    // Test each URL
+                    testImageUrl('Primary URL', firstItem.src);
+                    if (firstItem.altSrc) testImageUrl('Alternative URL', firstItem.altSrc);
+                    if (firstItem.downloadSrc) testImageUrl('Download URL', firstItem.downloadSrc);
+                    if (firstItem.webViewLink) testImageUrl('Web View URL', firstItem.webViewLink);
+                }
+                
+            } catch (error) {
+                console.error('Test failed:', error);
+                document.getElementById('test-results').innerHTML = '<div class="error">Test failed: ' + error.message + '</div>';
+            }
+        }
+        
+        function testImageUrl(name, url) {
+            const img = new Image();
+            const testDiv = document.createElement('div');
+            testDiv.className = 'url-test';
+            testDiv.innerHTML = `Testing ${name}: <span id="status-${name.replace(/\s+/g, '-')}">Loading...</span>`;
+            document.getElementById('test-results').appendChild(testDiv);
+            
+            img.onload = () => {
+                document.getElementById(`status-${name.replace(/\s+/g, '-')}`).innerHTML = '<span class="success">✓ Works</span>';
+                testDiv.appendChild(img);
+                img.className = 'test-image';
+            };
+            
+            img.onerror = () => {
+                document.getElementById(`status-${name.replace(/\s+/g, '-')}`).innerHTML = '<span class="error">✗ Failed</span>';
+            };
+            
+            img.src = url;
+        }
+        
+        // Run test when page loads
+        testGallery();
+    </script>
+</body>
+</html>

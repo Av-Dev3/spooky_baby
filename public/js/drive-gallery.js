@@ -214,6 +214,18 @@ class DriveGallery {
       this.currentImages = data.items || [];
       this.hasMore = !!data.nextPageToken;
       
+      // Debug: Log the first image data
+      if (this.currentImages.length > 0) {
+        console.log('First image data:', this.currentImages[0]);
+        console.log('Available URLs for first image:', {
+          src: this.currentImages[0].src,
+          altSrc: this.currentImages[0].altSrc,
+          downloadSrc: this.currentImages[0].downloadSrc,
+          webViewLink: this.currentImages[0].webViewLink,
+          thumb: this.currentImages[0].thumb
+        });
+      }
+      
       this.renderPhotos();
       this.hideLoading();
 
@@ -510,42 +522,59 @@ class DriveGallery {
     console.log('Updating lightbox with photo:', photo);
     
     // Show loading state
-    image.style.opacity = '0.5';
+    image.style.opacity = '0.3';
     image.alt = photo.caption;
     
-    // Create a new image to test loading
-    const testImg = new Image();
-    testImg.onload = () => {
-      image.src = photo.src;
-      image.style.opacity = '1';
-      console.log('Lightbox image loaded successfully');
-    };
-    testImg.onerror = () => {
-      console.error('Failed to load lightbox image:', photo.src);
-      // Try alternative URL formats
-      if (photo.altSrc) {
-        console.log('Trying alternative URL:', photo.altSrc);
-        image.src = photo.altSrc;
-        image.style.opacity = '1';
-      } else if (photo.downloadSrc) {
-        console.log('Trying download URL:', photo.downloadSrc);
-        image.src = photo.downloadSrc;
-        image.style.opacity = '1';
-      } else {
-        // Fallback to manual URL construction
-        const altSrc = photo.src.replace('uc?id=', 'file/d/') + '/view';
-        console.log('Trying manual alternative URL:', altSrc);
-        image.src = altSrc;
-        image.style.opacity = '1';
-      }
-    };
-    testImg.src = photo.src;
+    // Try to load the image with multiple fallbacks
+    this.loadImageWithFallbacks(image, photo);
     
     if (caption) caption.textContent = photo.caption;
     if (counter) counter.textContent = `${this.lightboxIndex + 1} of ${this.currentImages.length}`;
     
     if (prevBtn) prevBtn.style.display = this.lightboxIndex > 0 ? 'block' : 'none';
     if (nextBtn) nextBtn.style.display = this.lightboxIndex < this.currentImages.length - 1 ? 'block' : 'none';
+  }
+
+  loadImageWithFallbacks(imgElement, photo) {
+    const urls = [
+      photo.src,
+      photo.altSrc,
+      photo.downloadSrc,
+      photo.webViewLink
+    ].filter(url => url); // Remove any undefined URLs
+
+    let currentIndex = 0;
+
+    const tryNextUrl = () => {
+      if (currentIndex >= urls.length) {
+        console.error('All image URLs failed to load');
+        imgElement.style.opacity = '1';
+        imgElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBhdmFpbGFibGU8L3RleHQ+PC9zdmc+';
+        return;
+      }
+
+      const currentUrl = urls[currentIndex];
+      console.log(`Trying image URL ${currentIndex + 1}/${urls.length}:`, currentUrl);
+
+      const testImg = new Image();
+      testImg.crossOrigin = 'anonymous';
+      
+      testImg.onload = () => {
+        console.log('Image loaded successfully:', currentUrl);
+        imgElement.src = currentUrl;
+        imgElement.style.opacity = '1';
+      };
+      
+      testImg.onerror = () => {
+        console.warn('Failed to load image:', currentUrl);
+        currentIndex++;
+        tryNextUrl();
+      };
+      
+      testImg.src = currentUrl;
+    };
+
+    tryNextUrl();
   }
 
   trapFocus() {
