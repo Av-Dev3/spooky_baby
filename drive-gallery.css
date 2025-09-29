@@ -230,85 +230,77 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
   display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.9);
-  overflow: hidden;
+  background: rgba(0, 0, 0, 0.95);
 }
 
-.drive-lightbox[style*="display: flex"] {
+.drive-lightbox[style*="display: flex"],
+.drive-lightbox[style*="display:flex"] {
   display: flex !important;
+  align-items: center;
+  justify-content: center;
 }
 
 .lightbox-backdrop {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
-  z-index: 1;
 }
 
 .lightbox-container {
   position: relative;
-  max-width: 95vw;
-  max-height: 95vh;
+  z-index: 100000;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
-  padding: 20px;
+  max-width: 90%;
+  max-height: 90%;
 }
 
 .lightbox-image {
-  max-width: 100%;
-  max-height: 85vh;
+  max-width: 90vw;
+  max-height: 80vh;
   object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  background: rgba(255, 255, 255, 0.05);
+  border: 3px solid white;
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
 }
 
 .lightbox-caption {
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-align: center;
-  max-width: 80%;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: white;
+  color: black;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 /* ===== LIGHTBOX BUTTONS ===== */
 .lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: white;
   border: none;
-  color: white;
+  color: black;
   cursor: pointer;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  font-weight: bold;
+  z-index: 100001;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-  transition: background 0.3s ease;
 }
 
 .lightbox-close:hover {
-  background: rgba(0, 0, 0, 0.9);
+  background: #f0f0f0;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
