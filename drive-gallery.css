@@ -1,0 +1,455 @@
+/**
+ * Google Drive Photo Gallery Styles
+ * 
+ * Features:
+ * - Responsive masonry grid layout
+ * - Smooth hover effects and transitions
+ * - Accessible lightbox with keyboard navigation
+ * - Loading states and error handling
+ * - Mobile-first responsive design
+ * 
+ * To customize:
+ * - Adjust --gallery-columns variables for different layouts
+ * - Modify --gallery-gap for spacing
+ * - Change --gallery-border-radius for corner rounding
+ * - Update color variables to match your theme
+ */
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  /* Gallery Layout */
+  --gallery-columns-mobile: 2;
+  --gallery-columns-tablet: 3;
+  --gallery-columns-desktop: 4;
+  --gallery-gap: 1rem;
+  --gallery-border-radius: 12px;
+  
+  /* Gallery Colors */
+  --gallery-bg: var(--bg-secondary, #262626);
+  --gallery-item-bg: var(--bg-primary, #1F1F1F);
+  --gallery-border: rgba(246, 182, 207, 0.2);
+  --gallery-hover-border: var(--accent-pink, #F6B6CF);
+  --gallery-text: var(--text-primary, #F3F3F3);
+  --gallery-text-secondary: var(--text-secondary, #CFCFCF);
+  
+  /* Lightbox Colors */
+  --lightbox-bg: rgba(0, 0, 0, 0.95);
+  --lightbox-text: #FFFFFF;
+  --lightbox-button-bg: rgba(255, 255, 255, 0.1);
+  --lightbox-button-hover: rgba(255, 255, 255, 0.2);
+  
+  /* Transitions */
+  --gallery-transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --gallery-transition-fast: all 0.2s ease;
+}
+
+/* ===== GALLERY CONTAINER ===== */
+.drive-gallery-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ===== MASONRY GRID LAYOUT ===== */
+.drive-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-columns-mobile), 1fr);
+  gap: var(--gallery-gap);
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+/* Responsive columns */
+@media (min-width: 768px) {
+  .drive-gallery-grid {
+    grid-template-columns: repeat(var(--gallery-columns-tablet), 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .drive-gallery-grid {
+    grid-template-columns: repeat(var(--gallery-columns-desktop), 1fr);
+  }
+}
+
+/* ===== GALLERY ITEMS ===== */
+.drive-gallery-item {
+  position: relative;
+  background: var(--gallery-item-bg);
+  border: 2px solid var(--gallery-border);
+  border-radius: var(--gallery-border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--gallery-transition);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+}
+
+.drive-gallery-item:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--gallery-hover-border);
+  box-shadow: 
+    0 20px 40px rgba(246, 182, 207, 0.3),
+    0 0 0 1px var(--gallery-hover-border);
+  z-index: 10;
+}
+
+.drive-gallery-item:focus {
+  outline: 3px solid var(--gallery-hover-border);
+  outline-offset: 2px;
+}
+
+.drive-gallery-item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===== GALLERY IMAGES ===== */
+.drive-gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--gallery-transition);
+  border-radius: calc(var(--gallery-border-radius) - 2px);
+  opacity: 0.9;
+}
+
+.drive-gallery-image.loaded {
+  opacity: 1;
+}
+
+.drive-gallery-item:hover .drive-gallery-image {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+/* ===== LOADING STATES ===== */
+.drive-gallery-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: var(--gallery-text-secondary);
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(246, 182, 207, 0.3);
+  border-top: 3px solid var(--accent-pink, #F6B6CF);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.drive-gallery-loading p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ===== ERROR STATE ===== */
+.drive-gallery-error {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.2);
+  border-radius: var(--gallery-border-radius);
+  margin: 2rem 0;
+}
+
+.drive-gallery-error p {
+  margin: 0 0 1rem 0;
+  color: #E57373;
+  font-size: 1rem;
+}
+
+.drive-gallery-error .btn {
+  margin-top: 0.5rem;
+}
+
+/* ===== LOAD MORE BUTTON ===== */
+.drive-gallery-load-more {
+  display: none;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.drive-gallery-load-more .btn {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: var(--gallery-transition);
+}
+
+.drive-gallery-load-more .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(247, 213, 106, 0.3);
+}
+
+/* ===== EMPTY STATE ===== */
+.drive-gallery-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--gallery-text-secondary);
+  background: var(--gallery-item-bg);
+  border: 2px dashed var(--gallery-border);
+  border-radius: var(--gallery-border-radius);
+}
+
+.drive-gallery-empty p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* ===== LIGHTBOX ===== */
+.drive-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.lightbox-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+.lightbox-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10000;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-caption {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 80%;
+}
+
+/* ===== LIGHTBOX BUTTONS ===== */
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  transition: background 0.3s ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .drive-gallery-container {
+    padding: 0 0.5rem;
+  }
+  
+  .drive-gallery-grid {
+    gap: 0.75rem;
+  }
+  
+  .drive-gallery-item {
+    min-height: 150px;
+  }
+  
+  .lightbox-container {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .lightbox-image {
+    max-height: 70vh;
+  }
+  
+  .lightbox-close {
+    top: -2.5rem;
+    right: -0.5rem;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .lightbox-prev,
+  .lightbox-next {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .lightbox-prev {
+    left: -2rem;
+  }
+  
+  .lightbox-next {
+    right: -2rem;
+  }
+  
+  .lightbox-caption {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    max-width: 90%;
+  }
+  
+  .lightbox-counter {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .drive-gallery-grid {
+    gap: 0.5rem;
+  }
+  
+  .drive-gallery-item {
+    min-height: 120px;
+  }
+  
+  .lightbox-prev,
+  .lightbox-next {
+    display: none; /* Hide navigation arrows on very small screens */
+  }
+  
+  .lightbox-caption {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+  .drive-gallery-item,
+  .drive-gallery-image,
+  .lightbox-image,
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next {
+    transition: none;
+  }
+  
+  .loading-spinner {
+    animation: none;
+  }
+}
+
+/* Focus management for keyboard navigation */
+.drive-gallery-item:focus-visible {
+  outline: 3px solid var(--gallery-hover-border);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .drive-gallery-item {
+    border-width: 3px;
+  }
+  
+  .drive-gallery-item:hover {
+    border-color: #FFFFFF;
+  }
+  
+  .lightbox-caption {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #FFFFFF;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .drive-lightbox,
+  .drive-gallery-loading,
+  .drive-gallery-error,
+  .drive-gallery-load-more {
+    display: none !important;
+  }
+  
+  .drive-gallery-grid {
+    display: block;
+  }
+  
+  .drive-gallery-item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    border: 1px solid #000;
+  }
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
+.drive-gallery-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.drive-gallery-container::-webkit-scrollbar-track {
+  background: var(--gallery-bg);
+}
+
+.drive-gallery-container::-webkit-scrollbar-thumb {
+  background: var(--gallery-hover-border);
+  border-radius: 4px;
+}
+
+.drive-gallery-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(246, 182, 207, 0.8);
+}
