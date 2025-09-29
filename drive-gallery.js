@@ -438,10 +438,10 @@ class DriveGallery {
     // Update content
     this.updateLightboxContent();
     
-    // Animate to center of viewport
+    // Animate to center of viewport (accounting for scroll)
     setTimeout(() => {
       const viewportCenterX = window.innerWidth / 2;
-      const viewportCenterY = window.innerHeight / 2;
+      const viewportCenterY = (window.innerHeight / 2) + window.scrollY;
       
       this.lightbox.style.left = viewportCenterX + 'px';
       this.lightbox.style.top = viewportCenterY + 'px';
