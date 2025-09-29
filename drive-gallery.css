@@ -233,13 +233,7 @@
   width: 100vw;
   height: 100vh;
   z-index: 99999;
-  display: none;
   background: rgba(0, 0, 0, 0.95);
-}
-
-.drive-lightbox[style*="display: flex"],
-.drive-lightbox[style*="display:flex"] {
-  display: flex !important;
   align-items: center;
   justify-content: center;
 }
