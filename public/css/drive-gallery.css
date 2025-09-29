@@ -233,17 +233,10 @@
   right: 0;
   bottom: 0;
   z-index: 9999;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--lightbox-bg);
-  backdrop-filter: blur(10px);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.drive-lightbox[aria-hidden="false"] {
-  opacity: 1;
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .lightbox-backdrop {
@@ -265,114 +258,48 @@
   z-index: 10000;
 }
 
-.lightbox-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 100%;
-  max-height: 100%;
-}
-
 .lightbox-image {
   max-width: 100%;
   max-height: 80vh;
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  transition: var(--gallery-transition);
 }
 
 .lightbox-caption {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
   background: rgba(0, 0, 0, 0.8);
-  color: var(--lightbox-text);
+  color: white;
   border-radius: 25px;
   font-size: 0.9rem;
   font-weight: 500;
   text-align: center;
   max-width: 80%;
-  backdrop-filter: blur(10px);
-}
-
-.lightbox-counter {
-  position: absolute;
-  top: -2rem;
-  right: 0;
-  color: var(--lightbox-text);
-  font-size: 0.8rem;
-  font-weight: 500;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 0.25rem 0.75rem;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
 }
 
 /* ===== LIGHTBOX BUTTONS ===== */
-.lightbox-close,
-.lightbox-prev,
-.lightbox-next {
+.lightbox-close {
   position: absolute;
-  background: var(--lightbox-button-bg);
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
   border: none;
-  color: var(--lightbox-text);
+  color: white;
   cursor: pointer;
   border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--gallery-transition-fast);
-  backdrop-filter: blur(10px);
   z-index: 10001;
-}
-
-.lightbox-close {
-  top: -3rem;
-  right: 0;
-  width: 48px;
-  height: 48px;
-  font-size: 1.2rem;
-}
-
-.lightbox-prev,
-.lightbox-next {
-  top: 50%;
-  transform: translateY(-50%);
-  width: 56px;
-  height: 56px;
-  font-size: 1.1rem;
-}
-
-.lightbox-prev {
-  left: -3rem;
-}
-
-.lightbox-next {
-  right: -3rem;
-}
-
-.lightbox-close:hover,
-.lightbox-prev:hover,
-.lightbox-next:hover {
-  background: var(--lightbox-button-hover);
-  transform: translateY(-50%) scale(1.1);
+  transition: background 0.3s ease;
 }
 
 .lightbox-close:hover {
-  transform: scale(1.1);
-}
-
-.lightbox-prev:disabled,
-.lightbox-next:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.lightbox-prev:disabled:hover,
-.lightbox-next:disabled:hover {
-  transform: translateY(-50%) scale(1);
-  background: var(--lightbox-button-bg);
+  background: rgba(0, 0, 0, 0.9);
 }
 
 /* ===== RESPONSIVE DESIGN ===== */

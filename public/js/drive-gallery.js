@@ -85,29 +85,12 @@ class DriveGallery {
 
   createLightboxHTML() {
     return `
-      <div class="drive-lightbox" id="driveLightbox" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="drive-lightbox" id="driveLightbox" style="display: none;">
         <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
         <div class="lightbox-container">
-          <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous image">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="lightbox-next" id="lightboxNext" aria-label="Next image">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="lightbox-content">
-            <img class="lightbox-image" id="lightboxImage" alt="">
-            <div class="lightbox-caption" id="lightboxCaption"></div>
-            <div class="lightbox-counter" id="lightboxCounter"></div>
-          </div>
+          <button class="lightbox-close" id="lightboxClose">×</button>
+          <img class="lightbox-image" id="lightboxImage" alt="">
+          <div class="lightbox-caption" id="lightboxCaption"></div>
         </div>
       </div>
     `;
@@ -138,33 +121,17 @@ class DriveGallery {
   }
 
   bindLightboxEvents() {
-    // Use event delegation since lightbox is created dynamically
+    // Simple click handlers
     document.addEventListener('click', (e) => {
-      if (!this.lightboxOpen) return;
-      
       if (e.target.id === 'lightboxClose' || e.target.id === 'lightboxBackdrop') {
         this.closeLightbox();
-      } else if (e.target.id === 'lightboxPrev') {
-        this.previousImage();
-      } else if (e.target.id === 'lightboxNext') {
-        this.nextImage();
       }
     });
 
-    // Keyboard navigation
+    // Close on Escape key
     document.addEventListener('keydown', (e) => {
-      if (!this.lightboxOpen) return;
-
-      switch (e.key) {
-        case 'Escape':
-          this.closeLightbox();
-          break;
-        case 'ArrowLeft':
-          this.previousImage();
-          break;
-        case 'ArrowRight':
-          this.nextImage();
-          break;
+      if (e.key === 'Escape' && this.lightboxOpen) {
+        this.closeLightbox();
       }
     });
   }
@@ -382,8 +349,6 @@ class DriveGallery {
   openLightbox(index) {
     if (!this.config.enableLightbox) return;
 
-    console.log('Opening lightbox for index:', index);
-    
     // Validate index
     if (index < 0 || index >= this.currentImages.length) {
       console.error('Invalid lightbox index:', index);
@@ -394,15 +359,11 @@ class DriveGallery {
     this.lightboxOpen = true;
     
     if (this.lightbox) {
-      this.lightbox.setAttribute('aria-hidden', 'false');
       this.lightbox.style.display = 'flex';
       document.body.style.overflow = 'hidden';
-
       this.updateLightboxContent();
-      this.trapFocus();
     } else {
-      console.error('Lightbox element not found, creating fallback');
-      this.createFallbackLightbox(index);
+      console.error('Lightbox element not found');
     }
   }
 
@@ -481,15 +442,8 @@ class DriveGallery {
     if (!this.lightboxOpen) return;
 
     this.lightboxOpen = false;
-    this.lightbox.setAttribute('aria-hidden', 'true');
     this.lightbox.style.display = 'none';
     document.body.style.overflow = '';
-
-    // Return focus to the image that was clicked
-    const clickedImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"]`);
-    if (clickedImage) {
-      clickedImage.focus();
-    }
   }
 
   previousImage() {
@@ -509,9 +463,6 @@ class DriveGallery {
   updateLightboxContent() {
     const image = document.getElementById('lightboxImage');
     const caption = document.getElementById('lightboxCaption');
-    const counter = document.getElementById('lightboxCounter');
-    const prevBtn = document.getElementById('lightboxPrev');
-    const nextBtn = document.getElementById('lightboxNext');
 
     if (!image || !this.currentImages[this.lightboxIndex]) {
       console.error('Lightbox elements not found or invalid index:', this.lightboxIndex);
@@ -519,20 +470,12 @@ class DriveGallery {
     }
 
     const photo = this.currentImages[this.lightboxIndex];
-    console.log('Updating lightbox with photo:', photo);
     
-    // Show loading state
-    image.style.opacity = '0.3';
+    // Set the image source directly - use the same URL that works in the grid
+    image.src = photo.src;
     image.alt = photo.caption;
     
-    // Try to load the image with multiple fallbacks
-    this.loadImageWithFallbacks(image, photo);
-    
     if (caption) caption.textContent = photo.caption;
-    if (counter) counter.textContent = `${this.lightboxIndex + 1} of ${this.currentImages.length}`;
-    
-    if (prevBtn) prevBtn.style.display = this.lightboxIndex > 0 ? 'block' : 'none';
-    if (nextBtn) nextBtn.style.display = this.lightboxIndex < this.currentImages.length - 1 ? 'block' : 'none';
   }
 
   loadImageWithFallbacks(imgElement, photo) {
