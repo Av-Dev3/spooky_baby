@@ -543,27 +543,39 @@ class DriveGallery {
     // Find the corresponding grid image and copy its src
     const gridImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"] img`);
     console.log('Grid image element:', gridImage);
+    console.log('Grid image src:', gridImage ? gridImage.src : 'none');
     
     // Get a larger version of the image
     let largeImageSrc = photo.src;
     
-    if (gridImage && gridImage.src && gridImage.src.includes('googleusercontent.com')) {
-      // Replace the thumbnail size (s220) with a larger size (s2048 for high quality)
-      largeImageSrc = gridImage.src.replace(/=s\d+/, '=s2048');
-      console.log('Using large Google Drive image:', largeImageSrc);
+    if (gridImage && gridImage.src) {
+      console.log('Original src:', gridImage.src);
+      
+      if (gridImage.src.includes('googleusercontent.com')) {
+        // Replace the thumbnail size (s220) with a larger size (s2048 for high quality)
+        largeImageSrc = gridImage.src.replace(/=s\d+$/, '=s2048');
+        console.log('Using large Google Drive image:', largeImageSrc);
+      } else {
+        largeImageSrc = gridImage.src;
+        console.log('Using grid src as-is:', largeImageSrc);
+      }
     } else {
-      console.log('Using photo src:', largeImageSrc);
+      console.log('Using photo.src:', largeImageSrc);
     }
+    
+    console.log('Final image src being set:', largeImageSrc);
     
     // Add error handler for debugging
     image.onerror = () => {
       console.error('❌ Failed to load large image:', largeImageSrc);
       console.log('Trying original thumbnail...');
-      image.src = gridImage.src;
+      if (gridImage && gridImage.src) {
+        image.src = gridImage.src;
+      }
     };
     
     image.onload = () => {
-      console.log('✅ Image loaded successfully:', largeImageSrc);
+      console.log('✅ Image loaded successfully!');
     };
     
     image.src = largeImageSrc;
