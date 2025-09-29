@@ -161,13 +161,19 @@ class DriveGallery {
 
   bindLightboxEvents() {
     document.addEventListener('click', (e) => {
+      // Only handle clicks when lightbox is actually open
+      if (!this.lightboxOpen) return;
+      
       if (e.target.id === 'imageOverlay' || e.target.id === 'closeBtn') {
+        e.stopPropagation();
         this.closeLightbox();
       }
       if (e.target.id === 'prevBtn') {
+        e.stopPropagation();
         this.previousImage();
       }
       if (e.target.id === 'nextBtn') {
+        e.stopPropagation();
         this.nextImage();
       }
     });
