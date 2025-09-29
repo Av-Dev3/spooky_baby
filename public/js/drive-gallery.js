@@ -291,6 +291,8 @@ class DriveGallery {
       photoDiv.addEventListener('click', (e) => {
         e.preventDefault();
         console.log('Photo clicked, index:', index, 'Total images:', this.currentImages.length);
+        console.log('Photo data:', this.currentImages[index]);
+        console.log('Grid image src:', photoDiv.querySelector('img').src);
         this.openLightbox(index);
       });
       photoDiv.addEventListener('keydown', (e) => {
@@ -470,9 +472,19 @@ class DriveGallery {
     }
 
     const photo = this.currentImages[this.lightboxIndex];
+    console.log('Lightbox photo:', photo);
     
-    // Set the image source directly - use the same URL that works in the grid
-    image.src = photo.src;
+    // Use the same image that's already working in the grid
+    // Find the corresponding grid image and copy its src
+    const gridImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"] img`);
+    if (gridImage && gridImage.src) {
+      console.log('Using grid image src:', gridImage.src);
+      image.src = gridImage.src;
+    } else {
+      console.log('Using photo src:', photo.src);
+      image.src = photo.src;
+    }
+    
     image.alt = photo.caption;
     
     if (caption) caption.textContent = photo.caption;
