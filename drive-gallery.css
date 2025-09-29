@@ -227,15 +227,26 @@
 
 /* ===== LIGHTBOX ===== */
 .drive-lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 99999;
-  background: rgba(0, 0, 0, 0.95);
-  align-items: center;
-  justify-content: center;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  background: rgba(0, 0, 0, 0.95) !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.drive-lightbox[style*="display: none"],
+.drive-lightbox[style*="display:none"] {
+  display: none !important;
+}
+
+.drive-lightbox[style*="display: flex"],
+.drive-lightbox[style*="display:flex"],
+.drive-lightbox[style*="display: block"] {
+  display: flex !important;
 }
 
 .lightbox-backdrop {
