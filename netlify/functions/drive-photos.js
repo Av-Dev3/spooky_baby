@@ -95,10 +95,12 @@ exports.handler = async (event, context) => {
 
     // Transform files to gallery format
     const items = files.map(file => {
-      // Create direct image URL
+      // Create multiple URL formats for better compatibility
       const src = `https://drive.google.com/uc?id=${file.id}`;
+      const altSrc = `https://drive.google.com/file/d/${file.id}/view`;
+      const downloadSrc = `https://drive.google.com/uc?export=download&id=${file.id}`;
       
-      // Use thumbnail if available, otherwise use full image
+      // Use thumbnail if available, otherwise use src
       const thumb = file.thumbnailLink || src;
       
       // Use description as caption, fallback to filename
@@ -110,6 +112,8 @@ exports.handler = async (event, context) => {
       return {
         id: file.id,
         src: src,
+        altSrc: altSrc,
+        downloadSrc: downloadSrc,
         thumb: thumb,
         caption: caption,
         ts: ts

@@ -412,15 +412,50 @@ class DriveGallery {
     `;
     
     const photo = this.currentImages[index];
+    console.log('Creating fallback lightbox with photo:', photo);
+    
     fallback.innerHTML = `
       <div style="position: relative; max-width: 90vw; max-height: 90vh;">
-        <img src="${photo.src}" alt="${photo.caption}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        <img id="fallbackImg" src="${photo.src}" alt="${photo.caption}" style="max-width: 100%; max-height: 100%; object-fit: contain; opacity: 0.5;">
         <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -40px; right: 0; background: white; border: none; padding: 10px; cursor: pointer;">Close</button>
         <div style="color: white; text-align: center; margin-top: 10px;">${photo.caption}</div>
+        <div id="fallbackError" style="color: red; text-align: center; margin-top: 10px; display: none;">Image failed to load</div>
       </div>
     `;
     
     document.body.appendChild(fallback);
+    
+    // Test image loading
+    const fallbackImg = fallback.querySelector('#fallbackImg');
+    const fallbackError = fallback.querySelector('#fallbackError');
+    
+    fallbackImg.onload = () => {
+      fallbackImg.style.opacity = '1';
+      console.log('Fallback image loaded successfully');
+    };
+    
+    fallbackImg.onerror = () => {
+      console.error('Fallback image failed to load:', photo.src);
+      // Try alternative URL formats
+      if (photo.altSrc) {
+        console.log('Trying alternative URL in fallback:', photo.altSrc);
+        fallbackImg.src = photo.altSrc;
+      } else if (photo.downloadSrc) {
+        console.log('Trying download URL in fallback:', photo.downloadSrc);
+        fallbackImg.src = photo.downloadSrc;
+      } else {
+        // Fallback to manual URL construction
+        const altSrc = photo.src.replace('uc?id=', 'file/d/') + '/view';
+        console.log('Trying manual alternative URL in fallback:', altSrc);
+        fallbackImg.src = altSrc;
+      }
+      
+      // If all URLs fail, show error
+      fallbackImg.onerror = () => {
+        fallbackError.style.display = 'block';
+        console.error('All image URLs failed to load');
+      };
+    };
     
     // Close on backdrop click
     fallback.addEventListener('click', (e) => {
@@ -474,8 +509,37 @@ class DriveGallery {
     const photo = this.currentImages[this.lightboxIndex];
     console.log('Updating lightbox with photo:', photo);
     
-    image.src = photo.src;
+    // Show loading state
+    image.style.opacity = '0.5';
     image.alt = photo.caption;
+    
+    // Create a new image to test loading
+    const testImg = new Image();
+    testImg.onload = () => {
+      image.src = photo.src;
+      image.style.opacity = '1';
+      console.log('Lightbox image loaded successfully');
+    };
+    testImg.onerror = () => {
+      console.error('Failed to load lightbox image:', photo.src);
+      // Try alternative URL formats
+      if (photo.altSrc) {
+        console.log('Trying alternative URL:', photo.altSrc);
+        image.src = photo.altSrc;
+        image.style.opacity = '1';
+      } else if (photo.downloadSrc) {
+        console.log('Trying download URL:', photo.downloadSrc);
+        image.src = photo.downloadSrc;
+        image.style.opacity = '1';
+      } else {
+        // Fallback to manual URL construction
+        const altSrc = photo.src.replace('uc?id=', 'file/d/') + '/view';
+        console.log('Trying manual alternative URL:', altSrc);
+        image.src = altSrc;
+        image.style.opacity = '1';
+      }
+    };
+    testImg.src = photo.src;
     
     if (caption) caption.textContent = photo.caption;
     if (counter) counter.textContent = `${this.lightboxIndex + 1} of ${this.currentImages.length}`;
