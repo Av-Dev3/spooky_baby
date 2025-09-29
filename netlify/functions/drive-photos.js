@@ -43,12 +43,21 @@ exports.handler = async (event, context) => {
     const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
     if (!clientEmail || !privateKey || !folderId) {
-      console.error('Missing required environment variables');
+      console.error('Missing required environment variables:', {
+        clientEmail: !!clientEmail,
+        privateKey: !!privateKey,
+        folderId: !!folderId
+      });
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({
-          error: 'Server configuration error: Missing Google Drive credentials'
+          error: 'Server configuration error: Missing Google Drive credentials',
+          details: {
+            GOOGLE_CLIENT_EMAIL: !!clientEmail,
+            GOOGLE_PRIVATE_KEY: !!privateKey,
+            GOOGLE_DRIVE_FOLDER_ID: !!folderId
+          }
         })
       };
     }
@@ -119,11 +128,22 @@ exports.handler = async (event, context) => {
   } catch (error) {
     console.error('Error fetching photos from Google Drive:', error);
     
+    // Provide more specific error messages
+    let errorMessage = 'Failed to fetch photos from Google Drive';
+    if (error.message.includes('invalid_grant')) {
+      errorMessage = 'Invalid service account credentials';
+    } else if (error.message.includes('insufficient authentication')) {
+      errorMessage = 'Service account lacks permission to access folder';
+    } else if (error.message.includes('not found')) {
+      errorMessage = 'Google Drive folder not found';
+    }
+    
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Failed to fetch photos from Google Drive'
+        error: errorMessage,
+        details: error.message
       })
     };
   }

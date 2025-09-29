@@ -199,7 +199,8 @@ class DriveGallery {
       const data = await response.json();
       
       if (data.error) {
-        throw new Error(data.error);
+        console.error('API Error:', data);
+        throw new Error(data.error + (data.details ? ': ' + data.details : ''));
       }
 
       this.currentImages = data.items || [];
@@ -242,7 +243,8 @@ class DriveGallery {
       const data = await response.json();
       
       if (data.error) {
-        throw new Error(data.error);
+        console.error('API Error:', data);
+        throw new Error(data.error + (data.details ? ': ' + data.details : ''));
       }
 
       const newImages = data.items || [];
