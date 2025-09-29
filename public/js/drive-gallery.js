@@ -76,6 +76,11 @@ class DriveGallery {
     this.error = document.getElementById('driveGalleryError');
     this.loadMore = document.getElementById('driveGalleryLoadMore');
     this.lightbox = document.getElementById('driveLightbox');
+    
+    // Ensure lightbox is properly initialized
+    if (this.config.enableLightbox && !this.lightbox) {
+      console.error('Lightbox element not found after creation');
+    }
   }
 
   createLightboxHTML() {
@@ -133,15 +138,18 @@ class DriveGallery {
   }
 
   bindLightboxEvents() {
-    const closeBtn = document.getElementById('lightboxClose');
-    const backdrop = document.getElementById('lightboxBackdrop');
-    const prevBtn = document.getElementById('lightboxPrev');
-    const nextBtn = document.getElementById('lightboxNext');
-
-    if (closeBtn) closeBtn.addEventListener('click', () => this.closeLightbox());
-    if (backdrop) backdrop.addEventListener('click', () => this.closeLightbox());
-    if (prevBtn) prevBtn.addEventListener('click', () => this.previousImage());
-    if (nextBtn) nextBtn.addEventListener('click', () => this.nextImage());
+    // Use event delegation since lightbox is created dynamically
+    document.addEventListener('click', (e) => {
+      if (!this.lightboxOpen) return;
+      
+      if (e.target.id === 'lightboxClose' || e.target.id === 'lightboxBackdrop') {
+        this.closeLightbox();
+      } else if (e.target.id === 'lightboxPrev') {
+        this.previousImage();
+      } else if (e.target.id === 'lightboxNext') {
+        this.nextImage();
+      }
+    });
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -301,10 +309,15 @@ class DriveGallery {
 
     // Add click handler for lightbox
     if (this.config.enableLightbox) {
-      photoDiv.addEventListener('click', () => this.openLightbox(index));
+      photoDiv.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Photo clicked, index:', index, 'Total images:', this.currentImages.length);
+        this.openLightbox(index);
+      });
       photoDiv.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
+          console.log('Photo key pressed, index:', index);
           this.openLightbox(index);
         }
       });
@@ -357,14 +370,64 @@ class DriveGallery {
   openLightbox(index) {
     if (!this.config.enableLightbox) return;
 
+    console.log('Opening lightbox for index:', index);
+    
+    // Validate index
+    if (index < 0 || index >= this.currentImages.length) {
+      console.error('Invalid lightbox index:', index);
+      return;
+    }
+    
     this.lightboxIndex = index;
     this.lightboxOpen = true;
-    this.lightbox.setAttribute('aria-hidden', 'false');
-    this.lightbox.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    
+    if (this.lightbox) {
+      this.lightbox.setAttribute('aria-hidden', 'false');
+      this.lightbox.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
 
-    this.updateLightboxContent();
-    this.trapFocus();
+      this.updateLightboxContent();
+      this.trapFocus();
+    } else {
+      console.error('Lightbox element not found, creating fallback');
+      this.createFallbackLightbox(index);
+    }
+  }
+
+  createFallbackLightbox(index) {
+    // Create a simple fallback lightbox
+    const fallback = document.createElement('div');
+    fallback.className = 'drive-lightbox-fallback';
+    fallback.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    `;
+    
+    const photo = this.currentImages[index];
+    fallback.innerHTML = `
+      <div style="position: relative; max-width: 90vw; max-height: 90vh;">
+        <img src="${photo.src}" alt="${photo.caption}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -40px; right: 0; background: white; border: none; padding: 10px; cursor: pointer;">Close</button>
+        <div style="color: white; text-align: center; margin-top: 10px;">${photo.caption}</div>
+      </div>
+    `;
+    
+    document.body.appendChild(fallback);
+    
+    // Close on backdrop click
+    fallback.addEventListener('click', (e) => {
+      if (e.target === fallback) {
+        fallback.remove();
+      }
+    });
   }
 
   closeLightbox() {
@@ -403,9 +466,13 @@ class DriveGallery {
     const prevBtn = document.getElementById('lightboxPrev');
     const nextBtn = document.getElementById('lightboxNext');
 
-    if (!image || !this.currentImages[this.lightboxIndex]) return;
+    if (!image || !this.currentImages[this.lightboxIndex]) {
+      console.error('Lightbox elements not found or invalid index:', this.lightboxIndex);
+      return;
+    }
 
     const photo = this.currentImages[this.lightboxIndex];
+    console.log('Updating lightbox with photo:', photo);
     
     image.src = photo.src;
     image.alt = photo.caption;
