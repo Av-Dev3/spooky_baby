@@ -233,11 +233,15 @@
   right: 0;
   bottom: 0;
   z-index: 9999;
-  display: flex !important;
+  display: none;
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.9);
   overflow: hidden;
+}
+
+.drive-lightbox[style*="display: flex"] {
+  display: flex !important;
 }
 
 .lightbox-backdrop {
