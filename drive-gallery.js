@@ -387,7 +387,9 @@ class DriveGallery {
 
   // Lightbox methods
   openLightbox(index) {
-    console.log('openLightbox called with index:', index);
+    console.log('=== openLightbox called ===');
+    console.log('Called from:', new Error().stack);
+    console.log('Index:', index);
     console.log('enableLightbox:', this.config.enableLightbox);
     console.log('lightbox element:', this.lightbox);
     
