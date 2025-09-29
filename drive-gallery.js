@@ -415,11 +415,18 @@ class DriveGallery {
     const rect = clickedImg.getBoundingClientRect();
     
     this.lightboxIndex = index;
-    this.lightboxOpen = true;
     
-    // Show overlay
+    // Show overlay (but make it non-clickable during animation)
     this.overlay.style.display = 'block';
-    setTimeout(() => this.overlay.style.opacity = '1', 10);
+    this.overlay.style.pointerEvents = 'none';
+    setTimeout(() => {
+      this.overlay.style.opacity = '1';
+      // Enable clicks after animation
+      setTimeout(() => {
+        this.overlay.style.pointerEvents = 'auto';
+        this.lightboxOpen = true;
+      }, 300);
+    }, 10);
     
     // Position enlarged image at clicked image location
     this.lightbox.style.display = 'block';
