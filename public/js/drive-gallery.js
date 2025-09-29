@@ -14,11 +14,19 @@
  * - Change API endpoint if needed
  */
 
+console.log('=== DRIVE GALLERY SCRIPT LOADED ===');
+
 class DriveGallery {
   constructor(containerId, options = {}) {
+    console.log('=== DRIVE GALLERY CONSTRUCTOR CALLED ===');
+    console.log('Container ID:', containerId);
+    console.log('Options:', options);
+    
     this.container = document.getElementById(containerId);
+    console.log('Container element:', this.container);
+    
     if (!this.container) {
-      console.error(`Gallery container with id "${containerId}" not found`);
+      console.error(`❌ Gallery container with id "${containerId}" not found`);
       return;
     }
 
@@ -667,21 +675,45 @@ class DriveGallery {
 
 // Initialize gallery when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM loaded, initializing DriveGallery...');
+  console.log('=== DOM LOADED ===');
+  console.log('Looking for driveGallery element...');
+  const galleryElement = document.getElementById('driveGallery');
+  console.log('Gallery element found:', galleryElement);
+  
+  if (!galleryElement) {
+    console.error('❌ Gallery element with ID "driveGallery" not found!');
+    return;
+  }
+  
   // Wait a bit for any other scripts to load
   setTimeout(() => {
-    console.log('Creating DriveGallery instance...');
-    const gallery = new DriveGallery('driveGallery', {
-      limit: 24, // Adjust this to change number of photos loaded
-      columns: {
-        mobile: 2,
-        tablet: 3,
-        desktop: 4
-      },
-      enableLazyLoading: true,
-      enableLightbox: true
+    console.log('=== CREATING GALLERY ===');
+    try {
+      const gallery = new DriveGallery('driveGallery', {
+        limit: 24, // Adjust this to change number of photos loaded
+        columns: {
+          mobile: 2,
+          tablet: 3,
+          desktop: 4
+        },
+        enableLazyLoading: true,
+        enableLightbox: true
+      });
+      console.log('✅ DriveGallery instance created:', gallery);
+    
+    // Test if clicks work at all
+    document.addEventListener('click', (e) => {
+      console.log('=== ANY CLICK DETECTED ===');
+      console.log('Target:', e.target);
+      console.log('Target class:', e.target.className);
+      console.log('Target ID:', e.target.id);
+      console.log('Target parent:', e.target.parentElement);
+      console.log('Target parent class:', e.target.parentElement?.className);
     });
-    console.log('DriveGallery instance created:', gallery);
+    
+    } catch (error) {
+      console.error('❌ Error creating gallery:', error);
+    }
 
     // Handle window resize
     let resizeTimeout;
