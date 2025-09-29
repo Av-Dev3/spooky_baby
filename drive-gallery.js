@@ -495,11 +495,17 @@ class DriveGallery {
   }
 
   closeLightbox() {
-    if (!this.lightboxOpen) return;
+    console.log('closeLightbox called, lightboxOpen:', this.lightboxOpen);
+    if (!this.lightboxOpen) {
+      console.log('Lightbox already closed, returning');
+      return;
+    }
 
+    console.log('Closing lightbox...');
     this.lightboxOpen = false;
     this.lightbox.style.display = 'none';
     document.body.style.overflow = '';
+    console.log('Lightbox closed');
   }
 
   previousImage() {
