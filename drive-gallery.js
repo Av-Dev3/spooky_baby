@@ -159,13 +159,19 @@ class DriveGallery {
 
   bindLightboxEvents() {
     document.addEventListener('click', (e) => {
-      if (e.target.id === 'closeBtn' || e.target.id === 'simpleLightbox') {
+      // Only close if clicking the backdrop (lightbox itself), not its children
+      if (e.target.id === 'simpleLightbox') {
+        this.closeLightbox();
+      }
+      if (e.target.id === 'closeBtn') {
         this.closeLightbox();
       }
       if (e.target.id === 'prevBtn') {
+        e.stopPropagation();
         this.previousImage();
       }
       if (e.target.id === 'nextBtn') {
+        e.stopPropagation();
         this.nextImage();
       }
     });
