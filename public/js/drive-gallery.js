@@ -1,0 +1,517 @@
+/**
+ * Google Drive Photo Gallery
+ * 
+ * Features:
+ * - Responsive masonry grid layout
+ * - Lazy loading images
+ * - Accessible lightbox with keyboard navigation
+ * - Focus management and ARIA support
+ * - Error handling and loading states
+ * 
+ * Configuration:
+ * - Adjust GALLERY_CONFIG.limit to change number of photos
+ * - Modify GALLERY_CONFIG.columns for different layouts
+ * - Change API endpoint if needed
+ */
+
+class DriveGallery {
+  constructor(containerId, options = {}) {
+    this.container = document.getElementById(containerId);
+    if (!this.container) {
+      console.error(`Gallery container with id "${containerId}" not found`);
+      return;
+    }
+
+    // Configuration with defaults
+    this.config = {
+      apiEndpoint: '/.netlify/functions/drive-photos',
+      limit: 24,
+      columns: {
+        mobile: 2,
+        tablet: 3,
+        desktop: 4
+      },
+      enableLazyLoading: true,
+      enableLightbox: true,
+      ...options
+    };
+
+    this.currentPage = 1;
+    this.isLoading = false;
+    this.hasMore = true;
+    this.currentImages = [];
+    this.lightboxIndex = -1;
+    this.lightboxOpen = false;
+
+    this.init();
+  }
+
+  init() {
+    this.createGalleryHTML();
+    this.bindEvents();
+    this.loadPhotos();
+  }
+
+  createGalleryHTML() {
+    this.container.innerHTML = `
+      <div class="drive-gallery-container">
+        <div class="drive-gallery-grid" id="driveGalleryGrid"></div>
+        <div class="drive-gallery-loading" id="driveGalleryLoading" style="display: none;">
+          <div class="loading-spinner"></div>
+          <p>Loading photos...</p>
+        </div>
+        <div class="drive-gallery-error" id="driveGalleryError" style="display: none;">
+          <p>Failed to load photos. Please try again later.</p>
+          <button class="btn btn-pink" id="retryButton">Retry</button>
+        </div>
+        <div class="drive-gallery-load-more" id="driveGalleryLoadMore" style="display: none;">
+          <button class="btn btn-yellow" id="loadMoreButton">Load More Photos</button>
+        </div>
+      </div>
+      ${this.config.enableLightbox ? this.createLightboxHTML() : ''}
+    `;
+
+    this.grid = document.getElementById('driveGalleryGrid');
+    this.loading = document.getElementById('driveGalleryLoading');
+    this.error = document.getElementById('driveGalleryError');
+    this.loadMore = document.getElementById('driveGalleryLoadMore');
+    this.lightbox = document.getElementById('driveLightbox');
+  }
+
+  createLightboxHTML() {
+    return `
+      <div class="drive-lightbox" id="driveLightbox" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+        <div class="lightbox-container">
+          <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous image">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="lightbox-next" id="lightboxNext" aria-label="Next image">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="lightbox-content">
+            <img class="lightbox-image" id="lightboxImage" alt="">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+            <div class="lightbox-counter" id="lightboxCounter"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  bindEvents() {
+    // Load more button
+    const loadMoreBtn = document.getElementById('loadMoreButton');
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => this.loadMorePhotos());
+    }
+
+    // Retry button
+    const retryBtn = document.getElementById('retryButton');
+    if (retryBtn) {
+      retryBtn.addEventListener('click', () => this.loadPhotos());
+    }
+
+    // Lightbox events
+    if (this.config.enableLightbox) {
+      this.bindLightboxEvents();
+    }
+
+    // Intersection Observer for lazy loading
+    if (this.config.enableLazyLoading) {
+      this.setupLazyLoading();
+    }
+  }
+
+  bindLightboxEvents() {
+    const closeBtn = document.getElementById('lightboxClose');
+    const backdrop = document.getElementById('lightboxBackdrop');
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+
+    if (closeBtn) closeBtn.addEventListener('click', () => this.closeLightbox());
+    if (backdrop) backdrop.addEventListener('click', () => this.closeLightbox());
+    if (prevBtn) prevBtn.addEventListener('click', () => this.previousImage());
+    if (nextBtn) nextBtn.addEventListener('click', () => this.nextImage());
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!this.lightboxOpen) return;
+
+      switch (e.key) {
+        case 'Escape':
+          this.closeLightbox();
+          break;
+        case 'ArrowLeft':
+          this.previousImage();
+          break;
+        case 'ArrowRight':
+          this.nextImage();
+          break;
+      }
+    });
+  }
+
+  setupLazyLoading() {
+    const options = {
+      root: null,
+      rootMargin: '50px',
+      threshold: 0.1
+    };
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          this.loadImage(img);
+          this.observer.unobserve(img);
+        }
+      });
+    }, options);
+  }
+
+  async loadPhotos() {
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+    this.showLoading();
+    this.hideError();
+
+    try {
+      const url = new URL(this.config.apiEndpoint, window.location.origin);
+      url.searchParams.set('limit', this.config.limit);
+
+      const response = await fetch(url.toString());
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      this.currentImages = data.items || [];
+      this.hasMore = !!data.nextPageToken;
+      
+      this.renderPhotos();
+      this.hideLoading();
+
+      if (this.hasMore && this.currentImages.length > 0) {
+        this.showLoadMore();
+      }
+
+    } catch (error) {
+      console.error('Error loading photos:', error);
+      this.showError();
+      this.hideLoading();
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async loadMorePhotos() {
+    if (this.isLoading || !this.hasMore) return;
+
+    this.currentPage++;
+    this.isLoading = true;
+    this.hideLoadMore();
+
+    try {
+      const url = new URL(this.config.apiEndpoint, window.location.origin);
+      url.searchParams.set('limit', this.config.limit);
+      url.searchParams.set('page', this.currentPage);
+
+      const response = await fetch(url.toString());
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      const newImages = data.items || [];
+      this.currentImages = [...this.currentImages, ...newImages];
+      this.hasMore = !!data.nextPageToken;
+      
+      this.renderPhotos(newImages);
+      
+      if (this.hasMore) {
+        this.showLoadMore();
+      }
+
+    } catch (error) {
+      console.error('Error loading more photos:', error);
+      this.showError();
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  renderPhotos(images = this.currentImages) {
+    if (!images.length) {
+      this.showEmptyState();
+      return;
+    }
+
+    images.forEach((photo, index) => {
+      const photoElement = this.createPhotoElement(photo, this.currentImages.indexOf(photo));
+      this.grid.appendChild(photoElement);
+    });
+
+    // Update grid columns based on screen size
+    this.updateGridColumns();
+  }
+
+  createPhotoElement(photo, index) {
+    const photoDiv = document.createElement('div');
+    photoDiv.className = 'drive-gallery-item';
+    photoDiv.setAttribute('data-index', index);
+    photoDiv.setAttribute('tabindex', '0');
+    photoDiv.setAttribute('role', 'button');
+    photoDiv.setAttribute('aria-label', `View photo: ${photo.caption}`);
+
+    // Create image element
+    const img = document.createElement('img');
+    img.className = 'drive-gallery-image';
+    img.alt = photo.caption;
+    img.setAttribute('data-src', photo.src);
+    img.setAttribute('data-thumb', photo.thumb);
+    img.setAttribute('loading', 'lazy');
+
+    // Add loading placeholder
+    img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+';
+
+    // Add click handler for lightbox
+    if (this.config.enableLightbox) {
+      photoDiv.addEventListener('click', () => this.openLightbox(index));
+      photoDiv.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.openLightbox(index);
+        }
+      });
+    }
+
+    photoDiv.appendChild(img);
+
+    // Set up lazy loading
+    if (this.config.enableLazyLoading && this.observer) {
+      this.observer.observe(img);
+    } else {
+      this.loadImage(img);
+    }
+
+    return photoDiv;
+  }
+
+  loadImage(img) {
+    const src = img.getAttribute('data-src');
+    const thumb = img.getAttribute('data-thumb');
+
+    // Load thumbnail first, then full image
+    img.src = thumb;
+    
+    // Load full image in background
+    const fullImg = new Image();
+    fullImg.onload = () => {
+      img.src = src;
+      img.classList.add('loaded');
+    };
+    fullImg.src = src;
+  }
+
+  updateGridColumns() {
+    const width = window.innerWidth;
+    let columns;
+
+    if (width < 768) {
+      columns = this.config.columns.mobile;
+    } else if (width < 1024) {
+      columns = this.config.columns.tablet;
+    } else {
+      columns = this.config.columns.desktop;
+    }
+
+    this.grid.style.setProperty('--columns', columns);
+  }
+
+  // Lightbox methods
+  openLightbox(index) {
+    if (!this.config.enableLightbox) return;
+
+    this.lightboxIndex = index;
+    this.lightboxOpen = true;
+    this.lightbox.setAttribute('aria-hidden', 'false');
+    this.lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    this.updateLightboxContent();
+    this.trapFocus();
+  }
+
+  closeLightbox() {
+    if (!this.lightboxOpen) return;
+
+    this.lightboxOpen = false;
+    this.lightbox.setAttribute('aria-hidden', 'true');
+    this.lightbox.style.display = 'none';
+    document.body.style.overflow = '';
+
+    // Return focus to the image that was clicked
+    const clickedImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"]`);
+    if (clickedImage) {
+      clickedImage.focus();
+    }
+  }
+
+  previousImage() {
+    if (this.lightboxIndex > 0) {
+      this.lightboxIndex--;
+      this.updateLightboxContent();
+    }
+  }
+
+  nextImage() {
+    if (this.lightboxIndex < this.currentImages.length - 1) {
+      this.lightboxIndex++;
+      this.updateLightboxContent();
+    }
+  }
+
+  updateLightboxContent() {
+    const image = document.getElementById('lightboxImage');
+    const caption = document.getElementById('lightboxCaption');
+    const counter = document.getElementById('lightboxCounter');
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+
+    if (!image || !this.currentImages[this.lightboxIndex]) return;
+
+    const photo = this.currentImages[this.lightboxIndex];
+    
+    image.src = photo.src;
+    image.alt = photo.caption;
+    
+    if (caption) caption.textContent = photo.caption;
+    if (counter) counter.textContent = `${this.lightboxIndex + 1} of ${this.currentImages.length}`;
+    
+    if (prevBtn) prevBtn.style.display = this.lightboxIndex > 0 ? 'block' : 'none';
+    if (nextBtn) nextBtn.style.display = this.lightboxIndex < this.currentImages.length - 1 ? 'block' : 'none';
+  }
+
+  trapFocus() {
+    const focusableElements = this.lightbox.querySelectorAll(
+      'button, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    this.lightbox.addEventListener('keydown', this.handleFocusTrap);
+
+    firstElement.focus();
+  }
+
+  handleFocusTrap = (e) => {
+    if (e.key !== 'Tab') return;
+
+    const focusableElements = this.lightbox.querySelectorAll(
+      'button, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  };
+
+  // UI state methods
+  showLoading() {
+    if (this.loading) this.loading.style.display = 'flex';
+  }
+
+  hideLoading() {
+    if (this.loading) this.loading.style.display = 'none';
+  }
+
+  showError() {
+    if (this.error) this.error.style.display = 'block';
+  }
+
+  hideError() {
+    if (this.error) this.error.style.display = 'none';
+  }
+
+  showLoadMore() {
+    if (this.loadMore) this.loadMore.style.display = 'block';
+  }
+
+  hideLoadMore() {
+    if (this.loadMore) this.loadMore.style.display = 'none';
+  }
+
+  showEmptyState() {
+    this.grid.innerHTML = `
+      <div class="drive-gallery-empty">
+        <p>No photos found. Check back later for new content!</p>
+      </div>
+    `;
+  }
+}
+
+// Initialize gallery when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Wait a bit for any other scripts to load
+  setTimeout(() => {
+    const gallery = new DriveGallery('driveGallery', {
+      limit: 24, // Adjust this to change number of photos loaded
+      columns: {
+        mobile: 2,
+        tablet: 3,
+        desktop: 4
+      }
+    });
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (gallery && gallery.updateGridColumns) {
+          gallery.updateGridColumns();
+        }
+      }, 250);
+    });
+  }, 100);
+});
+
+// Export for potential external use
+window.DriveGallery = DriveGallery;

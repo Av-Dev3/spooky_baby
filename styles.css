@@ -1497,14 +1497,14 @@ select option {
   border: 1px solid rgba(244, 67, 54, 0.2);
 }
 
-/* ===== INSTAGRAM FEED SECTION ===== */
-.instagram-feed {
+/* ===== PHOTO GALLERY SECTION ===== */
+.photo-gallery {
   padding: var(--section-padding);
   background-color: var(--bg-primary);
   text-align: center;
 }
 
-.instagram-intro {
+.gallery-intro {
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin-bottom: 3rem;
@@ -1706,7 +1706,7 @@ select option {
   height: 16px;
 }
 
-.instagram-cta {
+.gallery-cta {
   margin-top: 2rem;
 }
 

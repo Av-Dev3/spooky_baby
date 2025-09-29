@@ -671,30 +671,11 @@ const scrollAnimations = {
     }
 };
 
-// ===== INSTAGRAM FEED =====
-const instagramFeed = {
+// ===== PHOTO GALLERY =====
+const photoGallery = {
     init() {
-        // Instagram embed is now handled by the HTML and Instagram's embed.js script
-        console.log('Instagram embed initialized - using official Instagram embed');
-        this.initializeEmbed();
-    },
-
-    initializeEmbed() {
-        // The Instagram embed script will automatically process the blockquote
-        // and replace it with the actual Instagram content
-        console.log('Instagram embed will load your real posts automatically');
-        
-        // Optional: Add any custom styling or interactions here
-        this.addCustomStyling();
-    },
-
-    addCustomStyling() {
-        // Add any custom styling or interactions for the Instagram embed
-        const embedContainer = document.querySelector('.instagram-embed-container');
-        if (embedContainer) {
-            // Add any custom classes or styling here if needed
-            embedContainer.classList.add('instagram-embed-loaded');
-        }
+        // Photo gallery is now handled by drive-gallery.js
+        console.log('Photo gallery initialized - using Google Drive integration');
     }
 };
 
@@ -769,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
         customDropdown.init();
         cardInteractions.init();
         scrollAnimations.init();
-        instagramFeed.init();
+        photoGallery.init();
         yearUpdate.init();
         accessibility.init();
         
