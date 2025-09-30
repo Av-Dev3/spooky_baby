@@ -830,14 +830,14 @@ body {
 }
 
 .flavor-list li::before {
-  content: '✨';
+  content: '•';
   position: absolute;
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1rem;
-  animation: sparkle 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 4px rgba(247, 213, 106, 0.5));
+  font-size: 1.2rem;
+  color: var(--accent-pink);
+  font-weight: bold;
 }
 
 .flavor-note {
