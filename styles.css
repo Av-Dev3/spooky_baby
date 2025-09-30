@@ -246,6 +246,13 @@ body {
   gap: 2rem;
 }
 
+.nav-socials {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  align-items: center;
+}
+
 .nav-link {
   color: var(--text-secondary);
   text-decoration: none;
@@ -1924,7 +1931,13 @@ select option {
   
   .nav {
     padding: 0.75rem 1rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .nav-brand {
+    order: 1;
   }
   
   .nav-links {
@@ -1932,7 +1945,14 @@ select option {
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    margin-top: 0.5rem;
+    order: 2;
+  }
+  
+  .nav-socials {
+    gap: 0.5rem;
+    justify-content: center;
+    width: 100%;
+    order: 3;
   }
   
   .nav-link {
