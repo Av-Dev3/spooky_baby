@@ -580,13 +580,11 @@ body {
   background: rgba(0, 0, 0, 0.8);
   z-index: 10000;
   padding: 2rem 1rem;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .mobile-menu-popup.active {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  display: block;
 }
 
 .mobile-menu-content {
@@ -600,6 +598,7 @@ body {
   max-width: 95%;
   width: fit-content;
   min-width: 300px;
+  margin: 0 auto;
   position: relative;
   box-shadow: 
     0 25px 50px rgba(0, 0, 0, 0.6),
