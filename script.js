@@ -496,7 +496,9 @@ const cardInteractions = {
     
     initMobileMenuButtons() {
         const mobileButtons = document.querySelectorAll('.mobile-menu-btn');
-        const menuCards = document.querySelectorAll('.menu-card');
+        const popup = document.getElementById('mobileMenuPopup');
+        const popupContent = document.getElementById('mobileMenuContent');
+        const closeBtn = document.getElementById('mobileMenuClose');
         
         mobileButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -505,31 +507,42 @@ const cardInteractions = {
                 
                 if (!targetCard) return;
                 
-                // Toggle active state
-                const isActive = button.classList.contains('active');
+                // Copy the card content to the popup
+                const cardClone = targetCard.cloneNode(true);
+                cardClone.classList.remove('scroll-animate-stagger');
+                cardClone.style.display = 'block';
+                cardClone.style.margin = '0';
+                cardClone.style.padding = '0';
                 
-                // Close all other buttons and cards
-                mobileButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                menuCards.forEach(card => {
-                    card.classList.remove('mobile-active');
-                });
+                // Clear previous content and add new content
+                popupContent.innerHTML = '';
+                popupContent.appendChild(cardClone);
                 
-                // If this button wasn't active, open it
-                if (!isActive) {
-                    button.classList.add('active');
-                    targetCard.classList.add('mobile-active');
-                    
-                    // Smooth scroll to the opened card
-                    setTimeout(() => {
-                        targetCard.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }, 100);
-                }
+                // Show popup
+                popup.classList.add('active');
+                document.body.style.overflow = 'hidden';
             });
+        });
+        
+        // Close popup handlers
+        closeBtn.addEventListener('click', () => {
+            popup.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && popup.classList.contains('active')) {
+                popup.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         });
     },
 
