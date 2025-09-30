@@ -489,6 +489,48 @@ const cardInteractions = {
             card.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
             card.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
         });
+        
+        // Initialize mobile menu buttons
+        this.initMobileMenuButtons();
+    },
+    
+    initMobileMenuButtons() {
+        const mobileButtons = document.querySelectorAll('.mobile-menu-btn');
+        const menuCards = document.querySelectorAll('.menu-card');
+        
+        mobileButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                const targetCard = document.getElementById(targetId);
+                
+                if (!targetCard) return;
+                
+                // Toggle active state
+                const isActive = button.classList.contains('active');
+                
+                // Close all other buttons and cards
+                mobileButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                menuCards.forEach(card => {
+                    card.classList.remove('mobile-active');
+                });
+                
+                // If this button wasn't active, open it
+                if (!isActive) {
+                    button.classList.add('active');
+                    targetCard.classList.add('mobile-active');
+                    
+                    // Smooth scroll to the opened card
+                    setTimeout(() => {
+                        targetCard.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }, 100);
+                }
+            });
+        });
     },
 
     handleMouseEnter(e) {

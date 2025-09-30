@@ -111,9 +111,38 @@
     <section class="menu" id="menu">
         <div class="container">
             <h2 class="section-title scroll-animate">Our Sweet Menu</h2>
+            <!-- Mobile Menu Buttons -->
+            <div class="mobile-menu-buttons">
+                <button class="mobile-menu-btn" data-target="cupcakes-card">
+                    <span class="btn-icon">🧁</span>
+                    <span class="btn-text">Cupcakes</span>
+                    <span class="btn-arrow">▼</span>
+                </button>
+                <button class="mobile-menu-btn" data-target="cake-pops-card">
+                    <span class="btn-icon">🍭</span>
+                    <span class="btn-text">Cake Pops</span>
+                    <span class="btn-arrow">▼</span>
+                </button>
+                <button class="mobile-menu-btn" data-target="cakecicles-card">
+                    <span class="btn-icon">🍰</span>
+                    <span class="btn-text">Cakecicles</span>
+                    <span class="btn-arrow">▼</span>
+                </button>
+                <button class="mobile-menu-btn" data-target="cakes-card">
+                    <span class="btn-icon">🎂</span>
+                    <span class="btn-text">Cakes</span>
+                    <span class="btn-arrow">▼</span>
+                </button>
+                <button class="mobile-menu-btn" data-target="seasonal-card">
+                    <span class="btn-icon">🎃</span>
+                    <span class="btn-text">Seasonal & Specialty</span>
+                    <span class="btn-arrow">▼</span>
+                </button>
+            </div>
+
             <div class="menu-grid">
                 <!-- Cupcakes Card -->
-                <div class="menu-card scroll-animate-stagger">
+                <div class="menu-card scroll-animate-stagger" id="cupcakes-card">
                     <h3 class="card-title">Cupcakes</h3>
                     <div class="card-content">
                         <div class="flavor-group">
@@ -142,7 +171,7 @@
                 </div>
 
                 <!-- Cake Pops Card -->
-                <div class="menu-card scroll-animate-stagger">
+                <div class="menu-card scroll-animate-stagger" id="cake-pops-card">
                     <h3 class="card-title">Cake Pops</h3>
                     <div class="card-content">
                         <ul class="flavor-list">
@@ -175,7 +204,7 @@
                 </div>
 
                 <!-- Cakecicles Card -->
-                <div class="menu-card scroll-animate-stagger">
+                <div class="menu-card scroll-animate-stagger" id="cakecicles-card">
                     <h3 class="card-title">Cakecicles</h3>
                     <div class="card-content">
                         <div class="pricing">
@@ -185,7 +214,7 @@
                 </div>
 
                 <!-- Cakes Card -->
-                <div class="menu-card scroll-animate-stagger">
+                <div class="menu-card scroll-animate-stagger" id="cakes-card">
                     <h3 class="card-title">Cakes</h3>
                     <div class="card-content">
                         <ul class="flavor-list">
@@ -199,7 +228,7 @@
                 </div>
 
                 <!-- Seasonal & Specialty Card -->
-                <div class="menu-card scroll-animate-stagger">
+                <div class="menu-card scroll-animate-stagger" id="seasonal-card">
                     <h3 class="card-title">Seasonal & Specialty</h3>
                     <div class="card-content">
                         <ul class="flavor-list">

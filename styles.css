@@ -511,6 +511,91 @@ body {
   background-color: var(--bg-secondary);
 }
 
+/* Mobile Menu Buttons */
+.mobile-menu-buttons {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.mobile-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, 
+    rgba(246, 182, 207, 0.1) 0%, 
+    rgba(38, 38, 38, 0.9) 50%, 
+    rgba(247, 213, 106, 0.1) 100%);
+  border: 2px solid rgba(246, 182, 207, 0.3);
+  border-radius: 16px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(246, 182, 207, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-menu-btn:hover {
+  border-color: var(--accent-pink);
+  background: linear-gradient(135deg, 
+    rgba(246, 182, 207, 0.2) 0%, 
+    rgba(38, 38, 38, 0.95) 50%, 
+    rgba(247, 213, 106, 0.2) 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 25px rgba(246, 182, 207, 0.3),
+    0 0 0 1px rgba(246, 182, 207, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-btn.active {
+  border-color: var(--accent-yellow);
+  background: linear-gradient(135deg, 
+    rgba(247, 213, 106, 0.2) 0%, 
+    rgba(38, 38, 38, 0.95) 50%, 
+    rgba(246, 182, 207, 0.2) 100%);
+  box-shadow: 
+    0 0 0 3px rgba(247, 213, 106, 0.3),
+    0 8px 25px rgba(247, 213, 106, 0.2),
+    0 0 20px rgba(247, 213, 106, 0.1);
+  transform: translateY(-1px) scale(1.01);
+}
+
+.mobile-menu-btn .btn-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu-btn:hover .btn-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.mobile-menu-btn .btn-text {
+  flex: 1;
+  text-align: left;
+}
+
+.mobile-menu-btn .btn-arrow {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  color: var(--accent-pink);
+}
+
+.mobile-menu-btn.active .btn-arrow {
+  transform: rotate(180deg);
+  color: var(--accent-yellow);
+}
+
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1882,11 +1967,21 @@ select option {
     margin-bottom: 2rem;
   }
   
+  /* Show mobile menu buttons on mobile */
+  .mobile-menu-buttons {
+    display: flex !important;
+  }
+  
+  /* Hide menu grid on mobile initially */
   .menu-grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
-    max-width: 100% !important;
-    padding: 0 1rem !important;
+    display: none !important;
+  }
+  
+  /* Show individual menu cards when active */
+  .menu-card.mobile-active {
+    display: block !important;
+    margin-bottom: 2rem;
+    padding: 2rem 1.5rem;
   }
   
   /* Override explicit grid positioning for mobile */
