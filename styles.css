@@ -776,6 +776,27 @@ body {
   font-size: 1.1rem;
 }
 
+.flavor-group {
+  margin-bottom: 1.5rem;
+}
+
+.flavor-group:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.flavor-line-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-pink);
+  margin-bottom: 0.75rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .flavor-list {
   list-style: none;
   display: grid;
