@@ -933,6 +933,31 @@ const giveaway = {
     
     // Show popup
     showPopup() {
+        // Create a super simple test popup
+        const testPopup = document.createElement('div');
+        testPopup.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: red;
+                color: white;
+                padding: 50px;
+                font-size: 24px;
+                z-index: 999999;
+                border: 10px solid yellow;
+                text-align: center;
+            ">
+                <h1>TEST POPUP</h1>
+                <p>Can you see this?</p>
+                <button onclick="this.parentElement.parentElement.remove()" style="background: white; color: black; padding: 10px 20px; border: none; cursor: pointer;">Close</button>
+            </div>
+        `;
+        document.body.appendChild(testPopup);
+        console.log('TEST POPUP CREATED - should be visible now!');
+        
+        // Also try the original popup
         const popup = document.getElementById('giveawayPopup');
         console.log('Attempting to show popup:', popup);
         if (popup) {
@@ -952,22 +977,6 @@ const giveaway = {
             popup.classList.add('show');
             document.body.style.overflow = 'hidden';
             console.log('Popup should be visible now with forced styles');
-            console.log('Popup computed styles:', window.getComputedStyle(popup));
-            console.log('Popup innerHTML:', popup.innerHTML);
-            console.log('Popup children:', popup.children);
-            
-            // Check if popup content exists
-            const popupContent = popup.querySelector('.popup-content');
-            console.log('Popup content element:', popupContent);
-            if (popupContent) {
-                console.log('Popup content styles:', window.getComputedStyle(popupContent));
-                // Make popup content more visible for debugging
-                popupContent.style.background = 'red';
-                popupContent.style.border = '5px solid yellow';
-                popupContent.style.minWidth = '300px';
-                popupContent.style.minHeight = '200px';
-                popupContent.style.padding = '20px';
-            }
         } else {
             console.log('Popup element not found!');
         }
