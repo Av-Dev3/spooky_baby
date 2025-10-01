@@ -963,27 +963,20 @@ const giveaway = {
     
     // Initialize giveaway features
     init() {
-        // Check if banner should be hidden
-        if (this.isBannerHidden()) {
-            this.hideBannerElement();
-        }
+        console.log('Giveaway init started');
         
         // Set up event listeners first
         this.setupEventListeners();
         
-        // Show popup for first-time visitors
-        if (!this.hasSeenPopup()) {
-            // Delay popup to let page load
-            setTimeout(() => {
-                this.showPopup();
-            }, 2000);
-        } else {
-            // For debugging - force show popup
-            console.log('Popup already seen, but showing for debug');
-            setTimeout(() => {
-                this.showPopup();
-            }, 3000);
-        }
+        // Always show popup for debugging
+        console.log('Setting up popup timer');
+        setTimeout(() => {
+            console.log('Attempting to show popup');
+            this.showPopup();
+        }, 3000);
+        
+        // Don't hide banner for now
+        console.log('Banner should be visible');
     },
     
     // Set up event listeners
@@ -1032,9 +1025,18 @@ const giveaway = {
 
 // Initialize giveaway functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing giveaway');
     // Add a small delay to ensure all other scripts are loaded
     setTimeout(() => {
         giveaway.init();
     }, 100);
+});
+
+// Also try immediate initialization for debugging
+window.addEventListener('load', () => {
+    console.log('Window loaded, trying giveaway init again');
+    setTimeout(() => {
+        giveaway.init();
+    }, 500);
 });
 
