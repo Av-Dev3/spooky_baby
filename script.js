@@ -909,3 +909,128 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// ===== GIVEAWAY FUNCTIONALITY =====
+const giveaway = {
+    // Check if user has seen the popup before
+    hasSeenPopup() {
+        return localStorage.getItem('giveaway-popup-seen') === 'true';
+    },
+    
+    // Mark popup as seen
+    markPopupSeen() {
+        localStorage.setItem('giveaway-popup-seen', 'true');
+    },
+    
+    // Check if banner should be hidden
+    isBannerHidden() {
+        return localStorage.getItem('giveaway-banner-hidden') === 'true';
+    },
+    
+    // Hide banner
+    hideBanner() {
+        localStorage.setItem('giveaway-banner-hidden', 'true');
+    },
+    
+    // Show popup
+    showPopup() {
+        const popup = document.getElementById('giveawayPopup');
+        if (popup) {
+            popup.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+    
+    // Hide popup
+    hidePopup() {
+        const popup = document.getElementById('giveawayPopup');
+        if (popup) {
+            popup.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    },
+    
+    // Hide banner
+    hideBannerElement() {
+        const banner = document.getElementById('giveawayBanner');
+        if (banner) {
+            banner.style.display = 'none';
+        }
+    },
+    
+    // Initialize giveaway features
+    init() {
+        // Check if banner should be hidden
+        if (this.isBannerHidden()) {
+            this.hideBannerElement();
+        }
+        
+        // Show popup for first-time visitors
+        if (!this.hasSeenPopup()) {
+            // Delay popup to let page load
+            setTimeout(() => {
+                this.showPopup();
+            }, 1500);
+        }
+        
+        // Set up event listeners
+        this.setupEventListeners();
+    },
+    
+    // Set up event listeners
+    setupEventListeners() {
+        // Banner close button
+        const bannerClose = document.getElementById('bannerClose');
+        if (bannerClose) {
+            bannerClose.addEventListener('click', () => {
+                this.hideBanner();
+                this.hideBannerElement();
+            });
+        }
+        
+        // Popup close button
+        const popupClose = document.getElementById('popupClose');
+        if (popupClose) {
+            popupClose.addEventListener('click', () => {
+                this.hidePopup();
+                this.markPopupSeen();
+            });
+        }
+        
+        // Popup "Maybe Later" button
+        const popupLater = document.getElementById('popupLater');
+        if (popupLater) {
+            popupLater.addEventListener('click', () => {
+                this.hidePopup();
+                this.markPopupSeen();
+            });
+        }
+        
+        // Close popup when clicking outside
+        const popup = document.getElementById('giveawayPopup');
+        if (popup) {
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    this.hidePopup();
+                    this.markPopupSeen();
+                }
+            });
+        }
+        
+        // Close popup with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const popup = document.getElementById('giveawayPopup');
+                if (popup && popup.classList.contains('show')) {
+                    this.hidePopup();
+                    this.markPopupSeen();
+                }
+            }
+        });
+    }
+};
+
+// Initialize giveaway functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    giveaway.init();
+});
+
