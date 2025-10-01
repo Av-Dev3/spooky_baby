@@ -933,88 +933,132 @@ const giveaway = {
     
     // Show popup
     showPopup() {
-        console.log('Creating popup as page content instead of modal');
+        console.log('Creating proper modal popup');
         
-        // Create popup as a section in the page content
-        const popupSection = document.createElement('section');
-        popupSection.id = 'giveaway-popup-section';
-        popupSection.innerHTML = `
+        // First test with browser alert to see if anything works
+        const userWantsPopup = confirm('🎉 Instagram Giveaway! 🎉\n\nWe\'re celebrating 100 followers on Instagram with a special giveaway!\n\nFollow us for a chance to win free cupcakes and cake pops!\n\nClick OK to go to Instagram, Cancel to dismiss.');
+        
+        if (userWantsPopup) {
+            window.open('https://www.instagram.com/spookybabysweets/', '_blank');
+        }
+        
+        // Now create the actual modal popup
+        const modal = document.createElement('div');
+        modal.id = 'giveaway-modal';
+        modal.style.cssText = `
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(0, 0, 0, 0.9) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 2147483647 !important;
+            font-family: Arial, sans-serif !important;
+        `;
+        
+        modal.innerHTML = `
             <div style="
-                background: linear-gradient(135deg, #F6B6CF, #F7D56A);
-                color: #1F1F1F;
-                padding: 3rem 2rem;
-                text-align: center;
-                margin: 2rem 0;
-                border-radius: 20px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                position: relative;
+                background: linear-gradient(135deg, #F6B6CF, #F7D56A) !important;
+                color: #1F1F1F !important;
+                padding: 3rem !important;
+                border-radius: 20px !important;
+                text-align: center !important;
+                max-width: 500px !important;
+                width: 90% !important;
+                position: relative !important;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
             ">
-                <button onclick="this.closest('section').remove()" style="
-                    position: absolute;
-                    top: 1rem;
-                    right: 1rem;
-                    background: #1F1F1F;
-                    color: #F6B6CF;
-                    border: none;
-                    border-radius: 50%;
-                    width: 30px;
-                    height: 30px;
-                    cursor: pointer;
-                    font-size: 18px;
+                <button id="modal-close" style="
+                    position: absolute !important;
+                    top: 1rem !important;
+                    right: 1rem !important;
+                    background: #1F1F1F !important;
+                    color: #F6B6CF !important;
+                    border: none !important;
+                    border-radius: 50% !important;
+                    width: 40px !important;
+                    height: 40px !important;
+                    cursor: pointer !important;
+                    font-size: 20px !important;
+                    font-weight: bold !important;
                 ">×</button>
                 
-                <h2 style="font-family: 'Chewy', cursive; font-size: 2rem; margin-bottom: 1rem; color: #1F1F1F;">
-                    🎉 Instagram Giveaway! 🎉
-                </h2>
+                <h2 style="
+                    font-family: 'Chewy', cursive !important;
+                    font-size: 2.5rem !important;
+                    margin-bottom: 1.5rem !important;
+                    color: #1F1F1F !important;
+                ">🎉 Instagram Giveaway! 🎉</h2>
                 
-                <p style="font-size: 1.2rem; margin-bottom: 1rem; color: #1F1F1F;">
-                    We're celebrating 100 followers on Instagram with a special giveaway!
-                </p>
+                <p style="
+                    font-size: 1.3rem !important;
+                    margin-bottom: 1rem !important;
+                    color: #1F1F1F !important;
+                    font-weight: 600 !important;
+                ">We're celebrating 100 followers on Instagram with a special giveaway!</p>
                 
-                <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #1F1F1F;">
-                    Follow us for a chance to win free cupcakes and cake pops!
-                </p>
+                <p style="
+                    font-size: 1.1rem !important;
+                    margin-bottom: 2rem !important;
+                    color: #1F1F1F !important;
+                ">Follow us for a chance to win free cupcakes and cake pops!</p>
                 
-                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <div style="
+                    display: flex !important;
+                    gap: 1rem !important;
+                    justify-content: center !important;
+                    flex-wrap: wrap !important;
+                ">
                     <a href="https://www.instagram.com/spookybabysweets/" target="_blank" rel="noopener noreferrer" style="
-                        background: #1F1F1F;
-                        color: #F6B6CF;
-                        padding: 1rem 2rem;
-                        border-radius: 25px;
-                        text-decoration: none;
-                        font-weight: 600;
-                        transition: all 0.3s ease;
-                    " onmouseover="this.style.background='#262626'" onmouseout="this.style.background='#1F1F1F'">
-                        Follow on Instagram
-                    </a>
-                    <button onclick="this.closest('section').remove()" style="
-                        background: #F7D56A;
-                        color: #1F1F1F;
-                        padding: 1rem 2rem;
-                        border-radius: 25px;
-                        border: none;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                    " onmouseover="this.style.background='#F5C842'" onmouseout="this.style.background='#F7D56A'">
-                        Maybe Later
-                    </button>
+                        background: #1F1F1F !important;
+                        color: #F6B6CF !important;
+                        padding: 1rem 2rem !important;
+                        border-radius: 25px !important;
+                        text-decoration: none !important;
+                        font-weight: 600 !important;
+                        font-size: 1.1rem !important;
+                        display: inline-block !important;
+                    ">Follow on Instagram</a>
+                    <button id="modal-later" style="
+                        background: #F7D56A !important;
+                        color: #1F1F1F !important;
+                        padding: 1rem 2rem !important;
+                        border-radius: 25px !important;
+                        border: none !important;
+                        font-weight: 600 !important;
+                        cursor: pointer !important;
+                        font-size: 1.1rem !important;
+                    ">Maybe Later</button>
                 </div>
             </div>
         `;
         
-        // Insert after the banner
-        const banner = document.getElementById('giveawayBanner');
-        if (banner && banner.nextSibling) {
-            banner.parentNode.insertBefore(popupSection, banner.nextSibling);
-        } else {
-            document.body.insertBefore(popupSection, document.body.firstChild);
-        }
+        // Add to body
+        document.body.appendChild(modal);
         
-        console.log('POPUP ADDED AS PAGE CONTENT - should be visible now!');
+        // Add event listeners
+        document.getElementById('modal-close').onclick = () => {
+            modal.remove();
+            this.markPopupSeen();
+        };
         
-        // Mark as seen
-        this.markPopupSeen();
+        document.getElementById('modal-later').onclick = () => {
+            modal.remove();
+            this.markPopupSeen();
+        };
+        
+        // Close on background click
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                modal.remove();
+                this.markPopupSeen();
+            }
+        };
+        
+        console.log('MODAL POPUP CREATED - should be visible now!');
     },
     
     // Hide popup
