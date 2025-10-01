@@ -934,9 +934,13 @@ const giveaway = {
     // Show popup
     showPopup() {
         const popup = document.getElementById('giveawayPopup');
+        console.log('Attempting to show popup:', popup); // Debug log
         if (popup) {
             popup.classList.add('show');
             document.body.style.overflow = 'hidden';
+            console.log('Popup should be visible now'); // Debug log
+        } else {
+            console.log('Popup element not found!'); // Debug log
         }
     },
     
@@ -964,16 +968,16 @@ const giveaway = {
             this.hideBannerElement();
         }
         
+        // Set up event listeners first
+        this.setupEventListeners();
+        
         // Show popup for first-time visitors
         if (!this.hasSeenPopup()) {
             // Delay popup to let page load
             setTimeout(() => {
                 this.showPopup();
-            }, 1500);
+            }, 2000);
         }
-        
-        // Set up event listeners
-        this.setupEventListeners();
     },
     
     // Set up event listeners
