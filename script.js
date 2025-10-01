@@ -1032,24 +1032,36 @@ const giveaway = {
         // Add to body
         document.body.appendChild(modal);
         
-        // Add event listeners
-        document.getElementById('modal-close').onclick = () => {
-            modal.remove();
-            this.markPopupSeen();
-        };
-        
-        document.getElementById('modal-later').onclick = () => {
-            modal.remove();
-            this.markPopupSeen();
-        };
-        
-        // Close on background click
-        modal.onclick = (e) => {
-            if (e.target === modal) {
-                modal.remove();
-                this.markPopupSeen();
+        // Add event listeners after a small delay to ensure elements exist
+        setTimeout(() => {
+            const closeBtn = document.getElementById('modal-close');
+            const laterBtn = document.getElementById('modal-later');
+            
+            if (closeBtn) {
+                closeBtn.onclick = () => {
+                    console.log('Close button clicked');
+                    modal.remove();
+                    this.markPopupSeen();
+                };
             }
-        };
+            
+            if (laterBtn) {
+                laterBtn.onclick = () => {
+                    console.log('Maybe Later button clicked');
+                    modal.remove();
+                    this.markPopupSeen();
+                };
+            }
+            
+            // Close on background click
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    console.log('Background clicked');
+                    modal.remove();
+                    this.markPopupSeen();
+                }
+            };
+        }, 100);
         
         console.log('MODAL POPUP CREATED - should be visible now!');
     },
