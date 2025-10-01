@@ -936,12 +936,23 @@ const giveaway = {
         const popup = document.getElementById('giveawayPopup');
         console.log('Attempting to show popup:', popup);
         if (popup) {
-            popup.classList.add('show');
-            popup.style.display = 'flex'; // Force display
+            // Force all the styles
+            popup.style.position = 'fixed';
+            popup.style.top = '0';
+            popup.style.left = '0';
+            popup.style.width = '100%';
+            popup.style.height = '100%';
+            popup.style.background = 'rgba(0, 0, 0, 0.8)';
+            popup.style.display = 'flex';
+            popup.style.alignItems = 'center';
+            popup.style.justifyContent = 'center';
+            popup.style.zIndex = '99999';
             popup.style.opacity = '1';
             popup.style.visibility = 'visible';
+            popup.classList.add('show');
             document.body.style.overflow = 'hidden';
-            console.log('Popup should be visible now');
+            console.log('Popup should be visible now with forced styles');
+            console.log('Popup computed styles:', window.getComputedStyle(popup));
         } else {
             console.log('Popup element not found!');
         }
@@ -1034,8 +1045,14 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing giveaway');
     
     // For testing - clear localStorage to simulate first visit
-    // localStorage.removeItem('giveaway-popup-seen');
+    localStorage.removeItem('giveaway-popup-seen');
     
     giveaway.init();
+    
+    // Force show popup for debugging
+    setTimeout(() => {
+        console.log('FORCE SHOWING POPUP FOR DEBUG');
+        giveaway.showPopup();
+    }, 1000);
 });
 
