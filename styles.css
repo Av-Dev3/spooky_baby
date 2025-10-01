@@ -2695,7 +2695,7 @@ textarea:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 99999;
   opacity: 0;
   visibility: hidden;
   transition: var(--transition);
