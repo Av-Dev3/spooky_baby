@@ -952,8 +952,16 @@ const giveaway = {
             font-family: Arial, sans-serif !important;
         `;
         
+        // Add background click handler
+        modal.onclick = function(e) {
+            if (e.target === modal) {
+                modal.remove();
+                localStorage.setItem('giveaway-popup-seen', 'true');
+            }
+        };
+        
         modal.innerHTML = `
-            <div style="
+            <div onclick="event.stopPropagation();" style="
                 background: linear-gradient(135deg, #F6B6CF, #F7D56A) !important;
                 color: #1F1F1F !important;
                 padding: 3rem !important;
@@ -964,7 +972,7 @@ const giveaway = {
                 position: relative !important;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
             ">
-                <button id="modal-close" style="
+                <button onclick="this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
                     position: absolute !important;
                     top: 1rem !important;
                     right: 1rem !important;
@@ -1015,7 +1023,7 @@ const giveaway = {
                         font-size: 1.1rem !important;
                         display: inline-block !important;
                     ">Follow on Instagram</a>
-                    <button id="modal-later" style="
+                    <button onclick="this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
                         background: #F7D56A !important;
                         color: #1F1F1F !important;
                         padding: 1rem 2rem !important;
@@ -1031,37 +1039,6 @@ const giveaway = {
         
         // Add to body
         document.body.appendChild(modal);
-        
-        // Add event listeners after a small delay to ensure elements exist
-        setTimeout(() => {
-            const closeBtn = document.getElementById('modal-close');
-            const laterBtn = document.getElementById('modal-later');
-            
-            if (closeBtn) {
-                closeBtn.onclick = () => {
-                    console.log('Close button clicked');
-                    modal.remove();
-                    this.markPopupSeen();
-                };
-            }
-            
-            if (laterBtn) {
-                laterBtn.onclick = () => {
-                    console.log('Maybe Later button clicked');
-                    modal.remove();
-                    this.markPopupSeen();
-                };
-            }
-            
-            // Close on background click
-            modal.onclick = (e) => {
-                if (e.target === modal) {
-                    console.log('Background clicked');
-                    modal.remove();
-                    this.markPopupSeen();
-                }
-            };
-        }, 100);
         
         console.log('MODAL POPUP CREATED - should be visible now!');
     },
