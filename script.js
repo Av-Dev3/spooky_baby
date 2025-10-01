@@ -935,6 +935,12 @@ const giveaway = {
     showPopup() {
         console.log('Creating proper modal popup');
         
+        // Check if popup already exists
+        if (document.getElementById('giveaway-modal')) {
+            console.log('Popup already exists, not creating another');
+            return;
+        }
+        
         // Create the modal popup
         const modal = document.createElement('div');
         modal.id = 'giveaway-modal';
@@ -1133,11 +1139,5 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('giveaway-popup-seen');
     
     giveaway.init();
-    
-    // Force show popup for debugging
-    setTimeout(() => {
-        console.log('FORCE SHOWING POPUP FOR DEBUG');
-        giveaway.showPopup();
-    }, 1000);
 });
 
