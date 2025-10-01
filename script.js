@@ -972,7 +972,7 @@ const giveaway = {
                 position: relative !important;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
             ">
-                <button onclick="this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
+                <button onclick="event.stopPropagation(); this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
                     position: absolute !important;
                     top: 1rem !important;
                     right: 1rem !important;
@@ -1023,7 +1023,7 @@ const giveaway = {
                         font-size: 1.1rem !important;
                         display: inline-block !important;
                     ">Follow on Instagram</a>
-                    <button onclick="this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
+                    <button onclick="event.stopPropagation(); this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
                         background: #F7D56A !important;
                         color: #1F1F1F !important;
                         padding: 1rem 2rem !important;
