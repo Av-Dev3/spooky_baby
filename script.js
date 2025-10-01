@@ -933,53 +933,88 @@ const giveaway = {
     
     // Show popup
     showPopup() {
-        // Create a super simple test popup
-        const testPopup = document.createElement('div');
-        testPopup.innerHTML = `
+        console.log('Creating popup as page content instead of modal');
+        
+        // Create popup as a section in the page content
+        const popupSection = document.createElement('section');
+        popupSection.id = 'giveaway-popup-section';
+        popupSection.innerHTML = `
             <div style="
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: red;
-                color: white;
-                padding: 50px;
-                font-size: 24px;
-                z-index: 999999;
-                border: 10px solid yellow;
+                background: linear-gradient(135deg, #F6B6CF, #F7D56A);
+                color: #1F1F1F;
+                padding: 3rem 2rem;
                 text-align: center;
+                margin: 2rem 0;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                position: relative;
             ">
-                <h1>TEST POPUP</h1>
-                <p>Can you see this?</p>
-                <button onclick="this.parentElement.parentElement.remove()" style="background: white; color: black; padding: 10px 20px; border: none; cursor: pointer;">Close</button>
+                <button onclick="this.closest('section').remove()" style="
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    background: #1F1F1F;
+                    color: #F6B6CF;
+                    border: none;
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    cursor: pointer;
+                    font-size: 18px;
+                ">×</button>
+                
+                <h2 style="font-family: 'Chewy', cursive; font-size: 2rem; margin-bottom: 1rem; color: #1F1F1F;">
+                    🎉 Instagram Giveaway! 🎉
+                </h2>
+                
+                <p style="font-size: 1.2rem; margin-bottom: 1rem; color: #1F1F1F;">
+                    We're celebrating 100 followers on Instagram with a special giveaway!
+                </p>
+                
+                <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #1F1F1F;">
+                    Follow us for a chance to win free cupcakes and cake pops!
+                </p>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://www.instagram.com/spookybabysweets/" target="_blank" rel="noopener noreferrer" style="
+                        background: #1F1F1F;
+                        color: #F6B6CF;
+                        padding: 1rem 2rem;
+                        border-radius: 25px;
+                        text-decoration: none;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='#262626'" onmouseout="this.style.background='#1F1F1F'">
+                        Follow on Instagram
+                    </a>
+                    <button onclick="this.closest('section').remove()" style="
+                        background: #F7D56A;
+                        color: #1F1F1F;
+                        padding: 1rem 2rem;
+                        border-radius: 25px;
+                        border: none;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.background='#F5C842'" onmouseout="this.style.background='#F7D56A'">
+                        Maybe Later
+                    </button>
+                </div>
             </div>
         `;
-        document.body.appendChild(testPopup);
-        console.log('TEST POPUP CREATED - should be visible now!');
         
-        // Also try the original popup
-        const popup = document.getElementById('giveawayPopup');
-        console.log('Attempting to show popup:', popup);
-        if (popup) {
-            // Force all the styles
-            popup.style.position = 'fixed';
-            popup.style.top = '0';
-            popup.style.left = '0';
-            popup.style.width = '100%';
-            popup.style.height = '100%';
-            popup.style.background = 'rgba(0, 0, 0, 0.8)';
-            popup.style.display = 'flex';
-            popup.style.alignItems = 'center';
-            popup.style.justifyContent = 'center';
-            popup.style.zIndex = '99999';
-            popup.style.opacity = '1';
-            popup.style.visibility = 'visible';
-            popup.classList.add('show');
-            document.body.style.overflow = 'hidden';
-            console.log('Popup should be visible now with forced styles');
+        // Insert after the banner
+        const banner = document.getElementById('giveawayBanner');
+        if (banner && banner.nextSibling) {
+            banner.parentNode.insertBefore(popupSection, banner.nextSibling);
         } else {
-            console.log('Popup element not found!');
+            document.body.insertBefore(popupSection, document.body.firstChild);
         }
+        
+        console.log('POPUP ADDED AS PAGE CONTENT - should be visible now!');
+        
+        // Mark as seen
+        this.markPopupSeen();
     },
     
     // Hide popup
