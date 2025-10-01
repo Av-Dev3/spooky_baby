@@ -935,14 +935,7 @@ const giveaway = {
     showPopup() {
         console.log('Creating proper modal popup');
         
-        // First test with browser alert to see if anything works
-        const userWantsPopup = confirm('🎉 Instagram Giveaway! 🎉\n\nWe\'re celebrating 100 followers on Instagram with a special giveaway!\n\nFollow us for a chance to win free cupcakes and cake pops!\n\nClick OK to go to Instagram, Cancel to dismiss.');
-        
-        if (userWantsPopup) {
-            window.open('https://www.instagram.com/spookybabysweets/', '_blank');
-        }
-        
-        // Now create the actual modal popup
+        // Create the modal popup
         const modal = document.createElement('div');
         modal.id = 'giveaway-modal';
         modal.style.cssText = `
