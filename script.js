@@ -934,13 +934,16 @@ const giveaway = {
     // Show popup
     showPopup() {
         const popup = document.getElementById('giveawayPopup');
-        console.log('Attempting to show popup:', popup); // Debug log
+        console.log('Attempting to show popup:', popup);
         if (popup) {
             popup.classList.add('show');
+            popup.style.display = 'flex'; // Force display
+            popup.style.opacity = '1';
+            popup.style.visibility = 'visible';
             document.body.style.overflow = 'hidden';
-            console.log('Popup should be visible now'); // Debug log
+            console.log('Popup should be visible now');
         } else {
-            console.log('Popup element not found!'); // Debug log
+            console.log('Popup element not found!');
         }
     },
     
@@ -968,14 +971,17 @@ const giveaway = {
         // Set up event listeners first
         this.setupEventListeners();
         
-        // Always show popup for debugging
-        console.log('Setting up popup timer');
-        setTimeout(() => {
-            console.log('Attempting to show popup');
-            this.showPopup();
-        }, 3000);
+        // Show popup for first-time visitors
+        if (!this.hasSeenPopup()) {
+            console.log('First time visitor - showing popup');
+            setTimeout(() => {
+                console.log('Attempting to show popup');
+                this.showPopup();
+            }, 2000);
+        } else {
+            console.log('Returning visitor - popup already seen');
+        }
         
-        // Don't hide banner for now
         console.log('Banner should be visible');
     },
     
@@ -1026,17 +1032,10 @@ const giveaway = {
 // Initialize giveaway functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing giveaway');
-    // Add a small delay to ensure all other scripts are loaded
-    setTimeout(() => {
-        giveaway.init();
-    }, 100);
-});
-
-// Also try immediate initialization for debugging
-window.addEventListener('load', () => {
-    console.log('Window loaded, trying giveaway init again');
-    setTimeout(() => {
-        giveaway.init();
-    }, 500);
+    
+    // For testing - clear localStorage to simulate first visit
+    // localStorage.removeItem('giveaway-popup-seen');
+    
+    giveaway.init();
 });
 
