@@ -977,20 +977,17 @@ const giveaway = {
             setTimeout(() => {
                 this.showPopup();
             }, 2000);
+        } else {
+            // For debugging - force show popup
+            console.log('Popup already seen, but showing for debug');
+            setTimeout(() => {
+                this.showPopup();
+            }, 3000);
         }
     },
     
     // Set up event listeners
     setupEventListeners() {
-        // Banner close button
-        const bannerClose = document.getElementById('bannerClose');
-        if (bannerClose) {
-            bannerClose.addEventListener('click', () => {
-                this.hideBanner();
-                this.hideBannerElement();
-            });
-        }
-        
         // Popup close button
         const popupClose = document.getElementById('popupClose');
         if (popupClose) {
@@ -1035,6 +1032,9 @@ const giveaway = {
 
 // Initialize giveaway functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    giveaway.init();
+    // Add a small delay to ensure all other scripts are loaded
+    setTimeout(() => {
+        giveaway.init();
+    }, 100);
 });
 
