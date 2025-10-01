@@ -970,13 +970,16 @@ const giveaway = {
             <div onclick="event.stopPropagation();" style="
                 background: linear-gradient(135deg, #F6B6CF, #F7D56A) !important;
                 color: #1F1F1F !important;
-                padding: 3rem !important;
+                padding: 2rem !important;
                 border-radius: 20px !important;
                 text-align: center !important;
                 max-width: 500px !important;
                 width: 90% !important;
+                max-height: 90vh !important;
+                overflow-y: auto !important;
                 position: relative !important;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
+                margin: 1rem !important;
             ">
                 <button onclick="event.stopPropagation(); this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
                     position: absolute !important;
@@ -995,29 +998,33 @@ const giveaway = {
                 
                 <h2 style="
                     font-family: 'Chewy', cursive !important;
-                    font-size: 2.5rem !important;
+                    font-size: 2rem !important;
                     margin-bottom: 1.5rem !important;
                     color: #1F1F1F !important;
+                    line-height: 1.2 !important;
                 ">🎉 Instagram Giveaway! 🎉</h2>
                 
                 <p style="
-                    font-size: 1.3rem !important;
+                    font-size: 1.1rem !important;
                     margin-bottom: 1rem !important;
                     color: #1F1F1F !important;
                     font-weight: 600 !important;
+                    line-height: 1.4 !important;
                 ">We're celebrating 100 followers on Instagram with a special giveaway!</p>
                 
                 <p style="
-                    font-size: 1.1rem !important;
+                    font-size: 1rem !important;
                     margin-bottom: 2rem !important;
                     color: #1F1F1F !important;
+                    line-height: 1.4 !important;
                 ">Follow us for a chance to win free cupcakes and cake pops!</p>
                 
                 <div style="
                     display: flex !important;
+                    flex-direction: column !important;
                     gap: 1rem !important;
                     justify-content: center !important;
-                    flex-wrap: wrap !important;
+                    align-items: center !important;
                 ">
                     <a href="https://www.instagram.com/spookybabysweets/" target="_blank" rel="noopener noreferrer" style="
                         background: #1F1F1F !important;
@@ -1026,8 +1033,11 @@ const giveaway = {
                         border-radius: 25px !important;
                         text-decoration: none !important;
                         font-weight: 600 !important;
-                        font-size: 1.1rem !important;
+                        font-size: 1rem !important;
                         display: inline-block !important;
+                        width: 100% !important;
+                        max-width: 250px !important;
+                        text-align: center !important;
                     ">Follow on Instagram</a>
                     <button onclick="event.stopPropagation(); this.closest('#giveaway-modal').remove(); localStorage.setItem('giveaway-popup-seen', 'true');" style="
                         background: #F7D56A !important;
@@ -1037,7 +1047,9 @@ const giveaway = {
                         border: none !important;
                         font-weight: 600 !important;
                         cursor: pointer !important;
-                        font-size: 1.1rem !important;
+                        font-size: 1rem !important;
+                        width: 100% !important;
+                        max-width: 250px !important;
                     ">Maybe Later</button>
                 </div>
             </div>
