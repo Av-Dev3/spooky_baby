@@ -822,7 +822,7 @@ const cardInteractions = {
         `;
         
         content.innerHTML = `
-            <button id="lemonPopupClose" style="position: absolute; top: 1rem; right: 1rem; background: #F6B6CF; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; font-size: 2rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 0;">×</button>
+            <button id="lemonPopupClose" style="position: absolute; top: 0.5rem; right: 0.5rem; background: #F6B6CF; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 2rem; cursor: pointer; font-weight: bold; display: block; text-align: center; padding: 0; margin: 0; z-index: 10;">×</button>
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div style="font-size: 4rem; margin-bottom: 1rem;">🧁</div>
                 <h2 style="font-family: 'Chewy', cursive; color: #F6B6CF; font-size: 2rem; margin: 0;">Lemon Burst Cupcake</h2>
@@ -863,9 +863,18 @@ const cardInteractions = {
         document.body.style.overflow = 'hidden';
         
         // Add click handlers
-        document.getElementById('lemonPopupClose').addEventListener('click', () => {
+        const closeBtn = document.getElementById('lemonPopupClose');
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             modal.remove();
             document.body.style.overflow = '';
+        });
+        
+        // Also make it clickable on mousedown
+        closeBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
         });
         
         modal.addEventListener('click', (e) => {
