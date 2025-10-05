@@ -501,55 +501,12 @@ const cardInteractions = {
             return;
         }
         
-        // Menu data
-        const menuItems = [
-            {
-                id: 'cupcakes',
-                icon: '🧁',
-                title: 'Cupcakes',
-                subtitle: 'Gourmet & Kool Aid Flavors',
-                price: '$25/dozen • $12/half dozen',
-                content: this.getCupcakesContent()
-            },
-            {
-                id: 'cake-pops',
-                icon: '🍭',
-                title: 'Cake Pops',
-                subtitle: 'Perfect Party Treats',
-                price: '10 pops $12 • 20 pops $25',
-                content: this.getCakePopsContent()
-            },
-            {
-                id: 'cakecicles',
-                icon: '🍰',
-                title: 'Cakecicles',
-                subtitle: 'Coming Soon',
-                price: 'TBD',
-                content: this.getCakeciclesContent()
-            },
-            {
-                id: 'cakes',
-                icon: '🎂',
-                title: 'Cakes',
-                subtitle: 'Custom Creations',
-                price: 'Starting at $75',
-                content: this.getCakesContent()
-            },
-            {
-                id: 'seasonal',
-                icon: '🎃',
-                title: 'Seasonal & Specialty',
-                subtitle: 'Limited Time Treats',
-                price: 'Prices vary',
-                content: this.getSeasonalContent()
-            }
-        ];
         
-        this.createSwipeMenu(menuItems);
+        this.createSwipeMenu();
         this.initSwipeGestures();
     },
     
-    createSwipeMenu(menuItems) {
+    createSwipeMenu() {
         const swipeTrack = document.getElementById('swipeTrack');
         const swipeIndicators = document.getElementById('swipeIndicators');
         
@@ -562,26 +519,23 @@ const cardInteractions = {
         swipeTrack.innerHTML = '';
         swipeIndicators.innerHTML = '';
         
-        // Create swipe items
-        menuItems.forEach((item, index) => {
-            // Create swipe item
-            const swipeItem = document.createElement('div');
+        // Get existing desktop menu cards
+        const desktopCards = document.querySelectorAll('.menu-card');
+        
+        if (desktopCards.length === 0) {
+            console.log('No desktop menu cards found');
+            return;
+        }
+        
+        // Clone and add desktop cards to swipe track
+        desktopCards.forEach((card, index) => {
+            const swipeItem = card.cloneNode(true);
             swipeItem.className = 'swipe-item';
+            swipeItem.classList.add('menu-card'); // Keep the original menu-card class
             if (index === 0) swipeItem.classList.add('active');
             
-            swipeItem.innerHTML = `
-                <div class="swipe-item-header">
-                    <div class="swipe-item-icon">${item.icon}</div>
-                    <div class="swipe-item-title">${item.title}</div>
-                    <div class="swipe-item-subtitle">${item.subtitle}</div>
-                </div>
-                <div class="swipe-item-content">
-                    ${item.content}
-                </div>
-                <div class="swipe-item-footer">
-                    <div class="swipe-item-price">${item.price}</div>
-                </div>
-            `;
+            // Remove any existing scroll animations
+            swipeItem.classList.remove('scroll-animate-stagger');
             
             swipeTrack.appendChild(swipeItem);
             
@@ -735,78 +689,6 @@ const cardInteractions = {
         };
     },
     
-    getCupcakesContent() {
-        return `
-            <div class="flavor-group">
-                <h4>Gourmet Heritage Line</h4>
-                <ul>
-                    <li>Lemon Burst</li>
-                    <li>Orange Cranberry</li>
-                    <li>Key Lime Pie</li>
-                    <li>Chocolate Crunch</li>
-                </ul>
-            </div>
-            <div class="flavor-group">
-                <h4>Kool Aid Fruit Blast Line</h4>
-                <ul>
-                    <li>Cherry Bomb</li>
-                    <li>Blue Razz Pop</li>
-                    <li>Watermelon Splash</li>
-                    <li>Rainbow Variety Pack</li>
-                </ul>
-            </div>
-        `;
-    },
-    
-    getCakePopsContent() {
-        return `
-            <div class="flavor-group">
-                <h4>Cake Pop Flavors</h4>
-                <ul>
-                    <li>Red Velvet Bliss</li>
-                    <li>Birthday Confetti</li>
-                    <li>Spooky Pop</li>
-                    <li>Cookies & Cream Dream</li>
-                </ul>
-            </div>
-        `;
-    },
-    
-    getCakeciclesContent() {
-        return `
-            <div class="flavor-group">
-                <h4>Coming Soon</h4>
-                <p>New cakecicle flavors will be available soon!</p>
-            </div>
-        `;
-    },
-    
-    getCakesContent() {
-        return `
-            <div class="flavor-group">
-                <h4>Custom Cakes</h4>
-                <ul>
-                    <li>Custom designs and flavors available!</li>
-                </ul>
-            </div>
-        `;
-    },
-    
-    getSeasonalContent() {
-        return `
-            <div class="flavor-group">
-                <h4>Seasonal & Specialty Items</h4>
-                <ul>
-                    <li>Pumpkin Butterscotch Bundts</li>
-                    <li>Peppermint Mocha Pops</li>
-                    <li>Breakable Hearts</li>
-                    <li>Dubai Chocolate Bars</li>
-                    <li>Chocolate-Dipped Strawberries</li>
-                    <li>Seasonal Variety Packs</li>
-                </ul>
-            </div>
-        `;
-    },
 
     handleMouseEnter(e) {
         const card = e.currentTarget;
