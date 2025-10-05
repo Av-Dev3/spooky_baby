@@ -492,6 +492,9 @@ const cardInteractions = {
         
         // Initialize mobile swipe menu
         this.initMobileSwipeMenu();
+        
+        // Initialize menu item popups
+        this.initMenuItemPopups();
     },
     
     initMobileSwipeMenu() {
@@ -700,6 +703,134 @@ const cardInteractions = {
         const card = e.currentTarget;
         // Let CSS handle the hover animation for smoother transitions
         card.classList.remove('hovered');
+    },
+    
+    initMenuItemPopups() {
+        const popup = document.getElementById('menuItemPopup');
+        const popupClose = document.getElementById('popupClose');
+        const popupOverlay = document.getElementById('popupOverlay');
+        const popupOrderBtn = document.getElementById('popupOrderBtn');
+        
+        if (!popup || !popupClose || !popupOverlay) {
+            console.log('Popup elements not found - skipping popup initialization');
+            return;
+        }
+        
+        // Close popup handlers
+        popupClose.addEventListener('click', () => this.closePopup());
+        popupOverlay.addEventListener('click', () => this.closePopup());
+        
+        // Order button handler
+        if (popupOrderBtn) {
+            popupOrderBtn.addEventListener('click', () => this.handleOrderClick());
+        }
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && popup.classList.contains('active')) {
+                this.closePopup();
+            }
+        });
+        
+        // Make menu items clickable
+        this.makeMenuItemsClickable();
+    },
+    
+    makeMenuItemsClickable() {
+        // Make flavor list items clickable
+        const flavorItems = document.querySelectorAll('.flavor-list li');
+        flavorItems.forEach(item => {
+            item.style.cursor = 'pointer';
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const itemText = item.textContent.trim();
+                this.showMenuItemPopup(itemText);
+            });
+        });
+    },
+    
+    showMenuItemPopup(itemName) {
+        const popup = document.getElementById('menuItemPopup');
+        if (!popup) return;
+        
+        // For now, show Lemon Burst Cupcake popup
+        // Later we can expand this to handle different items
+        if (itemName.toLowerCase().includes('lemon burst')) {
+            this.populateLemonBurstPopup();
+            popup.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        } else {
+            // For other items, show a placeholder message
+            this.populateGenericPopup(itemName);
+            popup.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+    
+    populateLemonBurstPopup() {
+        // Popup is already populated with Lemon Burst data in HTML
+        // This method can be used to update content if needed
+        console.log('Showing Lemon Burst Cupcake popup');
+    },
+    
+    populateGenericPopup(itemName) {
+        const popupIcon = document.getElementById('popupIcon');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupDescription = document.getElementById('popupDescription');
+        const popupTastingNotes = document.getElementById('popupTastingNotes');
+        const popupIngredients = document.getElementById('popupIngredients');
+        const popupPricing = document.getElementById('popupPricing');
+        
+        if (popupIcon) popupIcon.textContent = '🧁';
+        if (popupTitle) popupTitle.textContent = itemName;
+        if (popupDescription) {
+            popupDescription.innerHTML = `
+                <h4>Description</h4>
+                <p>More details coming soon for ${itemName}!</p>
+            `;
+        }
+        if (popupTastingNotes) {
+            popupTastingNotes.innerHTML = `
+                <h4>Tasting Notes</h4>
+                <div class="tasting-tags">
+                    <span class="tasting-tag">Coming Soon</span>
+                </div>
+            `;
+        }
+        if (popupIngredients) {
+            popupIngredients.innerHTML = `
+                <h4>Ingredients</h4>
+                <p>Full ingredient list coming soon!</p>
+            `;
+        }
+        if (popupPricing) {
+            popupPricing.innerHTML = `
+                <h4>Pricing</h4>
+                <div class="price-options">
+                    <div class="price-option">
+                        <span class="price-quantity">Single</span>
+                        <span class="price-amount">TBD</span>
+                    </div>
+                </div>
+            `;
+        }
+    },
+    
+    closePopup() {
+        const popup = document.getElementById('menuItemPopup');
+        if (popup) {
+            popup.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    },
+    
+    handleOrderClick() {
+        // Scroll to order form
+        const orderSection = document.getElementById('order');
+        if (orderSection) {
+            orderSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        this.closePopup();
     }
 };
 
