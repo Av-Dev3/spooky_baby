@@ -822,7 +822,7 @@ const cardInteractions = {
         `;
         
         content.innerHTML = `
-            <button id="lemonPopupClose" style="position: absolute; top: 1rem; right: 1rem; background: #F6B6CF; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">×</button>
+            <button id="lemonPopupClose" style="position: absolute; top: 1rem; right: 1rem; background: #F6B6CF; color: white; border: none; border-radius: 50%; width: 45px; height: 45px; font-size: 2rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 0;">×</button>
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div style="font-size: 4rem; margin-bottom: 1rem;">🧁</div>
                 <h2 style="font-family: 'Chewy', cursive; color: #F6B6CF; font-size: 2rem; margin: 0;">Lemon Burst Cupcake</h2>
@@ -855,9 +855,6 @@ const cardInteractions = {
                         <span style="font-weight: 700; color: #F7D56A;">$35.00</span>
                     </div>
                 </div>
-            </div>
-            <div style="text-align: center; padding-top: 1.5rem; border-top: 2px solid rgba(246, 182, 207, 0.3);">
-                <button class="btn btn-pink" style="padding: 1rem 2rem; font-size: 1.1rem;">🧁 Add to Order</button>
             </div>
         `;
         
