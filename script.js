@@ -779,71 +779,101 @@ const cardInteractions = {
             localStorage.setItem('giveaway-popup-seen', 'true');
         }
         
-        // Check if giveaway popup is blocking - look for any high z-index elements
-        const allElements = document.querySelectorAll('*');
-        allElements.forEach(el => {
-            const zIndex = window.getComputedStyle(el).zIndex;
-            if (zIndex && parseInt(zIndex) > 1000000) {
-                console.log('Found high z-index element:', el, 'z-index:', zIndex);
-                if (el.id !== 'menuItemPopup') {
-                    console.log('Removing blocking element');
-                    el.remove();
-                }
+        // Remove any existing menu popup
+        const existingPopup = document.getElementById('lemonBurstPopup');
+        if (existingPopup) {
+            existingPopup.remove();
+        }
+        
+        // Create popup using the EXACT same approach as giveaway popup
+        const modal = document.createElement('div');
+        modal.id = 'lemonBurstPopup';
+        modal.style.cssText = `
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: rgba(0, 0, 0, 0.85) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 999999 !important;
+            padding: 2rem !important;
+        `;
+        
+        // Create content
+        const content = document.createElement('div');
+        content.style.cssText = `
+            background: white !important;
+            border-radius: 20px !important;
+            padding: 2rem !important;
+            max-width: 600px !important;
+            width: 90% !important;
+            max-height: 80vh !important;
+            overflow-y: auto !important;
+            position: relative !important;
+            border: 3px solid #F6B6CF !important;
+        `;
+        
+        content.innerHTML = `
+            <button id="lemonPopupClose" style="position: absolute; top: 1rem; right: 1rem; background: #F6B6CF; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; font-weight: bold;">×</button>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">🧁</div>
+                <h2 style="font-family: 'Chewy', cursive; color: #F6B6CF; font-size: 2rem; margin: 0;">Lemon Burst Cupcake</h2>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Description</h3>
+                <p style="color: #333; line-height: 1.6;">Bright, buttery lemon cake made with fresh zest and juice, topped with smooth lemon buttercream, a candied lemon slice, and a sprig of rosemary.</p>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Tasting Notes</h3>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">Tangy</span>
+                    <span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">Fresh</span>
+                    <span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">Elegant</span>
+                </div>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Ingredients</h3>
+                <p style="color: #333; line-height: 1.6; font-style: italic;">Butter, brown sugar, eggs, flour, cornmeal, baking powder, lemons (zest & juice), milk, powdered sugar, candied lemon, rosemary, and natural flavoring.</p>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Pricing</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(246, 182, 207, 0.1); border-radius: 12px; border: 1px solid rgba(246, 182, 207, 0.3);">
+                        <span style="font-weight: 600; color: #333;">6-Pack</span>
+                        <span style="font-weight: 700; color: #F7D56A;">$20.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(246, 182, 207, 0.1); border-radius: 12px; border: 1px solid rgba(246, 182, 207, 0.3);">
+                        <span style="font-weight: 600; color: #333;">Dozen</span>
+                        <span style="font-weight: 700; color: #F7D56A;">$35.00</span>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; padding-top: 1.5rem; border-top: 2px solid rgba(246, 182, 207, 0.3);">
+                <button class="btn btn-pink" style="padding: 1rem 2rem; font-size: 1.1rem;">🧁 Add to Order</button>
+            </div>
+        `;
+        
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+        
+        // Add click handlers
+        document.getElementById('lemonPopupClose').addEventListener('click', () => {
+            modal.remove();
+            document.body.style.overflow = '';
+        });
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+                document.body.style.overflow = '';
             }
         });
         
-        const popup = document.getElementById('menuItemPopup');
-        console.log('Popup element:', popup);
-        
-        if (!popup) {
-            console.error('Popup element not found!');
-            return;
-        }
-        
-        // FORCE EVERYTHING WITH INLINE STYLES
-        popup.style.display = 'flex';
-        popup.style.position = 'fixed';
-        popup.style.top = '0';
-        popup.style.left = '0';
-        popup.style.right = '0';
-        popup.style.bottom = '0';
-        popup.style.width = '100vw';
-        popup.style.height = '100vh';
-        popup.style.zIndex = '9999999';
-        popup.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-        popup.style.alignItems = 'center';
-        popup.style.justifyContent = 'center';
-        popup.style.padding = '2rem';
-        
-        const popupContent = popup.querySelector('.popup-content');
-        if (popupContent) {
-            popupContent.style.display = 'block';
-            popupContent.style.position = 'relative';
-            popupContent.style.background = 'white';
-            popupContent.style.padding = '2rem';
-            popupContent.style.borderRadius = '20px';
-            popupContent.style.maxWidth = '600px';
-            popupContent.style.width = '90%';
-            popupContent.style.maxHeight = '80vh';
-            popupContent.style.overflowY = 'auto';
-            popupContent.style.border = '3px solid #F6B6CF';
-            popupContent.style.zIndex = '10000000';
-        }
-        
-        popup.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        console.log('Popup forced visible with inline styles');
-        
-        // For now, show Lemon Burst Cupcake popup
-        // Later we can expand this to handle different items
-        if (itemName.toLowerCase().includes('lemon burst')) {
-            console.log('Showing Lemon Burst popup');
-            this.populateLemonBurstPopup();
-        } else {
-            console.log('Showing generic popup for:', itemName);
-            // For other items, show a placeholder message
-            this.populateGenericPopup(itemName);
-        }
+        console.log('Lemon Burst popup created and shown!');
     },
     
     populateLemonBurstPopup() {
