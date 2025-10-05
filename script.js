@@ -787,10 +787,39 @@ const cardInteractions = {
             return;
         }
         
-        // Add the active class to show the popup
+        // FORCE EVERYTHING WITH INLINE STYLES
+        popup.style.display = 'flex';
+        popup.style.position = 'fixed';
+        popup.style.top = '0';
+        popup.style.left = '0';
+        popup.style.right = '0';
+        popup.style.bottom = '0';
+        popup.style.width = '100vw';
+        popup.style.height = '100vh';
+        popup.style.zIndex = '9999999';
+        popup.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        popup.style.alignItems = 'center';
+        popup.style.justifyContent = 'center';
+        popup.style.padding = '2rem';
+        
+        const popupContent = popup.querySelector('.popup-content');
+        if (popupContent) {
+            popupContent.style.display = 'block';
+            popupContent.style.position = 'relative';
+            popupContent.style.background = 'white';
+            popupContent.style.padding = '2rem';
+            popupContent.style.borderRadius = '20px';
+            popupContent.style.maxWidth = '600px';
+            popupContent.style.width = '90%';
+            popupContent.style.maxHeight = '80vh';
+            popupContent.style.overflowY = 'auto';
+            popupContent.style.border = '3px solid #F6B6CF';
+            popupContent.style.zIndex = '10000000';
+        }
+        
         popup.classList.add('active');
         document.body.style.overflow = 'hidden';
-        console.log('Popup activated');
+        console.log('Popup forced visible with inline styles');
         
         // For now, show Lemon Burst Cupcake popup
         // Later we can expand this to handle different items
