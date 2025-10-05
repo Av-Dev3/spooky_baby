@@ -570,10 +570,17 @@ const cardInteractions = {
             if (index === 0) swipeItem.classList.add('active');
             
             swipeItem.innerHTML = `
-                <div class="swipe-item-icon">${item.icon}</div>
-                <div class="swipe-item-title">${item.title}</div>
-                <div class="swipe-item-subtitle">${item.subtitle}</div>
-                <div class="swipe-item-price">${item.price}</div>
+                <div class="swipe-item-header">
+                    <div class="swipe-item-icon">${item.icon}</div>
+                    <div class="swipe-item-title">${item.title}</div>
+                    <div class="swipe-item-subtitle">${item.subtitle}</div>
+                </div>
+                <div class="swipe-item-content">
+                    ${item.content}
+                </div>
+                <div class="swipe-item-footer">
+                    <div class="swipe-item-price">${item.price}</div>
+                </div>
             `;
             
             swipeTrack.appendChild(swipeItem);
@@ -711,11 +718,11 @@ const cardInteractions = {
             swipeTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
             
             // Update active states
-            swipeTrack.children.forEach((item, index) => {
+            Array.from(swipeTrack.children).forEach((item, index) => {
                 item.classList.toggle('active', index === currentIndex);
             });
             
-            swipeIndicators.children.forEach((dot, index) => {
+            Array.from(swipeIndicators.children).forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentIndex);
             });
             
