@@ -822,7 +822,7 @@ const cardInteractions = {
                 <p style="color: #333; line-height: 1.6;">${menuData.description}</p>
             </div>
             <div style="margin-bottom: 1.5rem;">
-                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Available Flavors</h3>
+                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Tasting Notes</h3>
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                     ${menuData.flavors.map(flavor => `<span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">${flavor}</span>`).join('')}
                 </div>
