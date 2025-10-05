@@ -750,37 +750,6 @@ const cardInteractions = {
                 this.showMenuItemPopup(itemText);
             });
         });
-        
-        // Handle Learn More button clicks
-        const learnMoreBtns = document.querySelectorAll('.learn-more-btn');
-        console.log('Found learn more buttons:', learnMoreBtns.length);
-        
-        learnMoreBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const menuItem = btn.getAttribute('data-menu-item');
-                console.log('Clicked learn more for:', menuItem);
-                this.showMenuItemPopup(menuItem);
-            });
-        });
-        
-        // Also make menu cards clickable for testing
-        const menuCards = document.querySelectorAll('.menu-card');
-        console.log('Found menu cards:', menuCards.length);
-        
-        menuCards.forEach(card => {
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', (e) => {
-                // Don't trigger if clicking on learn more button
-                if (e.target.classList.contains('learn-more-btn')) {
-                    return;
-                }
-                e.preventDefault();
-                console.log('Clicked menu card');
-                this.showMenuItemPopup('Lemon Burst');
-            });
-        });
     },
     
     showMenuItemPopup(itemName) {
