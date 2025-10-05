@@ -859,18 +859,32 @@ const cardInteractions = {
         
         modal.appendChild(content);
         document.body.appendChild(modal);
+        
+        // Save scroll position and reset
+        const scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = '100%';
         document.body.style.overflow = 'hidden';
         
         // Add click handlers
         document.getElementById('lemonPopupClose').addEventListener('click', () => {
             modal.remove();
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
             document.body.style.overflow = '';
+            window.scrollTo(0, scrollY);
         });
         
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.remove();
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
                 document.body.style.overflow = '';
+                window.scrollTo(0, scrollY);
             }
         });
         
