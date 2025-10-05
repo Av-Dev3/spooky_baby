@@ -810,10 +810,11 @@ const cardInteractions = {
             padding: 2rem !important;
             max-width: 600px !important;
             width: 90% !important;
-            max-height: 80vh !important;
+            max-height: 70vh !important;
             overflow-y: auto !important;
             position: relative !important;
             border: 3px solid #F6B6CF !important;
+            flex-shrink: 0 !important;
         `;
         
         content.innerHTML = `
