@@ -792,14 +792,15 @@ const cardInteractions = {
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
+            width: 100vw !important;
+            height: 100vh !important;
             background: rgba(0, 0, 0, 0.85) !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             z-index: 999999 !important;
-            padding: 2rem !important;
+            padding: 1rem !important;
+            overflow-y: auto !important;
         `;
         
         // Create content
@@ -810,10 +811,11 @@ const cardInteractions = {
             padding: 2rem !important;
             max-width: 600px !important;
             width: 90% !important;
-            max-height: 80vh !important;
+            max-height: 85vh !important;
             overflow-y: auto !important;
             position: relative !important;
             border: 3px solid #F6B6CF !important;
+            margin: auto !important;
         `;
         
         content.innerHTML = `
