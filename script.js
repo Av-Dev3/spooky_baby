@@ -496,7 +496,10 @@ const cardInteractions = {
     
     initMobileSwipeMenu() {
         const swipeMenu = document.getElementById('mobileSwipeMenu');
-        if (!swipeMenu) return;
+        if (!swipeMenu) {
+            console.log('Mobile swipe menu not found - skipping initialization');
+            return;
+        }
         
         // Menu data
         const menuItems = [
@@ -550,7 +553,10 @@ const cardInteractions = {
         const swipeTrack = document.getElementById('swipeTrack');
         const swipeIndicators = document.getElementById('swipeIndicators');
         
-        if (!swipeTrack || !swipeIndicators) return;
+        if (!swipeTrack || !swipeIndicators) {
+            console.log('Swipe menu elements not found - skipping menu creation');
+            return;
+        }
         
         // Clear existing content
         swipeTrack.innerHTML = '';
@@ -592,7 +598,10 @@ const cardInteractions = {
         const swipeLeft = document.getElementById('swipeLeft');
         const swipeRight = document.getElementById('swipeRight');
         
-        if (!swipeTrack) return;
+        if (!swipeTrack) {
+            console.log('Swipe track not found - skipping gesture initialization');
+            return;
+        }
         
         let currentIndex = 0;
         const totalItems = swipeTrack.children.length;
