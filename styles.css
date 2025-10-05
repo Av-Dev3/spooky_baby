@@ -3155,7 +3155,7 @@ textarea:focus {
   background: rgba(0, 0, 0, 0.8) !important;
 }
 
-.popup-content {
+.giveaway-popup .popup-content {
   background: var(--bg-secondary);
   border-radius: 20px;
   padding: 2rem;
