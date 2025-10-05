@@ -962,6 +962,34 @@ const cardInteractions = {
             };
         }
         
+        if (itemName === 'Key Lime Pie') {
+            return {
+                icon: '🥧',
+                title: 'Key Lime Pie Cupcake',
+                description: 'A smooth, tangy lime cupcake inspired by classic key lime pie. Finished with key lime buttercream, graham-cracker crumble, whipped cream swirl, and a candied lime slice.',
+                flavors: ['Tart', 'Creamy', 'Tropical'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$20' },
+                    { quantity: 'Dozen', price: '$35' }
+                ],
+                specialNotes: 'Classic key lime pie flavors in cupcake form.'
+            };
+        }
+        
+        if (itemName === 'Chocolate Crunch') {
+            return {
+                icon: '🍫',
+                title: 'Chocolate Crunch Cupcake',
+                description: 'Rich chocolate cake blended with melted chocolate, crisped rice, and a hint of coffee for depth. Topped with chocolate buttercream, drizzle of homemade chocolate syrup, sprinkle of crunch, and a Hershey square.',
+                flavors: ['Decadent', 'Crunchy', 'Fudgy'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$25' },
+                    { quantity: 'Dozen', price: '$45' }
+                ],
+                specialNotes: 'Rich chocolate indulgence with satisfying crunch.'
+            };
+        }
+        
         return menuData[itemName] || {
             icon: '🧁',
             title: itemName,
