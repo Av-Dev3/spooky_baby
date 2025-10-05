@@ -770,6 +770,15 @@ const cardInteractions = {
     
     showMenuItemPopup(itemName) {
         console.log('showMenuItemPopup called with:', itemName);
+        
+        // Close giveaway popup if it exists
+        const giveawayModal = document.getElementById('giveaway-modal');
+        if (giveawayModal) {
+            console.log('Closing giveaway popup');
+            giveawayModal.remove();
+            localStorage.setItem('giveaway-popup-seen', 'true');
+        }
+        
         const popup = document.getElementById('menuItemPopup');
         console.log('Popup element:', popup);
         
@@ -1346,7 +1355,7 @@ const giveaway = {
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            z-index: 2147483647 !important;
+            z-index: 100000 !important;
             font-family: Arial, sans-serif !important;
         `;
         
