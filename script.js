@@ -807,13 +807,14 @@ const cardInteractions = {
         content.style.cssText = `
             background: white !important;
             border-radius: 20px !important;
-            padding: 2rem !important;
+            padding: 1.5rem !important;
             max-width: 600px !important;
             width: 90% !important;
             max-height: 80vh !important;
             overflow-y: auto !important;
             position: relative !important;
             border: 3px solid #F6B6CF !important;
+            box-sizing: border-box !important;
         `;
         
         content.innerHTML = `
