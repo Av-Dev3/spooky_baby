@@ -649,19 +649,19 @@ body {
 
 /* ===== MENU ITEM POPUP ===== */
 .menu-item-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 99999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(5px);
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
+  box-sizing: border-box !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(5px) !important;
 }
 
 .menu-item-popup.active {
@@ -703,24 +703,27 @@ body {
 }
 
 .popup-content {
-  position: relative;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(38, 38, 38, 0.95) 100%);
-  border-radius: 24px;
-  padding: 2rem;
-  max-width: 500px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  position: relative !important;
+  background: white !important;
+  border-radius: 24px !important;
+  padding: 2rem !important;
+  max-width: 500px !important;
+  width: 90% !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
   box-shadow: 
     0 20px 60px rgba(0, 0, 0, 0.5),
     0 0 0 2px rgba(246, 182, 207, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(246, 182, 207, 0.4);
-  animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  z-index: 10001;
-  margin: auto;
-  transform: translateY(0);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 5px solid red !important;
+  z-index: 10001 !important;
+  margin: auto !important;
+  transform: translateY(0) !important;
+  display: block !important;
+}
+
+.popup-content * {
+  color: black !important;
 }
 
 .popup-close {
