@@ -815,7 +815,6 @@ const cardInteractions = {
             overflow-y: auto !important;
             position: relative !important;
             border: 3px solid #F6B6CF !important;
-            margin: auto !important;
         `;
         
         content.innerHTML = `
