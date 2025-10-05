@@ -1172,6 +1172,52 @@ body {
   }
 }
 
+/* Learn More Button */
+.learn-more-btn {
+  background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-yellow) 100%);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  width: 100%;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(246, 182, 207, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.learn-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.learn-more-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(246, 182, 207, 0.4);
+  background: linear-gradient(135deg, var(--accent-yellow) 0%, var(--accent-pink) 100%);
+}
+
+.learn-more-btn:hover::before {
+  left: 100%;
+}
+
+.learn-more-btn:active {
+  transform: translateY(0) scale(1);
+  box-shadow: 0 4px 15px rgba(246, 182, 207, 0.3);
+}
+
 .card-title {
   font-family: var(--font-heading);
   font-size: 2rem;

@@ -751,6 +751,20 @@ const cardInteractions = {
             });
         });
         
+        // Handle Learn More button clicks
+        const learnMoreBtns = document.querySelectorAll('.learn-more-btn');
+        console.log('Found learn more buttons:', learnMoreBtns.length);
+        
+        learnMoreBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const menuItem = btn.getAttribute('data-menu-item');
+                console.log('Clicked learn more for:', menuItem);
+                this.showMenuItemPopup(menuItem);
+            });
+        });
+        
         // Also make menu cards clickable for testing
         const menuCards = document.querySelectorAll('.menu-card');
         console.log('Found menu cards:', menuCards.length);
@@ -758,6 +772,10 @@ const cardInteractions = {
         menuCards.forEach(card => {
             card.style.cursor = 'pointer';
             card.addEventListener('click', (e) => {
+                // Don't trigger if clicking on learn more button
+                if (e.target.classList.contains('learn-more-btn')) {
+                    return;
+                }
                 e.preventDefault();
                 console.log('Clicked menu card');
                 this.showMenuItemPopup('Lemon Burst');
@@ -777,14 +795,17 @@ const cardInteractions = {
         }
         
         // Remove any existing menu popup
-        const existingPopup = document.getElementById('lemonBurstPopup');
+        const existingPopup = document.getElementById('menuItemPopup');
         if (existingPopup) {
             existingPopup.remove();
         }
         
+        // Get menu item data
+        const menuData = this.getMenuItemData(itemName);
+        
         // Create popup using the EXACT same approach as giveaway popup
         const modal = document.createElement('div');
-        modal.id = 'lemonBurstPopup';
+        modal.id = 'menuItemPopup';
         modal.style.cssText = `
             position: fixed !important;
             top: 0 !important;
@@ -822,40 +843,38 @@ const cardInteractions = {
         `;
         
         content.innerHTML = `
-            <button id="lemonPopupClose" style="position: absolute; top: 0.5rem; right: 0.5rem; background: #F6B6CF; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 2rem; cursor: pointer; font-weight: bold; display: block; text-align: center; padding: 0; margin: 0; z-index: 10;">×</button>
+            <button id="menuPopupClose" style="position: absolute; top: 0.5rem; right: 0.5rem; background: #F6B6CF; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 2rem; cursor: pointer; font-weight: bold; display: block; text-align: center; padding: 0; margin: 0; z-index: 10;">×</button>
             <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">🧁</div>
-                <h2 style="font-family: 'Chewy', cursive; color: #F6B6CF; font-size: 2rem; margin: 0;">Lemon Burst Cupcake</h2>
+                <div style="font-size: 4rem; margin-bottom: 1rem;">${menuData.icon}</div>
+                <h2 style="font-family: 'Chewy', cursive; color: #F6B6CF; font-size: 2rem; margin: 0;">${menuData.title}</h2>
             </div>
             <div style="margin-bottom: 1.5rem;">
                 <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Description</h3>
-                <p style="color: #333; line-height: 1.6;">Bright, buttery lemon cake made with fresh zest and juice, topped with smooth lemon buttercream, a candied lemon slice, and a sprig of rosemary.</p>
+                <p style="color: #333; line-height: 1.6;">${menuData.description}</p>
             </div>
             <div style="margin-bottom: 1.5rem;">
-                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Tasting Notes</h3>
+                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Available Flavors</h3>
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">Tangy</span>
-                    <span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">Fresh</span>
-                    <span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">Elegant</span>
+                    ${menuData.flavors.map(flavor => `<span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">${flavor}</span>`).join('')}
                 </div>
-            </div>
-            <div style="margin-bottom: 1.5rem;">
-                <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Ingredients</h3>
-                <p style="color: #333; line-height: 1.6; font-style: italic;">Butter, brown sugar, eggs, flour, cornmeal, baking powder, lemons (zest & juice), milk, powdered sugar, candied lemon, rosemary, and natural flavoring.</p>
             </div>
             <div style="margin-bottom: 1.5rem;">
                 <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Pricing</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(246, 182, 207, 0.1); border-radius: 12px; border: 1px solid rgba(246, 182, 207, 0.3);">
-                        <span style="font-weight: 600; color: #333;">6-Pack</span>
-                        <span style="font-weight: 700; color: #F7D56A;">$20.00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(246, 182, 207, 0.1); border-radius: 12px; border: 1px solid rgba(246, 182, 207, 0.3);">
-                        <span style="font-weight: 600; color: #333;">Dozen</span>
-                        <span style="font-weight: 700; color: #F7D56A;">$35.00</span>
-                    </div>
+                    ${menuData.pricing.map(price => `
+                        <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(246, 182, 207, 0.1); border-radius: 12px; border: 1px solid rgba(246, 182, 207, 0.3);">
+                            <span style="font-weight: 600; color: #333;">${price.quantity}</span>
+                            <span style="font-weight: 700; color: #F7D56A;">${price.price}</span>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
+            ${menuData.specialNotes ? `
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Special Notes</h3>
+                    <p style="color: #333; line-height: 1.6; font-style: italic;">${menuData.specialNotes}</p>
+                </div>
+            ` : ''}
         `;
         
         modal.appendChild(content);
@@ -863,7 +882,7 @@ const cardInteractions = {
         document.body.style.overflow = 'hidden';
         
         // Add click handlers
-        const closeBtn = document.getElementById('lemonPopupClose');
+        const closeBtn = document.getElementById('menuPopupClose');
         closeBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -884,7 +903,92 @@ const cardInteractions = {
             }
         });
         
-        console.log('Lemon Burst popup created and shown!');
+        console.log(`${menuData.title} popup created and shown!`);
+    },
+    
+    getMenuItemData(itemName) {
+        const menuData = {
+            'cupcakes': {
+                icon: '🧁',
+                title: 'Cupcakes',
+                description: 'Handcrafted cupcakes with premium ingredients and creative flavor combinations. Our cupcakes feature moist, tender cake bases topped with smooth, flavorful buttercream and decorative touches.',
+                flavors: ['Lemon Burst', 'Orange Cranberry', 'Key Lime Pie', 'Chocolate Crunch', 'Cherry Bomb', 'Blue Razz Pop', 'Watermelon Splash', 'Rainbow Variety'],
+                pricing: [
+                    { quantity: 'Half Dozen', price: '$12' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'More flavors and rotating seasonal options available!'
+            },
+            'cake-pops': {
+                icon: '🍭',
+                title: 'Cake Pops',
+                description: 'Perfect bite-sized treats made from crumbled cake mixed with frosting, shaped into balls, and dipped in premium chocolate. Each pop is hand-decorated with attention to detail.',
+                flavors: ['Red Velvet Bliss', 'Birthday Confetti', 'Spooky Pop', 'Cookies & Cream Dream'],
+                pricing: [
+                    { quantity: '10 Pops', price: '$12' },
+                    { quantity: '20 Pops', price: '$25' },
+                    { quantity: '40 Pops', price: '$45' },
+                    { quantity: '60+ Pops', price: '$60+' }
+                ],
+                specialNotes: 'Custom pricing available for events and large orders!'
+            },
+            'cakecicles': {
+                icon: '🍰',
+                title: 'Cakecicles',
+                description: 'Our newest creation! Cakecicles are a delightful fusion of cake and popsicle, perfect for summer treats and special occasions.',
+                flavors: ['Coming Soon'],
+                pricing: [
+                    { quantity: 'Pricing', price: 'TBD' }
+                ],
+                specialNotes: 'Stay tuned for our exciting new Cakecicles line!'
+            },
+            'cakes': {
+                icon: '🎂',
+                title: 'Custom Cakes',
+                description: 'Beautiful custom cakes designed specifically for your special occasions. From birthday celebrations to weddings, we create stunning cakes that taste as good as they look.',
+                flavors: ['Custom Flavors Available'],
+                pricing: [
+                    { quantity: 'Starting Price', price: '$75' }
+                ],
+                specialNotes: 'Custom designs and flavors available! Contact us to discuss your vision.'
+            },
+            'seasonal': {
+                icon: '🎃',
+                title: 'Seasonal & Specialty',
+                description: 'Limited-time seasonal treats and specialty items that celebrate the flavors of each season. From holiday favorites to unique creations, these items are available for a limited time.',
+                flavors: ['Pumpkin Butterscotch Bundts', 'Peppermint Mocha Pops', 'Breakable Hearts', 'Dubai Chocolate Bars', 'Chocolate-Dipped Strawberries', 'Seasonal Variety Packs'],
+                pricing: [
+                    { quantity: 'Prices', price: 'Vary by Item' }
+                ],
+                specialNotes: 'Requests open for custom seasonal creations!'
+            }
+        };
+        
+        // Handle individual flavor clicks
+        if (itemName === 'Lemon Burst') {
+            return {
+                icon: '🍋',
+                title: 'Lemon Burst Cupcake',
+                description: 'Bright, buttery lemon cake made with fresh zest and juice, topped with smooth lemon buttercream, a candied lemon slice, and a sprig of rosemary.',
+                flavors: ['Tangy', 'Fresh', 'Elegant'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$20' },
+                    { quantity: 'Dozen', price: '$35' }
+                ],
+                specialNotes: 'Made with real lemon zest and juice for authentic citrus flavor.'
+            };
+        }
+        
+        return menuData[itemName] || {
+            icon: '🧁',
+            title: itemName,
+            description: 'Delicious handmade treat with premium ingredients.',
+            flavors: ['Coming Soon'],
+            pricing: [
+                { quantity: 'Price', price: 'TBD' }
+            ],
+            specialNotes: 'More details coming soon!'
+        };
     },
     
     populateLemonBurstPopup() {
