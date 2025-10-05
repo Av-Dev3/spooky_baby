@@ -787,70 +787,20 @@ const cardInteractions = {
             return;
         }
         
-        // FORCE POPUP TO BE VISIBLE WITH INLINE STYLES
-        popup.style.cssText = `
-            display: flex !important;
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            z-index: 999999 !important;
-            background: rgba(255, 0, 0, 0.9) !important;
-            align-items: center !important;
-            justify-content: center !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-        `;
-        
-        // Add some debug content to make sure popup has content
-        const popupContent = popup.querySelector('.popup-content');
-        if (popupContent) {
-            popupContent.style.cssText = `
-                background: white !important;
-                color: black !important;
-                padding: 2rem !important;
-                border-radius: 10px !important;
-                max-width: 500px !important;
-                width: 90% !important;
-                z-index: 1000000 !important;
-                position: relative !important;
-            `;
-            console.log('Popup content found and styled');
-        } else {
-            console.error('Popup content not found!');
-            // Add a simple text element for debugging
-            const debugDiv = document.createElement('div');
-            debugDiv.innerHTML = '<h1 style="color: white; font-size: 3rem;">POPUP IS WORKING!</h1>';
-            debugDiv.style.cssText = `
-                background: white !important;
-                color: black !important;
-                padding: 2rem !important;
-                border-radius: 10px !important;
-                text-align: center !important;
-                z-index: 1000000 !important;
-            `;
-            popup.appendChild(debugDiv);
-        }
+        // Add the active class to show the popup
+        popup.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        console.log('Popup activated');
         
         // For now, show Lemon Burst Cupcake popup
         // Later we can expand this to handle different items
         if (itemName.toLowerCase().includes('lemon burst')) {
             console.log('Showing Lemon Burst popup');
             this.populateLemonBurstPopup();
-            popup.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            console.log('Popup classes:', popup.className);
-            console.log('Popup computed style:', window.getComputedStyle(popup).display);
-            console.log('Popup should be visible now');
         } else {
             console.log('Showing generic popup for:', itemName);
             // For other items, show a placeholder message
             this.populateGenericPopup(itemName);
-            popup.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            console.log('Popup classes:', popup.className);
-            console.log('Popup computed style:', window.getComputedStyle(popup).display);
         }
     },
     
