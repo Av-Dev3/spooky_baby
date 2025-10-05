@@ -734,32 +734,60 @@ const cardInteractions = {
         
         // Make menu items clickable
         this.makeMenuItemsClickable();
+        
+        // Add test button functionality
+        this.addTestButton();
     },
     
     makeMenuItemsClickable() {
         // Make flavor list items clickable
         const flavorItems = document.querySelectorAll('.flavor-list li');
+        console.log('Found flavor items:', flavorItems.length);
+        
         flavorItems.forEach(item => {
             item.style.cursor = 'pointer';
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 const itemText = item.textContent.trim();
+                console.log('Clicked flavor item:', itemText);
                 this.showMenuItemPopup(itemText);
+            });
+        });
+        
+        // Also make menu cards clickable for testing
+        const menuCards = document.querySelectorAll('.menu-card');
+        console.log('Found menu cards:', menuCards.length);
+        
+        menuCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Clicked menu card');
+                this.showMenuItemPopup('Lemon Burst');
             });
         });
     },
     
     showMenuItemPopup(itemName) {
+        console.log('showMenuItemPopup called with:', itemName);
         const popup = document.getElementById('menuItemPopup');
-        if (!popup) return;
+        console.log('Popup element:', popup);
+        
+        if (!popup) {
+            console.error('Popup element not found!');
+            return;
+        }
         
         // For now, show Lemon Burst Cupcake popup
         // Later we can expand this to handle different items
         if (itemName.toLowerCase().includes('lemon burst')) {
+            console.log('Showing Lemon Burst popup');
             this.populateLemonBurstPopup();
             popup.classList.add('active');
             document.body.style.overflow = 'hidden';
+            console.log('Popup should be visible now');
         } else {
+            console.log('Showing generic popup for:', itemName);
             // For other items, show a placeholder message
             this.populateGenericPopup(itemName);
             popup.classList.add('active');
@@ -831,6 +859,16 @@ const cardInteractions = {
             orderSection.scrollIntoView({ behavior: 'smooth' });
         }
         this.closePopup();
+    },
+    
+    addTestButton() {
+        const testBtn = document.getElementById('testPopupBtn');
+        if (testBtn) {
+            testBtn.addEventListener('click', () => {
+                console.log('Test button clicked');
+                this.showMenuItemPopup('Lemon Burst');
+            });
+        }
     }
 };
 
