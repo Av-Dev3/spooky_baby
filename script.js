@@ -870,8 +870,11 @@ const cardInteractions = {
         if (testBtn) {
             testBtn.addEventListener('click', () => {
                 console.log('Test button clicked');
+                console.log('Popup element exists:', document.getElementById('menuItemPopup'));
                 this.showMenuItemPopup('Lemon Burst');
             });
+        } else {
+            console.error('Test button not found!');
         }
     }
 };

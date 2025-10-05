@@ -672,7 +672,7 @@ body {
 
 /* Debug: Force popup to be visible for testing */
 .menu-item-popup {
-  background: rgba(255, 0, 0, 0.5) !important; /* Red background for debugging */
+  background: rgba(0, 0, 0, 0.8) !important; /* Restore proper background */
 }
 
 .popup-overlay {
