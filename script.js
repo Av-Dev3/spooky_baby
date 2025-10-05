@@ -794,6 +794,36 @@ const cardInteractions = {
             visibility: visible !important;
         `;
         
+        // Add some debug content to make sure popup has content
+        const popupContent = popup.querySelector('.popup-content');
+        if (popupContent) {
+            popupContent.style.cssText = `
+                background: white !important;
+                color: black !important;
+                padding: 2rem !important;
+                border-radius: 10px !important;
+                max-width: 500px !important;
+                width: 90% !important;
+                z-index: 1000000 !important;
+                position: relative !important;
+            `;
+            console.log('Popup content found and styled');
+        } else {
+            console.error('Popup content not found!');
+            // Add a simple text element for debugging
+            const debugDiv = document.createElement('div');
+            debugDiv.innerHTML = '<h1 style="color: white; font-size: 3rem;">POPUP IS WORKING!</h1>';
+            debugDiv.style.cssText = `
+                background: white !important;
+                color: black !important;
+                padding: 2rem !important;
+                border-radius: 10px !important;
+                text-align: center !important;
+                z-index: 1000000 !important;
+            `;
+            popup.appendChild(debugDiv);
+        }
+        
         // For now, show Lemon Burst Cupcake popup
         // Later we can expand this to handle different items
         if (itemName.toLowerCase().includes('lemon burst')) {
@@ -887,6 +917,32 @@ const cardInteractions = {
             testBtn.addEventListener('click', () => {
                 console.log('Test button clicked');
                 console.log('Popup element exists:', document.getElementById('menuItemPopup'));
+                
+                // Create a simple test popup to see if it works
+                const testPopup = document.createElement('div');
+                testPopup.id = 'testPopup';
+                testPopup.innerHTML = '<h1 style="color: white; font-size: 4rem; text-align: center;">TEST POPUP WORKS!</h1>';
+                testPopup.style.cssText = `
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100vw !important;
+                    height: 100vh !important;
+                    background: rgba(0, 255, 0, 0.9) !important;
+                    z-index: 999999 !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                `;
+                document.body.appendChild(testPopup);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    if (testPopup.parentNode) {
+                        testPopup.parentNode.removeChild(testPopup);
+                    }
+                }, 3000);
+                
                 this.showMenuItemPopup('Lemon Burst');
             });
         } else {
