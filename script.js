@@ -490,60 +490,306 @@ const cardInteractions = {
             card.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
         });
         
-        // Initialize mobile menu buttons
-        this.initMobileMenuButtons();
+        // Initialize mobile swipe menu
+        this.initMobileSwipeMenu();
     },
     
-    initMobileMenuButtons() {
-        const mobileButtons = document.querySelectorAll('.mobile-menu-btn');
-        const popup = document.getElementById('mobileMenuPopup');
-        const popupContent = document.getElementById('mobileMenuContent');
-        const closeBtn = document.getElementById('mobileMenuClose');
+    initMobileSwipeMenu() {
+        const swipeMenu = document.getElementById('mobileSwipeMenu');
+        if (!swipeMenu) return;
         
-        mobileButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const targetId = button.getAttribute('data-target');
-                const targetCard = document.getElementById(targetId);
-                
-                if (!targetCard) return;
-                
-                // Copy the card content to the popup
-                const cardClone = targetCard.cloneNode(true);
-                cardClone.classList.remove('scroll-animate-stagger');
-                cardClone.style.display = 'block';
-                cardClone.style.margin = '0';
-                cardClone.style.padding = '0';
-                
-                // Clear previous content and add new content
-                popupContent.innerHTML = '';
-                popupContent.appendChild(cardClone);
-                
-                // Show popup
-                popup.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
+        // Menu data
+        const menuItems = [
+            {
+                id: 'cupcakes',
+                icon: '🧁',
+                title: 'Cupcakes',
+                subtitle: 'Gourmet & Kool Aid Flavors',
+                price: '$25/dozen • $12/half dozen',
+                content: this.getCupcakesContent()
+            },
+            {
+                id: 'cake-pops',
+                icon: '🍭',
+                title: 'Cake Pops',
+                subtitle: 'Perfect Party Treats',
+                price: '10 pops $12 • 20 pops $25',
+                content: this.getCakePopsContent()
+            },
+            {
+                id: 'cakecicles',
+                icon: '🍰',
+                title: 'Cakecicles',
+                subtitle: 'Coming Soon',
+                price: 'TBD',
+                content: this.getCakeciclesContent()
+            },
+            {
+                id: 'cakes',
+                icon: '🎂',
+                title: 'Cakes',
+                subtitle: 'Custom Creations',
+                price: 'Starting at $75',
+                content: this.getCakesContent()
+            },
+            {
+                id: 'seasonal',
+                icon: '🎃',
+                title: 'Seasonal & Specialty',
+                subtitle: 'Limited Time Treats',
+                price: 'Prices vary',
+                content: this.getSeasonalContent()
+            }
+        ];
+        
+        this.createSwipeMenu(menuItems);
+        this.initSwipeGestures();
+    },
+    
+    createSwipeMenu(menuItems) {
+        const swipeTrack = document.getElementById('swipeTrack');
+        const swipeIndicators = document.getElementById('swipeIndicators');
+        
+        if (!swipeTrack || !swipeIndicators) return;
+        
+        // Clear existing content
+        swipeTrack.innerHTML = '';
+        swipeIndicators.innerHTML = '';
+        
+        // Create swipe items
+        menuItems.forEach((item, index) => {
+            // Create swipe item
+            const swipeItem = document.createElement('div');
+            swipeItem.className = 'swipe-item';
+            if (index === 0) swipeItem.classList.add('active');
+            
+            swipeItem.innerHTML = `
+                <div class="swipe-item-icon">${item.icon}</div>
+                <div class="swipe-item-title">${item.title}</div>
+                <div class="swipe-item-subtitle">${item.subtitle}</div>
+                <div class="swipe-item-price">${item.price}</div>
+            `;
+            
+            swipeTrack.appendChild(swipeItem);
+            
+            // Create indicator dot
+            const dot = document.createElement('div');
+            dot.className = 'swipe-dot';
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => this.goToSlide(index));
+            swipeIndicators.appendChild(dot);
         });
         
-        // Close popup handlers
-        closeBtn.addEventListener('click', () => {
-            popup.classList.remove('active');
-            document.body.style.overflow = '';
+        // Add swipe hint
+        const swipeHint = document.createElement('div');
+        swipeHint.className = 'swipe-hint';
+        swipeHint.textContent = '👆 Swipe left or right to explore our menu';
+        swipeIndicators.parentNode.appendChild(swipeHint);
+    },
+    
+    initSwipeGestures() {
+        const swipeTrack = document.getElementById('swipeTrack');
+        const swipeLeft = document.getElementById('swipeLeft');
+        const swipeRight = document.getElementById('swipeRight');
+        
+        if (!swipeTrack) return;
+        
+        let currentIndex = 0;
+        const totalItems = swipeTrack.children.length;
+        
+        // Touch event handlers
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+        
+        swipeTrack.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isDragging = false;
         });
         
-        popup.addEventListener('click', (e) => {
-            if (e.target === popup) {
-                popup.classList.remove('active');
-                document.body.style.overflow = '';
+        swipeTrack.addEventListener('touchmove', (e) => {
+            if (!startX || !startY) return;
+            
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const diffX = startX - currentX;
+            const diffY = startY - currentY;
+            
+            // Determine if this is a horizontal swipe
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+                isDragging = true;
+                e.preventDefault();
+                
+                // Add visual feedback during swipe
+                const progress = Math.min(Math.abs(diffX) / 100, 1);
+                swipeTrack.style.opacity = 1 - (progress * 0.1);
             }
         });
         
-        // Close on escape key
+        swipeTrack.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const diffX = startX - endX;
+            
+            if (Math.abs(diffX) > 50) { // Minimum swipe distance
+                if (diffX > 0) {
+                    this.nextSlide();
+                } else {
+                    this.prevSlide();
+                }
+            }
+            
+            // Reset visual feedback
+            swipeTrack.style.opacity = '1';
+            startX = 0;
+            startY = 0;
+            isDragging = false;
+        });
+        
+        // Arrow button handlers
+        if (swipeLeft) {
+            swipeLeft.addEventListener('click', () => this.prevSlide());
+        }
+        
+        if (swipeRight) {
+            swipeRight.addEventListener('click', () => this.nextSlide());
+        }
+        
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && popup.classList.contains('active')) {
-                popup.classList.remove('active');
-                document.body.style.overflow = '';
+            if (e.key === 'ArrowLeft') {
+                this.prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                this.nextSlide();
             }
         });
+        
+        // Mouse wheel support for desktop
+        swipeTrack.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaX > 0) {
+                this.nextSlide();
+            } else if (e.deltaX < 0) {
+                this.prevSlide();
+            }
+        });
+        
+        // Store methods for external access
+        this.goToSlide = (index) => {
+            currentIndex = Math.max(0, Math.min(index, totalItems - 1));
+            this.updateSwipeMenu();
+        };
+        
+        this.nextSlide = () => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            this.updateSwipeMenu();
+        };
+        
+        this.prevSlide = () => {
+            currentIndex = currentIndex === 0 ? totalItems - 1 : currentIndex - 1;
+            this.updateSwipeMenu();
+        };
+        
+        this.updateSwipeMenu = () => {
+            const swipeTrack = document.getElementById('swipeTrack');
+            const swipeIndicators = document.getElementById('swipeIndicators');
+            
+            if (!swipeTrack || !swipeIndicators) return;
+            
+            // Update track position
+            swipeTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+            
+            // Update active states
+            swipeTrack.children.forEach((item, index) => {
+                item.classList.toggle('active', index === currentIndex);
+            });
+            
+            swipeIndicators.children.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+            
+            // Update arrow states
+            const swipeLeft = document.getElementById('swipeLeft');
+            const swipeRight = document.getElementById('swipeRight');
+            
+            if (swipeLeft) swipeLeft.disabled = currentIndex === 0;
+            if (swipeRight) swipeRight.disabled = currentIndex === totalItems - 1;
+        };
+    },
+    
+    getCupcakesContent() {
+        return `
+            <div class="flavor-group">
+                <h4>Gourmet Heritage Line</h4>
+                <ul>
+                    <li>Lemon Burst</li>
+                    <li>Orange Cranberry</li>
+                    <li>Key Lime Pie</li>
+                    <li>Chocolate Crunch</li>
+                </ul>
+            </div>
+            <div class="flavor-group">
+                <h4>Kool Aid Fruit Blast Line</h4>
+                <ul>
+                    <li>Cherry Bomb</li>
+                    <li>Blue Razz Pop</li>
+                    <li>Watermelon Splash</li>
+                    <li>Rainbow Variety Pack</li>
+                </ul>
+            </div>
+        `;
+    },
+    
+    getCakePopsContent() {
+        return `
+            <div class="flavor-group">
+                <h4>Cake Pop Flavors</h4>
+                <ul>
+                    <li>Red Velvet Bliss</li>
+                    <li>Birthday Confetti</li>
+                    <li>Spooky Pop</li>
+                    <li>Cookies & Cream Dream</li>
+                </ul>
+            </div>
+        `;
+    },
+    
+    getCakeciclesContent() {
+        return `
+            <div class="flavor-group">
+                <h4>Coming Soon</h4>
+                <p>New cakecicle flavors will be available soon!</p>
+            </div>
+        `;
+    },
+    
+    getCakesContent() {
+        return `
+            <div class="flavor-group">
+                <h4>Custom Cakes</h4>
+                <ul>
+                    <li>Custom designs and flavors available!</li>
+                </ul>
+            </div>
+        `;
+    },
+    
+    getSeasonalContent() {
+        return `
+            <div class="flavor-group">
+                <h4>Seasonal & Specialty Items</h4>
+                <ul>
+                    <li>Pumpkin Butterscotch Bundts</li>
+                    <li>Peppermint Mocha Pops</li>
+                    <li>Breakable Hearts</li>
+                    <li>Dubai Chocolate Bars</li>
+                    <li>Chocolate-Dipped Strawberries</li>
+                    <li>Seasonal Variety Packs</li>
+                </ul>
+            </div>
+        `;
     },
 
     handleMouseEnter(e) {

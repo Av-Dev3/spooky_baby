@@ -125,40 +125,27 @@
     <section class="menu" id="menu">
         <div class="container">
             <h2 class="section-title scroll-animate">Our Sweet Menu</h2>
-            <!-- Mobile Menu Buttons -->
-            <div class="mobile-menu-buttons">
-                <button class="mobile-menu-btn" data-target="cupcakes-card">
-                    <span class="btn-icon">🧁</span>
-                    <span class="btn-text">Cupcakes</span>
-                    <span class="btn-arrow">▼</span>
-                </button>
-                <button class="mobile-menu-btn" data-target="cake-pops-card">
-                    <span class="btn-icon">🍭</span>
-                    <span class="btn-text">Cake Pops</span>
-                    <span class="btn-arrow">▼</span>
-                </button>
-                <button class="mobile-menu-btn" data-target="cakecicles-card">
-                    <span class="btn-icon">🍰</span>
-                    <span class="btn-text">Cakecicles</span>
-                    <span class="btn-arrow">▼</span>
-                </button>
-                <button class="mobile-menu-btn" data-target="cakes-card">
-                    <span class="btn-icon">🎂</span>
-                    <span class="btn-text">Cakes</span>
-                    <span class="btn-arrow">▼</span>
-                </button>
-                <button class="mobile-menu-btn" data-target="seasonal-card">
-                    <span class="btn-icon">🎃</span>
-                    <span class="btn-text">Seasonal & Specialty</span>
-                    <span class="btn-arrow">▼</span>
-                </button>
-            </div>
-
-            <!-- Mobile Menu Popup -->
-            <div class="mobile-menu-popup" id="mobileMenuPopup">
-                <div class="mobile-menu-content">
-                    <button class="mobile-menu-close" id="mobileMenuClose">×</button>
-                    <div id="mobileMenuContent"></div>
+            <!-- Mobile Swipeable Menu -->
+            <div class="mobile-swipe-menu" id="mobileSwipeMenu">
+                <div class="swipe-container">
+                    <div class="swipe-track" id="swipeTrack">
+                        <!-- Menu items will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="swipe-indicators" id="swipeIndicators">
+                    <!-- Navigation dots will be populated by JavaScript -->
+                </div>
+                <div class="swipe-arrows">
+                    <button class="swipe-arrow swipe-arrow-left" id="swipeLeft" aria-label="Previous menu">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="swipe-arrow swipe-arrow-right" id="swipeRight" aria-label="Next menu">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
