@@ -734,9 +734,6 @@ const cardInteractions = {
         
         // Make menu items clickable
         this.makeMenuItemsClickable();
-        
-        // Add test button functionality
-        this.addTestButton();
     },
     
     makeMenuItemsClickable() {
@@ -825,7 +822,7 @@ const cardInteractions = {
         `;
         
         content.innerHTML = `
-            <button id="lemonPopupClose" style="position: absolute; top: 1rem; right: 1rem; background: #F6B6CF; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; font-weight: bold;">×</button>
+            <button id="lemonPopupClose" style="position: absolute; top: 1rem; right: 1rem; background: #F6B6CF; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">×</button>
             <div style="text-align: center; margin-bottom: 2rem;">
                 <div style="font-size: 4rem; margin-bottom: 1rem;">🧁</div>
                 <h2 style="font-family: 'Chewy', cursive; color: #F6B6CF; font-size: 2rem; margin: 0;">Lemon Burst Cupcake</h2>
@@ -950,44 +947,6 @@ const cardInteractions = {
         this.closePopup();
     },
     
-    addTestButton() {
-        const testBtn = document.getElementById('testPopupBtn');
-        if (testBtn) {
-            testBtn.addEventListener('click', () => {
-                console.log('Test button clicked');
-                console.log('Popup element exists:', document.getElementById('menuItemPopup'));
-                
-                // Create a simple test popup to see if it works
-                const testPopup = document.createElement('div');
-                testPopup.id = 'testPopup';
-                testPopup.innerHTML = '<h1 style="color: white; font-size: 4rem; text-align: center;">TEST POPUP WORKS!</h1>';
-                testPopup.style.cssText = `
-                    position: fixed !important;
-                    top: 0 !important;
-                    left: 0 !important;
-                    width: 100vw !important;
-                    height: 100vh !important;
-                    background: rgba(0, 255, 0, 0.9) !important;
-                    z-index: 999999 !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                `;
-                document.body.appendChild(testPopup);
-                
-                // Remove after 3 seconds
-                setTimeout(() => {
-                    if (testPopup.parentNode) {
-                        testPopup.parentNode.removeChild(testPopup);
-                    }
-                }, 3000);
-                
-                this.showMenuItemPopup('Lemon Burst');
-            });
-        } else {
-            console.error('Test button not found!');
-        }
-    }
 };
 
 // ===== SCROLL ANIMATIONS =====
