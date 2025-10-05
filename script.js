@@ -948,6 +948,20 @@ const cardInteractions = {
             };
         }
         
+        if (itemName === 'Orange Cranberry') {
+            return {
+                icon: '🍊',
+                title: 'Orange Cranberry Cupcake',
+                description: 'A citrus-cranberry cake bursting with orange zest, real orange juice, and tart dried cranberries. Topped with orange buttercream, sugared cranberries, and a glossy candied orange half-slice.',
+                flavors: ['Fruity', 'Sweet-Tart', 'Festive'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$20' },
+                    { quantity: 'Dozen', price: '$35' }
+                ],
+                specialNotes: 'Perfect blend of citrus and tart cranberry flavors.'
+            };
+        }
+        
         return menuData[itemName] || {
             icon: '🧁',
             title: itemName,
