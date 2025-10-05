@@ -799,7 +799,8 @@ const cardInteractions = {
             align-items: center !important;
             justify-content: center !important;
             z-index: 999999 !important;
-            padding: 2rem !important;
+            padding: 1rem !important;
+            box-sizing: border-box !important;
         `;
         
         // Create content
@@ -810,11 +811,13 @@ const cardInteractions = {
             padding: 2rem !important;
             max-width: 600px !important;
             width: 90% !important;
-            max-height: 70vh !important;
+            max-height: 90vh !important;
             overflow-y: auto !important;
-            position: relative !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
             border: 3px solid #F6B6CF !important;
-            flex-shrink: 0 !important;
         `;
         
         content.innerHTML = `
