@@ -785,6 +785,8 @@ const cardInteractions = {
             this.populateLemonBurstPopup();
             popup.classList.add('active');
             document.body.style.overflow = 'hidden';
+            console.log('Popup classes:', popup.className);
+            console.log('Popup computed style:', window.getComputedStyle(popup).display);
             console.log('Popup should be visible now');
         } else {
             console.log('Showing generic popup for:', itemName);
@@ -792,6 +794,8 @@ const cardInteractions = {
             this.populateGenericPopup(itemName);
             popup.classList.add('active');
             document.body.style.overflow = 'hidden';
+            console.log('Popup classes:', popup.className);
+            console.log('Popup computed style:', window.getComputedStyle(popup).display);
         }
     },
     
