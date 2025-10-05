@@ -799,11 +799,14 @@ const cardInteractions = {
             align-items: center !important;
             justify-content: center !important;
             z-index: 999999 !important;
-            padding: 2rem !important;
+            padding: 1rem !important;
         `;
         
-        // Create content
+        // Create content - use EXACT same positioning as gallery
         const content = document.createElement('div');
+        const viewportCenterX = window.innerWidth / 2;
+        const viewportCenterY = (window.innerHeight / 2) + window.scrollY;
+        
         content.style.cssText = `
             background: white !important;
             border-radius: 20px !important;
@@ -812,9 +815,13 @@ const cardInteractions = {
             width: 90% !important;
             max-height: 80vh !important;
             overflow-y: auto !important;
-            position: relative !important;
+            position: absolute !important;
+            left: ${viewportCenterX}px !important;
+            top: ${viewportCenterY}px !important;
+            transform: translate(-50%, -50%) !important;
             border: 3px solid #F6B6CF !important;
             box-sizing: border-box !important;
+            z-index: 1000000 !important;
         `;
         
         content.innerHTML = `
