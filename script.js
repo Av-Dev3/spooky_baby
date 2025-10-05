@@ -779,6 +779,19 @@ const cardInteractions = {
             localStorage.setItem('giveaway-popup-seen', 'true');
         }
         
+        // Check if giveaway popup is blocking - look for any high z-index elements
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            const zIndex = window.getComputedStyle(el).zIndex;
+            if (zIndex && parseInt(zIndex) > 1000000) {
+                console.log('Found high z-index element:', el, 'z-index:', zIndex);
+                if (el.id !== 'menuItemPopup') {
+                    console.log('Removing blocking element');
+                    el.remove();
+                }
+            }
+        });
+        
         const popup = document.getElementById('menuItemPopup');
         console.log('Popup element:', popup);
         
