@@ -672,7 +672,23 @@ body {
 
 /* Debug: Force popup to be visible for testing */
 .menu-item-popup {
-  background: rgba(0, 0, 0, 0.8) !important; /* Restore proper background */
+  background: rgba(255, 0, 0, 0.9) !important; /* BRIGHT RED for debugging */
+  display: flex !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.menu-item-popup.active {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: rgba(255, 0, 0, 0.9) !important; /* BRIGHT RED for debugging */
 }
 
 .popup-overlay {

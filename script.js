@@ -778,6 +778,22 @@ const cardInteractions = {
             return;
         }
         
+        // FORCE POPUP TO BE VISIBLE WITH INLINE STYLES
+        popup.style.cssText = `
+            display: flex !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 999999 !important;
+            background: rgba(255, 0, 0, 0.9) !important;
+            align-items: center !important;
+            justify-content: center !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        `;
+        
         // For now, show Lemon Burst Cupcake popup
         // Later we can expand this to handle different items
         if (itemName.toLowerCase().includes('lemon burst')) {
