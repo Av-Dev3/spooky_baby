@@ -282,13 +282,22 @@ const formHandler = {
             itemDropdown.classList.remove('open');
             
             // Handle flavor dropdown visibility
+            const customFlavorGroup = document.getElementById('customFlavorGroup');
+            
             if (value && value !== 'custom' && value !== 'cakecicles') {
                 flavorGroup.style.display = 'block';
+                if (customFlavorGroup) customFlavorGroup.style.display = 'none';
                 this.updateFlavorOptions(value, flavorOptions);
             } else {
                 flavorGroup.style.display = 'none';
+                if (customFlavorGroup) customFlavorGroup.style.display = 'none';
                 flavorInput.value = '';
                 flavorTrigger.querySelector('.dropdown-text').textContent = 'Select a flavor...';
+                // Clear custom flavor as well
+                const customFlavorInput = document.getElementById('customFlavor');
+                const customFlavorTrigger = document.getElementById('customFlavorTrigger');
+                if (customFlavorInput) customFlavorInput.value = '';
+                if (customFlavorTrigger) customFlavorTrigger.querySelector('.dropdown-text').textContent = 'Select your custom flavor...';
             }
         });
         
@@ -315,6 +324,24 @@ const formHandler = {
             option.classList.add('selected');
             
             flavorDropdown.classList.remove('open');
+            
+            // Handle custom flavor dropdown visibility
+            const customFlavorGroup = document.getElementById('customFlavorGroup');
+            if (value === 'pick-your-own-flavor') {
+                if (customFlavorGroup) {
+                    customFlavorGroup.style.display = 'block';
+                    this.updateCustomFlavorOptions();
+                }
+            } else {
+                if (customFlavorGroup) {
+                    customFlavorGroup.style.display = 'none';
+                    // Clear custom flavor selection
+                    const customFlavorInput = document.getElementById('customFlavor');
+                    const customFlavorTrigger = document.getElementById('customFlavorTrigger');
+                    if (customFlavorInput) customFlavorInput.value = '';
+                    if (customFlavorTrigger) customFlavorTrigger.querySelector('.dropdown-text').textContent = 'Select your custom flavor...';
+                }
+            }
         });
     },
     
@@ -332,7 +359,8 @@ const formHandler = {
                 { value: 'cherry-bomb', text: '🍒 Cherry Bomb' },
                 { value: 'blue-razz-pop', text: '💙 Blue Razz Pop' },
                 { value: 'watermelon-splash', text: '🍉 Watermelon Splash' },
-                { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' }
+                { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' },
+                { value: 'pick-your-own-flavor', text: '🌈 Pick Your Own Flavor' }
             ],
             'cake-pops': [
                 { value: 'red-velvet-bliss', text: '❤️ Red Velvet Bliss' },
@@ -362,6 +390,75 @@ const formHandler = {
                 flavorOptions.appendChild(option);
             });
         }
+    },
+    
+    updateCustomFlavorOptions() {
+        const customFlavorOptions = document.getElementById('customFlavorOptions');
+        const customFlavorTrigger = document.getElementById('customFlavorTrigger');
+        const customFlavorInput = document.getElementById('customFlavor');
+        
+        if (!customFlavorOptions || !customFlavorTrigger || !customFlavorInput) return;
+        
+        // Clear existing options
+        customFlavorOptions.innerHTML = '<div class="custom-option" data-value="">Select your custom flavor...</div>';
+        
+        // Custom flavor options
+        const customFlavors = [
+            { value: 'cherry', text: '🍒 Cherry' },
+            { value: 'grape', text: '🍇 Grape' },
+            { value: 'lemon-lime', text: '🍋 Lemon‑Lime' },
+            { value: 'orange', text: '🍊 Orange' },
+            { value: 'raspberry', text: '🫐 Raspberry' },
+            { value: 'strawberry', text: '🍓 Strawberry' },
+            { value: 'tropical-punch', text: '🌴 Tropical Punch' },
+            { value: 'lemonade', text: '🍋 Lemonade' },
+            { value: 'pink-lemonade', text: '🌸 Pink Lemonade' },
+            { value: 'black-cherry', text: '🖤 Black Cherry' },
+            { value: 'mixed-berry', text: '🫐 Mixed Berry' },
+            { value: 'watermelon', text: '🍉 Watermelon' },
+            { value: 'peach-mango', text: '🥭 Peach Mango' },
+            { value: 'green-apple', text: '🍏 Green Apple' },
+            { value: 'strawberry-kiwi', text: '🥝 Strawberry Kiwi' },
+            { value: 'blue-raspberry-lemonade', text: '💙 Blue Raspberry Lemonade' },
+            { value: 'sharkleberry-fin', text: '🦈 Sharkleberry Fin' },
+            { value: 'jamaica', text: '🌺 Jamaica (Agua Fresca)' },
+            { value: 'pina-pineapple', text: '🍍 Piña‑Pineapple (Agua Fresca)' }
+        ];
+        
+        customFlavors.forEach(flavor => {
+            const option = document.createElement('div');
+            option.className = 'custom-option';
+            option.setAttribute('data-value', flavor.value);
+            option.textContent = flavor.text;
+            customFlavorOptions.appendChild(option);
+        });
+        
+        // Add custom flavor dropdown functionality
+        customFlavorTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const customFlavorDropdown = document.getElementById('customFlavorDropdown');
+            customFlavorDropdown.classList.toggle('open');
+        });
+        
+        customFlavorOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            customFlavorTrigger.querySelector('.dropdown-text').textContent = text;
+            customFlavorInput.value = value;
+            
+            customFlavorOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            const customFlavorDropdown = document.getElementById('customFlavorDropdown');
+            customFlavorDropdown.classList.remove('open');
+        });
     },
 
     async handleSubmit(e) {
@@ -407,6 +504,12 @@ const formHandler = {
         const flavorGroup = document.getElementById('flavorGroup');
         if (flavorGroup && flavorGroup.style.display !== 'none') {
             requiredFields.push('flavor');
+        }
+        
+        // Check if custom flavor field is visible and add it to required fields
+        const customFlavorGroup = document.getElementById('customFlavorGroup');
+        if (customFlavorGroup && customFlavorGroup.style.display !== 'none') {
+            requiredFields.push('customFlavor');
         }
         
         const missingFields = requiredFields.filter(field => !data[field] || data[field].trim() === '');
@@ -1022,6 +1125,23 @@ const cardInteractions = {
                     ${menuData.flavors.map(flavor => `<span style="background: #F6B6CF; color: white; padding: 0.4rem 0.8rem; border-radius: 20px; font-weight: 600;">${flavor}</span>`).join('')}
                 </div>
             </div>
+            ${menuData.availableFlavors ? `
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Available Flavors</h3>
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border-left: 4px solid #F6B6CF;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; margin-bottom: 1rem;">
+                            ${menuData.availableFlavors.slice(0, -1).map(flavor => `
+                                <div style="background: white; padding: 0.5rem; border-radius: 8px; text-align: center; font-weight: 600; color: #333; border: 2px solid #F6B6CF; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    ${flavor}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div style="background: linear-gradient(135deg, #F6B6CF, #F7D56A); color: white; padding: 0.75rem; border-radius: 8px; text-align: center; font-weight: 600; font-style: italic;">
+                            ${menuData.availableFlavors[menuData.availableFlavors.length - 1]}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
             <div style="margin-bottom: 1.5rem;">
                 <h3 style="color: #F7D56A; font-family: 'Chewy', cursive; margin-bottom: 0.5rem;">Pricing</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -1196,6 +1316,69 @@ const cardInteractions = {
                     { quantity: 'Dozen', price: '$25' }
                 ],
                 specialNotes: 'Bold cherry Kool-Aid flavor that brings back childhood memories.'
+            };
+        }
+        
+        if (itemName === 'Blue Razz Pop') {
+            return {
+                icon: '💙',
+                title: 'Blue Razz Pop Cupcake',
+                description: 'Electric blue cupcakes made with blue-raspberry Kool-Aid for a sweet-tangy punch, finished with matching whipped frosting and a sparkle of edible glitter.',
+                flavors: ['Tart', 'Sweet', 'Fun'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Electric blue color with a fun, tangy blue-raspberry flavor that pops!'
+            };
+        }
+        
+        if (itemName === 'Watermelon Splash') {
+            return {
+                icon: '🍉',
+                title: 'Watermelon Splash Cupcake',
+                description: 'Juicy and refreshing, this cupcake tastes like a bite of summer. Made with watermelon Kool-Aid and topped with pink-green whipped frosting.',
+                flavors: ['Fruity', 'Refreshing', 'Summer Vibes'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Perfect summer treat that captures the essence of fresh watermelon!'
+            };
+        }
+        
+        if (itemName === 'Pick Your Own Flavor') {
+            return {
+                icon: '🌈',
+                title: 'Pick Your Own Flavor Cupcake',
+                description: 'Can\'t decide? Choose your favorite flavor for a custom batch — mix any Kool-Aid flavor into our vanilla cake base and whipped frosting for your perfect combo!',
+                flavors: ['Customizable', 'Fun', 'Personal'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Create your perfect flavor combination!',
+                availableFlavors: [
+                    'Cherry',
+                    'Grape', 
+                    'Lemon‑Lime',
+                    'Orange',
+                    'Raspberry',
+                    'Strawberry',
+                    'Tropical Punch',
+                    'Lemonade',
+                    'Pink Lemonade',
+                    'Black Cherry',
+                    'Mixed Berry',
+                    'Watermelon',
+                    'Peach Mango',
+                    'Green Apple',
+                    'Strawberry Kiwi',
+                    'Blue Raspberry Lemonade',
+                    'Sharkleberry Fin',
+                    'Pink Lemonade',
+                    'Plus specialty "Agua Frescas" flavors (e.g. Jamaica, Piña‑Pineapple etc.)'
+                ]
             };
         }
         
@@ -1568,7 +1751,8 @@ function updateFlavorOptions(selectedItem) {
             { value: 'cherry-bomb', text: '🍒 Cherry Bomb' },
             { value: 'blue-razz-pop', text: '💙 Blue Razz Pop' },
             { value: 'watermelon-splash', text: '🍉 Watermelon Splash' },
-            { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' }
+            { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' },
+            { value: 'pick-your-own-flavor', text: '🌈 Pick Your Own Flavor' }
         ],
         'cake-pops': [
             { value: 'red-velvet-bliss', text: '❤️ Red Velvet Bliss' },
