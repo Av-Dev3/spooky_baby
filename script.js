@@ -1475,9 +1475,23 @@ const cardInteractions = {
             };
         }
         
-        if (itemName === 'Pick Your Own Flavor') {
+        if (itemName === 'Rainbow Variety Pack') {
             return {
                 icon: '🌈',
+                title: 'Rainbow Variety Pack Cupcakes',
+                description: 'Can\'t choose just one? Get a colorful assortment of our Kool-Aid Fruit Blast cupcakes! Each pack features a mix of Cherry Bomb, Blue Razz Pop, and Watermelon Splash for a rainbow of fruity flavors.',
+                flavors: ['Variety', 'Colorful', 'Fun'],
+                pricing: [
+                    { quantity: '6-Pack (2 of each)', price: '$14' },
+                    { quantity: 'Dozen (4 of each)', price: '$25' }
+                ],
+                specialNotes: 'Perfect for parties or when you want to try all the flavors!'
+            };
+        }
+        
+        if (itemName === 'Pick Your Own Flavor') {
+            return {
+                icon: '✨',
                 title: 'Pick Your Own Flavor Cupcake',
                 description: 'Can\'t decide? Choose your favorite flavor for a custom batch — mix any Kool-Aid flavor into our vanilla cake base and whipped frosting for your perfect combo!',
                 flavors: ['Customizable', 'Fun', 'Personal'],
