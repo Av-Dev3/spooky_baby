@@ -459,6 +459,7 @@ class DriveGallery {
         console.log('Grid image src:', photoDiv.querySelector('img').src);
         console.log('enableLightbox:', this.config.enableLightbox);
         console.log('lightbox element exists:', !!this.lightbox);
+        console.log('isMobile:', this.isMobile);
         this.openLightbox(index);
       });
       photoDiv.addEventListener('keydown', (e) => {
@@ -661,9 +662,29 @@ class DriveGallery {
     if (!this.config.enableLightbox || !this.lightbox) return;
     if (index < 0 || index >= this.currentImages.length) return;
     
-    // Get the clicked image position
-    const clickedImg = this.grid.querySelector(`[data-index="${index}"] img`);
-    if (!clickedImg) return;
+    // Get the clicked image position - search in both mobile and desktop structures
+    let clickedImg = null;
+    
+    // Try to find the image in the current structure
+    if (this.isMobile) {
+      // In mobile mode, search through all swipe pages
+      const allPages = this.swipeContainer.querySelectorAll('.drive-gallery-swipe-page');
+      for (const page of allPages) {
+        const img = page.querySelector(`[data-index="${index}"] img`);
+        if (img) {
+          clickedImg = img;
+          break;
+        }
+      }
+    } else {
+      // In desktop mode, search in the single grid
+      clickedImg = this.swipeContainer.querySelector(`[data-index="${index}"] img`);
+    }
+    
+    if (!clickedImg) {
+      console.error('Could not find image with index:', index);
+      return;
+    }
     
     const rect = clickedImg.getBoundingClientRect();
     
@@ -812,7 +833,23 @@ class DriveGallery {
     if (!image || !this.currentImages[this.lightboxIndex]) return;
 
     const photo = this.currentImages[this.lightboxIndex];
-    const gridImage = this.grid.querySelector(`[data-index="${this.lightboxIndex}"] img`);
+    
+    // Find the grid image in the current structure
+    let gridImage = null;
+    if (this.isMobile) {
+      // In mobile mode, search through all swipe pages
+      const allPages = this.swipeContainer.querySelectorAll('.drive-gallery-swipe-page');
+      for (const page of allPages) {
+        const img = page.querySelector(`[data-index="${this.lightboxIndex}"] img`);
+        if (img) {
+          gridImage = img;
+          break;
+        }
+      }
+    } else {
+      // In desktop mode, search in the single grid
+      gridImage = this.swipeContainer.querySelector(`[data-index="${this.lightboxIndex}"] img`);
+    }
     
     // Use large version of image
     let imageSrc = photo.src;
