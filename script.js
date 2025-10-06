@@ -774,11 +774,122 @@ const customDropdown = {
             if (formGroup) {
                 formGroup.classList.remove('dropdown-open');
             }
+            
+            // Handle custom flavor dropdown visibility
+            const customFlavorGroup = document.getElementById('customFlavorGroup');
+            console.log('Flavor selected in form:', value, 'Custom flavor group:', customFlavorGroup);
+            
+            if (value === 'pick-your-own-flavor') {
+                if (customFlavorGroup) {
+                    console.log('Showing custom flavor group in form');
+                    customFlavorGroup.style.display = 'block';
+                    this.initCustomFlavorDropdown();
+                } else {
+                    console.error('Custom flavor group not found in form');
+                }
+            } else {
+                if (customFlavorGroup) {
+                    console.log('Hiding custom flavor group in form');
+                    customFlavorGroup.style.display = 'none';
+                    // Clear custom flavor selection
+                    const customFlavorInput = document.getElementById('customFlavor');
+                    const customFlavorTrigger = document.getElementById('customFlavorTrigger');
+                    if (customFlavorInput) customFlavorInput.value = '';
+                    if (customFlavorTrigger) customFlavorTrigger.querySelector('.dropdown-text').textContent = 'Select your custom flavor...';
+                }
+            }
         });
         
         console.log('Flavor dropdown initialized');
     },
 
+    initCustomFlavorDropdown() {
+        const customFlavorDropdown = document.getElementById('customFlavorDropdown');
+        const customFlavorTrigger = document.getElementById('customFlavorTrigger');
+        const customFlavorOptions = document.getElementById('customFlavorOptions');
+        const customFlavorInput = document.getElementById('customFlavor');
+        
+        if (!customFlavorDropdown || !customFlavorTrigger || !customFlavorOptions || !customFlavorInput) {
+            console.error('Custom flavor elements not found');
+            return;
+        }
+        
+        // Clear existing options
+        customFlavorOptions.innerHTML = '<div class="custom-option" data-value="">Select your custom flavor...</div>';
+        
+        // Custom flavor options
+        const customFlavors = [
+            { value: 'cherry', text: '🍒 Cherry' },
+            { value: 'grape', text: '🍇 Grape' },
+            { value: 'lemon-lime', text: '🍋 Lemon‑Lime' },
+            { value: 'orange', text: '🍊 Orange' },
+            { value: 'raspberry', text: '🫐 Raspberry' },
+            { value: 'strawberry', text: '🍓 Strawberry' },
+            { value: 'tropical-punch', text: '🌴 Tropical Punch' },
+            { value: 'lemonade', text: '🍋 Lemonade' },
+            { value: 'pink-lemonade', text: '🌸 Pink Lemonade' },
+            { value: 'black-cherry', text: '🖤 Black Cherry' },
+            { value: 'mixed-berry', text: '🫐 Mixed Berry' },
+            { value: 'watermelon', text: '🍉 Watermelon' },
+            { value: 'peach-mango', text: '🥭 Peach Mango' },
+            { value: 'green-apple', text: '🍏 Green Apple' },
+            { value: 'strawberry-kiwi', text: '🥝 Strawberry Kiwi' },
+            { value: 'blue-raspberry-lemonade', text: '💙 Blue Raspberry Lemonade' },
+            { value: 'sharkleberry-fin', text: '🦈 Sharkleberry Fin' },
+            { value: 'jamaica', text: '🌺 Jamaica (Agua Fresca)' },
+            { value: 'pina-pineapple', text: '🍍 Piña‑Pineapple (Agua Fresca)' }
+        ];
+        
+        customFlavors.forEach(flavor => {
+            const option = document.createElement('div');
+            option.className = 'custom-option';
+            option.setAttribute('data-value', flavor.value);
+            option.textContent = flavor.text;
+            customFlavorOptions.appendChild(option);
+        });
+        
+        // Remove existing event listeners to prevent duplicates
+        const newTrigger = customFlavorTrigger.cloneNode(true);
+        customFlavorTrigger.parentNode.replaceChild(newTrigger, customFlavorTrigger);
+        
+        const newOptions = customFlavorOptions.cloneNode(true);
+        customFlavorOptions.parentNode.replaceChild(newOptions, customFlavorOptions);
+        
+        // Add custom flavor dropdown functionality
+        newTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            customFlavorDropdown.classList.toggle('open');
+            const formGroup = customFlavorDropdown.closest('.form-group');
+            if (formGroup) {
+                formGroup.classList.toggle('dropdown-open');
+            }
+        });
+        
+        newOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            newTrigger.querySelector('.dropdown-text').textContent = text;
+            customFlavorInput.value = value;
+            
+            newOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            customFlavorDropdown.classList.remove('open');
+            const formGroup = customFlavorDropdown.closest('.form-group');
+            if (formGroup) {
+                formGroup.classList.remove('dropdown-open');
+            }
+        });
+        
+        console.log('Custom flavor dropdown initialized');
+    },
 
     highlightOption(option) {
         // Remove highlight from all options
