@@ -327,13 +327,19 @@ const formHandler = {
             
             // Handle custom flavor dropdown visibility
             const customFlavorGroup = document.getElementById('customFlavorGroup');
+            console.log('Flavor selected:', value, 'Custom flavor group:', customFlavorGroup);
+            
             if (value === 'pick-your-own-flavor') {
                 if (customFlavorGroup) {
+                    console.log('Showing custom flavor group');
                     customFlavorGroup.style.display = 'block';
                     this.updateCustomFlavorOptions();
+                } else {
+                    console.error('Custom flavor group not found');
                 }
             } else {
                 if (customFlavorGroup) {
+                    console.log('Hiding custom flavor group');
                     customFlavorGroup.style.display = 'none';
                     // Clear custom flavor selection
                     const customFlavorInput = document.getElementById('customFlavor');
@@ -360,7 +366,7 @@ const formHandler = {
                 { value: 'blue-razz-pop', text: '💙 Blue Razz Pop' },
                 { value: 'watermelon-splash', text: '🍉 Watermelon Splash' },
                 { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' },
-                { value: 'pick-your-own-flavor', text: '🌈 Pick Your Own Flavor' }
+                { value: 'pick-your-own-flavor', text: '✨ Pick Your Own Flavor' }
             ],
             'cake-pops': [
                 { value: 'red-velvet-bliss', text: '❤️ Red Velvet Bliss' },
@@ -396,8 +402,12 @@ const formHandler = {
         const customFlavorOptions = document.getElementById('customFlavorOptions');
         const customFlavorTrigger = document.getElementById('customFlavorTrigger');
         const customFlavorInput = document.getElementById('customFlavor');
+        const customFlavorDropdown = document.getElementById('customFlavorDropdown');
         
-        if (!customFlavorOptions || !customFlavorTrigger || !customFlavorInput) return;
+        if (!customFlavorOptions || !customFlavorTrigger || !customFlavorInput || !customFlavorDropdown) {
+            console.error('Custom flavor elements not found');
+            return;
+        }
         
         // Clear existing options
         customFlavorOptions.innerHTML = '<div class="custom-option" data-value="">Select your custom flavor...</div>';
@@ -433,32 +443,39 @@ const formHandler = {
             customFlavorOptions.appendChild(option);
         });
         
+        // Remove existing event listeners to prevent duplicates
+        const newTrigger = customFlavorTrigger.cloneNode(true);
+        customFlavorTrigger.parentNode.replaceChild(newTrigger, customFlavorTrigger);
+        
+        const newOptions = customFlavorOptions.cloneNode(true);
+        customFlavorOptions.parentNode.replaceChild(newOptions, customFlavorOptions);
+        
         // Add custom flavor dropdown functionality
-        customFlavorTrigger.addEventListener('click', (e) => {
+        newTrigger.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const customFlavorDropdown = document.getElementById('customFlavorDropdown');
             customFlavorDropdown.classList.toggle('open');
         });
         
-        customFlavorOptions.addEventListener('click', (e) => {
+        newOptions.addEventListener('click', (e) => {
             const option = e.target.closest('.custom-option');
             if (!option) return;
             
             const value = option.getAttribute('data-value');
             const text = option.textContent;
             
-            customFlavorTrigger.querySelector('.dropdown-text').textContent = text;
+            newTrigger.querySelector('.dropdown-text').textContent = text;
             customFlavorInput.value = value;
             
-            customFlavorOptions.querySelectorAll('.custom-option').forEach(opt => {
+            newOptions.querySelectorAll('.custom-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
             option.classList.add('selected');
             
-            const customFlavorDropdown = document.getElementById('customFlavorDropdown');
             customFlavorDropdown.classList.remove('open');
         });
+        
+        console.log('Custom flavor dropdown initialized');
     },
 
     async handleSubmit(e) {
@@ -1752,7 +1769,7 @@ function updateFlavorOptions(selectedItem) {
             { value: 'blue-razz-pop', text: '💙 Blue Razz Pop' },
             { value: 'watermelon-splash', text: '🍉 Watermelon Splash' },
             { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' },
-            { value: 'pick-your-own-flavor', text: '🌈 Pick Your Own Flavor' }
+            { value: 'pick-your-own-flavor', text: '✨ Pick Your Own Flavor' }
         ],
         'cake-pops': [
             { value: 'red-velvet-bliss', text: '❤️ Red Velvet Bliss' },
