@@ -782,8 +782,9 @@ const cardInteractions = {
             const diffX = startX - currentX;
             const diffY = startY - currentY;
             
-            // Determine if this is a horizontal swipe
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 10) {
+            // Only prevent default if this is clearly a horizontal swipe
+            // Allow vertical scrolling to continue normally
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 20) {
                 isDragging = true;
                 e.preventDefault();
                 
@@ -791,6 +792,7 @@ const cardInteractions = {
                 const progress = Math.min(Math.abs(diffX) / 100, 1);
                 swipeTrack.style.opacity = 1 - (progress * 0.1);
             }
+            // If it's more vertical than horizontal, don't prevent default to allow page scrolling
         });
         
         swipeTrack.addEventListener('touchend', (e) => {

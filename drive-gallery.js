@@ -536,7 +536,17 @@ class DriveGallery {
 
     this.swipeContainer.addEventListener('touchmove', (e) => {
       if (!this.isMobile || !isDragging) return;
-      e.preventDefault(); // Prevent scrolling
+      
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const diffX = startX - currentX;
+      const diffY = startY - currentY;
+      
+      // Only prevent default if this is clearly a horizontal swipe
+      // Allow vertical scrolling to continue normally
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 20) {
+        e.preventDefault(); // Only prevent scrolling for horizontal swipes
+      }
     });
 
     this.swipeContainer.addEventListener('touchend', (e) => {
