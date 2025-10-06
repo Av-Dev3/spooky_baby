@@ -168,6 +168,199 @@ const formHandler = {
     init() {
         if (elements.orderForm) {
             elements.orderForm.addEventListener('submit', this.handleSubmit.bind(this));
+            this.initAddAnotherItem();
+        }
+    },
+    
+    initAddAnotherItem() {
+        const addAnotherBtn = document.getElementById('addAnotherItem');
+        if (addAnotherBtn) {
+            addAnotherBtn.addEventListener('click', this.addAnotherItem.bind(this));
+        }
+    },
+    
+    addAnotherItem() {
+        // Create a new item section
+        const form = document.getElementById('orderForm');
+        const notesGroup = document.querySelector('#notes').closest('.form-group');
+        
+        // Create new item group
+        const newItemGroup = document.createElement('div');
+        newItemGroup.className = 'form-group additional-item';
+        newItemGroup.innerHTML = `
+            <div class="additional-item-header">
+                <h4 style="color: var(--accent-pink); font-family: var(--font-heading); margin-bottom: 1rem;">Additional Item</h4>
+                <button type="button" class="remove-item-btn" style="background: #ff6b6b; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 16px; float: right;">×</button>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Item</label>
+                <div class="custom-dropdown">
+                    <div class="custom-dropdown-trigger">
+                        <span class="dropdown-text">Select an item...</span>
+                        <span class="dropdown-arrow">👻</span>
+                    </div>
+                    <div class="custom-dropdown-options">
+                        <div class="custom-option" data-value="">Select an item...</div>
+                        <div class="custom-option" data-value="cupcakes">🧁 Cupcakes</div>
+                        <div class="custom-option" data-value="cake-pops">🍭 Cake Pops</div>
+                        <div class="custom-option" data-value="cakecicles">🍰 Cakecicles</div>
+                        <div class="custom-option" data-value="cakes">🎂 Cakes</div>
+                        <div class="custom-option" data-value="seasonal">🎃 Seasonal & Specialty</div>
+                        <div class="custom-option" data-value="custom">✨ Custom Request</div>
+                    </div>
+                </div>
+                <input type="hidden" name="additional_items[]" value="">
+            </div>
+
+            <div class="form-group additional-flavor-group" style="display: none;">
+                <label class="form-label">Flavor</label>
+                <div class="custom-dropdown">
+                    <div class="custom-dropdown-trigger">
+                        <span class="dropdown-text">Select a flavor...</span>
+                        <span class="dropdown-arrow">✨</span>
+                    </div>
+                    <div class="custom-dropdown-options">
+                        <div class="custom-option" data-value="">Select a flavor...</div>
+                    </div>
+                </div>
+                <input type="hidden" name="additional_flavors[]" value="">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Amount</label>
+                <input type="number" name="additional_amounts[]" class="form-input" min="1" required>
+            </div>
+        `;
+        
+        // Insert before notes group
+        form.insertBefore(newItemGroup, notesGroup);
+        
+        // Initialize dropdowns for the new item
+        this.initAdditionalItemDropdowns(newItemGroup);
+        
+        // Add remove functionality
+        const removeBtn = newItemGroup.querySelector('.remove-item-btn');
+        removeBtn.addEventListener('click', () => {
+            newItemGroup.remove();
+        });
+    },
+    
+    initAdditionalItemDropdowns(itemGroup) {
+        const itemDropdown = itemGroup.querySelector('.custom-dropdown');
+        const itemTrigger = itemDropdown.querySelector('.custom-dropdown-trigger');
+        const itemOptions = itemDropdown.querySelector('.custom-dropdown-options');
+        const itemInput = itemGroup.querySelector('input[name="additional_items[]"]');
+        const flavorGroup = itemGroup.querySelector('.additional-flavor-group');
+        const flavorDropdown = flavorGroup.querySelector('.custom-dropdown');
+        const flavorTrigger = flavorDropdown.querySelector('.custom-dropdown-trigger');
+        const flavorOptions = flavorDropdown.querySelector('.custom-dropdown-options');
+        const flavorInput = itemGroup.querySelector('input[name="additional_flavors[]"]');
+        
+        // Item dropdown functionality
+        itemTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            itemDropdown.classList.toggle('open');
+        });
+        
+        itemOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            itemTrigger.querySelector('.dropdown-text').textContent = text;
+            itemInput.value = value;
+            
+            itemOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            itemDropdown.classList.remove('open');
+            
+            // Handle flavor dropdown visibility
+            if (value && value !== 'custom' && value !== 'cakecicles') {
+                flavorGroup.style.display = 'block';
+                this.updateFlavorOptions(value, flavorOptions);
+            } else {
+                flavorGroup.style.display = 'none';
+                flavorInput.value = '';
+                flavorTrigger.querySelector('.dropdown-text').textContent = 'Select a flavor...';
+            }
+        });
+        
+        // Flavor dropdown functionality
+        flavorTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            flavorDropdown.classList.toggle('open');
+        });
+        
+        flavorOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            flavorTrigger.querySelector('.dropdown-text').textContent = text;
+            flavorInput.value = value;
+            
+            flavorOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            flavorDropdown.classList.remove('open');
+        });
+    },
+    
+    updateFlavorOptions(selectedItem, flavorOptions) {
+        // Clear existing options
+        flavorOptions.innerHTML = '<div class="custom-option" data-value="">Select a flavor...</div>';
+        
+        // Use the same flavor data as the main form
+        const flavorData = {
+            'cupcakes': [
+                { value: 'lemon-burst', text: '🍋 Lemon Burst' },
+                { value: 'orange-cranberry', text: '🍊 Orange Cranberry' },
+                { value: 'key-lime-pie', text: '🥧 Key Lime Pie' },
+                { value: 'chocolate-crunch', text: '🍫 Chocolate Crunch' },
+                { value: 'cherry-bomb', text: '🍒 Cherry Bomb' },
+                { value: 'blue-razz-pop', text: '💙 Blue Razz Pop' },
+                { value: 'watermelon-splash', text: '🍉 Watermelon Splash' },
+                { value: 'rainbow-variety-pack', text: '🌈 Rainbow Variety Pack' }
+            ],
+            'cake-pops': [
+                { value: 'red-velvet-bliss', text: '❤️ Red Velvet Bliss' },
+                { value: 'birthday-confetti', text: '🎉 Birthday Confetti' },
+                { value: 'spooky-pop', text: '👻 Spooky Pop' },
+                { value: 'cookies-cream-dream', text: '🍪 Cookies & Cream Dream' }
+            ],
+            'cakes': [
+                { value: 'custom-cakes', text: '🎂 Custom Cakes' }
+            ],
+            'seasonal': [
+                { value: 'pumpkin-butterscotch-bundts', text: '🎃 Pumpkin Butterscotch Bundts' },
+                { value: 'peppermint-mocha-pops', text: '🍃 Peppermint Mocha Pops' },
+                { value: 'breakable-hearts', text: '💔 Breakable Hearts' },
+                { value: 'dubai-chocolate-bars', text: '🇦🇪 Dubai Chocolate Bars' },
+                { value: 'chocolate-dipped-strawberries', text: '🍓 Chocolate-Dipped Strawberries' },
+                { value: 'seasonal-variety-packs', text: '🎁 Seasonal Variety Packs' }
+            ]
+        };
+        
+        if (selectedItem && flavorData[selectedItem]) {
+            flavorData[selectedItem].forEach(flavor => {
+                const option = document.createElement('div');
+                option.className = 'custom-option';
+                option.setAttribute('data-value', flavor.value);
+                option.textContent = flavor.text;
+                flavorOptions.appendChild(option);
+            });
         }
     },
 
