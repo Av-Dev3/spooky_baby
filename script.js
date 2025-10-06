@@ -1185,6 +1185,20 @@ const cardInteractions = {
             };
         }
         
+        if (itemName === 'Cherry Bomb') {
+            return {
+                icon: '🍒',
+                title: 'Cherry Bomb Cupcake',
+                description: 'Classic white cake bursting with cherry Kool-Aid flavor and topped with fluffy cherry-tinted frosting. Bright pink and bold in flavor — the ultimate nostalgic treat.',
+                flavors: ['Sweet', 'Tart', 'Nostalgic'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Bold cherry Kool-Aid flavor that brings back childhood memories.'
+            };
+        }
+        
         return menuData[itemName] || {
             icon: '🧁',
             title: itemName,
