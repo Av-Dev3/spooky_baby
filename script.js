@@ -1240,7 +1240,10 @@ const cardInteractions = {
         content.innerHTML = `
             <button id="menuPopupClose" style="position: absolute; top: 0.5rem; right: 0.5rem; background: #F6B6CF; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 2rem; cursor: pointer; font-weight: bold; display: block; text-align: center; padding: 0; margin: 0; z-index: 10;">×</button>
             <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">${menuData.icon}</div>
+                ${menuData.image ? 
+                    `<img src="${menuData.image}" alt="${menuData.title}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 20px; margin-bottom: 1rem; box-shadow: 0 8px 25px rgba(0,0,0,0.15);">` : 
+                    `<div style="font-size: 4rem; margin-bottom: 1rem;">${menuData.icon}</div>`
+                }
                 <h2 style="font-family: 'Chewy', cursive; color: #F6B6CF; font-size: 2rem; margin: 0;">${menuData.title}</h2>
             </div>
             <div style="margin-bottom: 1.5rem;">
@@ -1380,6 +1383,7 @@ const cardInteractions = {
         if (itemName === 'Lemon Burst') {
             return {
                 icon: '🍋',
+                image: 'assets/lemon_burst.png',
                 title: 'Lemon Burst Cupcake',
                 description: 'Bright, buttery lemon cake made with fresh zest and juice, topped with smooth lemon buttercream, a candied lemon slice, and a sprig of rosemary.',
                 flavors: ['Tangy', 'Fresh', 'Elegant'],
