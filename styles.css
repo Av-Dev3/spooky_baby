@@ -1402,12 +1402,6 @@ body {
   text-align: center;
 }
 
-.pricing {
-  background-color: var(--bg-secondary);
-  padding: 1rem;
-  border-radius: 12px;
-  text-align: center;
-}
 
 .card-footer {
   margin-top: 1.5rem;
@@ -1446,12 +1440,6 @@ body {
   }
 }
 
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  padding: 1rem;
-}
 
 .price-item {
   display: flex;
@@ -2647,9 +2635,6 @@ select option {
     font-size: 0.9rem;
   }
   
-  .pricing-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
