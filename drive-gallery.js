@@ -69,7 +69,14 @@ class DriveGallery {
   createGalleryHTML() {
     this.container.innerHTML = `
       <div class="drive-gallery-container">
-        <div class="drive-gallery-grid" id="driveGalleryGrid"></div>
+        <div class="drive-gallery-swipe-container" id="driveGallerySwipeContainer">
+          <!-- Swipe pages will be created dynamically -->
+        </div>
+        <div class="drive-gallery-nav prev" id="driveGalleryPrev" aria-label="Previous page">‹</div>
+        <div class="drive-gallery-nav next" id="driveGalleryNext" aria-label="Next page">›</div>
+        <div class="drive-gallery-pagination" id="driveGalleryPagination">
+          <!-- Pagination dots will be created dynamically -->
+        </div>
         <div class="drive-gallery-loading" id="driveGalleryLoading" style="display: none;">
           <div class="loading-spinner"></div>
           <p>Loading photos...</p>
@@ -84,10 +91,18 @@ class DriveGallery {
       </div>
     `;
 
-    this.grid = document.getElementById('driveGalleryGrid');
+    this.swipeContainer = document.getElementById('driveGallerySwipeContainer');
+    this.prevButton = document.getElementById('driveGalleryPrev');
+    this.nextButton = document.getElementById('driveGalleryNext');
+    this.pagination = document.getElementById('driveGalleryPagination');
     this.loading = document.getElementById('driveGalleryLoading');
     this.error = document.getElementById('driveGalleryError');
     this.loadMore = document.getElementById('driveGalleryLoadMore');
+    
+    // Mobile gallery state
+    this.currentPage = 0;
+    this.totalPages = 0;
+    this.isMobile = window.innerWidth < 768;
     
     // Create lightbox and append to body
     if (this.config.enableLightbox) {
@@ -150,6 +165,23 @@ class DriveGallery {
     if (retryBtn) {
       retryBtn.addEventListener('click', () => this.loadPhotos());
     }
+
+    // Mobile navigation
+    if (this.prevButton) {
+      this.prevButton.addEventListener('click', () => this.previousPage());
+    }
+    if (this.nextButton) {
+      this.nextButton.addEventListener('click', () => this.nextPage());
+    }
+
+    // Touch/swipe events for mobile
+    this.setupSwipeEvents();
+
+    // Window resize handler
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+      this.updateLayout();
+    });
 
     // Lightbox events
     if (this.config.enableLightbox) {
@@ -334,13 +366,67 @@ class DriveGallery {
       return;
     }
 
-    images.forEach((photo, index) => {
-      const photoElement = this.createPhotoElement(photo, this.currentImages.indexOf(photo));
-      this.grid.appendChild(photoElement);
-    });
+    if (this.isMobile) {
+      this.renderMobileGallery(images);
+    } else {
+      this.renderDesktopGallery(images);
+    }
+  }
 
-    // Update grid columns based on screen size
-    this.updateGridColumns();
+  renderMobileGallery(images) {
+    // Clear existing content
+    this.swipeContainer.innerHTML = '';
+    
+    // Calculate pages (4 photos per page)
+    this.totalPages = Math.ceil(images.length / 4);
+    
+    // Create pages
+    for (let page = 0; page < this.totalPages; page++) {
+      const pageDiv = document.createElement('div');
+      pageDiv.className = 'drive-gallery-swipe-page';
+      pageDiv.setAttribute('data-page', page);
+      
+      // Add 4 photos to this page
+      const startIndex = page * 4;
+      const endIndex = Math.min(startIndex + 4, images.length);
+      
+      for (let i = startIndex; i < endIndex; i++) {
+        const photoElement = this.createPhotoElement(images[i], i);
+        pageDiv.appendChild(photoElement);
+      }
+      
+      this.swipeContainer.appendChild(pageDiv);
+    }
+    
+    // Create pagination dots
+    this.createPaginationDots();
+    
+    // Update navigation buttons
+    this.updateNavigationButtons();
+    
+    // Set initial position
+    this.goToPage(0);
+  }
+
+  renderDesktopGallery(images) {
+    // Clear mobile content
+    this.swipeContainer.innerHTML = '';
+    
+    // Create single grid for desktop
+    const gridDiv = document.createElement('div');
+    gridDiv.className = 'drive-gallery-swipe-page';
+    
+    images.forEach((photo, index) => {
+      const photoElement = this.createPhotoElement(photo, index);
+      gridDiv.appendChild(photoElement);
+    });
+    
+    this.swipeContainer.appendChild(gridDiv);
+    
+    // Hide pagination and navigation on desktop
+    this.pagination.style.display = 'none';
+    this.prevButton.style.display = 'none';
+    this.nextButton.style.display = 'none';
   }
 
   createPhotoElement(photo, index) {
@@ -426,7 +512,148 @@ class DriveGallery {
       columns = this.config.columns.desktop;
     }
 
-    this.grid.style.setProperty('--columns', columns);
+    // Update CSS custom property if grid exists
+    if (this.swipeContainer) {
+      this.swipeContainer.style.setProperty('--columns', columns);
+    }
+  }
+
+  // Mobile gallery navigation methods
+  setupSwipeEvents() {
+    if (!this.swipeContainer) return;
+
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+
+    this.swipeContainer.addEventListener('touchstart', (e) => {
+      if (!this.isMobile) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging = true;
+    });
+
+    this.swipeContainer.addEventListener('touchmove', (e) => {
+      if (!this.isMobile || !isDragging) return;
+      e.preventDefault(); // Prevent scrolling
+    });
+
+    this.swipeContainer.addEventListener('touchend', (e) => {
+      if (!this.isMobile || !isDragging) return;
+      
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const deltaX = endX - startX;
+      const deltaY = endY - startY;
+      
+      // Only handle horizontal swipes
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+          this.previousPage(); // Swipe right = previous
+        } else {
+          this.nextPage(); // Swipe left = next
+        }
+      }
+      
+      isDragging = false;
+    });
+
+    // Mouse drag support for desktop testing
+    let mouseStartX = 0;
+    let mouseIsDragging = false;
+
+    this.swipeContainer.addEventListener('mousedown', (e) => {
+      if (this.isMobile) return;
+      mouseStartX = e.clientX;
+      mouseIsDragging = true;
+      e.preventDefault();
+    });
+
+    this.swipeContainer.addEventListener('mousemove', (e) => {
+      if (this.isMobile || !mouseIsDragging) return;
+      e.preventDefault();
+    });
+
+    this.swipeContainer.addEventListener('mouseup', (e) => {
+      if (this.isMobile || !mouseIsDragging) return;
+      
+      const deltaX = e.clientX - mouseStartX;
+      if (Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+          this.previousPage();
+        } else {
+          this.nextPage();
+        }
+      }
+      
+      mouseIsDragging = false;
+    });
+  }
+
+  createPaginationDots() {
+    if (!this.pagination || this.totalPages <= 1) {
+      if (this.pagination) this.pagination.style.display = 'none';
+      return;
+    }
+
+    this.pagination.innerHTML = '';
+    this.pagination.style.display = 'flex';
+
+    for (let i = 0; i < this.totalPages; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'drive-gallery-dot';
+      if (i === this.currentPage) {
+        dot.classList.add('active');
+      }
+      
+      dot.addEventListener('click', () => this.goToPage(i));
+      this.pagination.appendChild(dot);
+    }
+  }
+
+  updateNavigationButtons() {
+    if (!this.prevButton || !this.nextButton) return;
+
+    this.prevButton.disabled = this.currentPage === 0;
+    this.nextButton.disabled = this.currentPage >= this.totalPages - 1;
+  }
+
+  goToPage(page) {
+    if (!this.isMobile || page < 0 || page >= this.totalPages) return;
+
+    this.currentPage = page;
+    const translateX = -page * 100;
+    this.swipeContainer.style.transform = `translateX(${translateX}%)`;
+
+    // Update pagination dots
+    const dots = this.pagination.querySelectorAll('.drive-gallery-dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === page);
+    });
+
+    this.updateNavigationButtons();
+  }
+
+  previousPage() {
+    if (this.currentPage > 0) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages - 1) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+
+  updateLayout() {
+    if (this.currentImages.length === 0) return;
+
+    if (this.isMobile) {
+      this.renderMobileGallery(this.currentImages);
+    } else {
+      this.renderDesktopGallery(this.currentImages);
+    }
   }
 
   // Lightbox methods
@@ -707,11 +934,16 @@ class DriveGallery {
   }
 
   showEmptyState() {
-    this.grid.innerHTML = `
+    this.swipeContainer.innerHTML = `
       <div class="drive-gallery-empty">
         <p>No photos found. Check back later for new content!</p>
       </div>
     `;
+    
+    // Hide pagination and navigation
+    if (this.pagination) this.pagination.style.display = 'none';
+    if (this.prevButton) this.prevButton.style.display = 'none';
+    if (this.nextButton) this.nextButton.style.display = 'none';
   }
 }
 
