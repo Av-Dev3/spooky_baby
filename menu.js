@@ -68,18 +68,26 @@ class MenuPage {
                 // Scroll to menu section for "all"
                 const menuSection = document.querySelector('.menu-section');
                 if (menuSection) {
-                    menuSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const menuRect = menuSection.getBoundingClientRect();
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = window.pageYOffset + menuRect.top - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
                     });
                 }
             } else {
                 // Scroll directly to the specific category
                 const selectedCategory = document.querySelector(`[data-category="${category}"]`);
                 if (selectedCategory) {
-                    selectedCategory.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const categoryRect = selectedCategory.getBoundingClientRect();
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = window.pageYOffset + categoryRect.top - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
                     });
                 }
             }
