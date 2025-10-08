@@ -316,14 +316,16 @@ html, body {
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: transparent;
     border-radius: 15px;
     transition: all 0.3s ease;
+    border: 1px solid rgba(255, 193, 7, 0.2);
 }
 
 .feature-item:hover {
     transform: translateX(5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 193, 7, 0.05);
+    border-color: var(--accent-yellow);
 }
 
 .feature-icon {
@@ -356,10 +358,10 @@ html, body {
 }
 
 .option-category {
-    background: linear-gradient(135deg, #fff, #f8f9fa);
+    background: transparent;
     padding: 1.5rem;
     border-radius: 15px;
-    border: 2px solid var(--accent-yellow);
+    border: 1px solid rgba(255, 193, 7, 0.2);
     transition: all 0.3s ease;
 }
 
