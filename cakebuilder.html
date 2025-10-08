@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake Builder — Spooky Baby Sweets</title>
+    <meta name="description" content="Build your dream cake with our interactive cake builder. Choose flavors, toppings, and watch your cake come to life!">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Cake Builder — Spooky Baby Sweets">
+    <meta property="og:description" content="Build your dream cake with our interactive cake builder. Choose flavors, toppings, and watch your cake come to life!">
+    <meta property="og:image" content="assets/logo_spooky.png">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="cakebuilder.css">
+</head>
+<body>
+    <!-- Giveaway Banner -->
+    <div class="giveaway-banner" id="giveawayBanner">
+        <div class="banner-content">
+            <span class="banner-icon">🎉</span>
+            <span class="banner-text">Follow us on Instagram for a chance to win free treats when we hit 100 followers!</span>
+        </div>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="header" id="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <img src="assets/logo_spooky.png" alt="Spooky Baby Sweets Logo" class="logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="index.html#menu" class="nav-link">Menu</a></li>
+                <li><a href="index.html#order" class="nav-link">Order</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="cakebuilder.html" class="nav-link active">Cake Builder</a></li>
+            </ul>
+            <ul class="nav-socials">
+                <li><a href="https://www.instagram.com/spookybabysweets/" target="_blank" rel="noopener noreferrer" class="nav-link social-link" aria-label="Follow us on Instagram" onclick="window.open(this.href, '_blank'); return false;">
+                    <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-6.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="currentColor"/>
+                    </svg>
+                    <span class="social-text">Instagram</span>
+                </a></li>
+                <li><a href="https://www.facebook.com/share/178VrCCTsx/" target="_blank" rel="noopener noreferrer" class="nav-link social-link facebook-link" aria-label="Follow us on Facebook" onclick="window.open(this.href, '_blank'); return false;">
+                    <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/>
+                    </svg>
+                    <span class="social-text">Facebook</span>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Cake Builder Hero Section -->
+    <section class="cakebuilder-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="word-animate" data-delay="0">Build</span>
+                    <span class="word-animate" data-delay="200">Your</span>
+                    <span class="word-animate" data-delay="400">Dream</span>
+                    <span class="word-animate" data-delay="600">Cake</span>
+                </h1>
+                <p class="hero-subtitle">
+                    <span class="word-animate" data-delay="800">Choose</span>
+                    <span class="word-animate" data-delay="900">your</span>
+                    <span class="word-animate" data-delay="1000">flavors,</span>
+                    <span class="word-animate" data-delay="1100">pick</span>
+                    <span class="word-animate" data-delay="1200">your</span>
+                    <span class="word-animate" data-delay="1300">toppings,</span>
+                    <span class="word-animate" data-delay="1400">and</span>
+                    <span class="word-animate" data-delay="1500">watch</span>
+                    <span class="word-animate" data-delay="1600">it</span>
+                    <span class="word-animate" data-delay="1700">come</span>
+                    <span class="word-animate" data-delay="1800">to</span>
+                    <span class="word-animate" data-delay="1900">life!</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cake Builder Main Section -->
+    <section class="cakebuilder-main">
+        <div class="container">
+            <div class="cakebuilder-layout">
+                <!-- Cake Display Area -->
+                <div class="cake-display">
+                    <div class="cake-container">
+                        <div class="cake-base" id="cakeBase">
+                            <div class="cake-layer" id="cakeLayer1"></div>
+                            <div class="cake-layer" id="cakeLayer2"></div>
+                            <div class="cake-layer" id="cakeLayer3"></div>
+                        </div>
+                        <div class="cake-frosting" id="cakeFrosting"></div>
+                        <div class="cake-toppings" id="cakeToppings"></div>
+                        <div class="cake-decoration" id="cakeDecoration"></div>
+                    </div>
+                    <div class="cake-info">
+                        <h3 id="cakeName">Your Custom Cake</h3>
+                        <p id="cakeDescription">Start building by selecting your base flavor!</p>
+                        <div class="cake-price" id="cakePrice">$0</div>
+                    </div>
+                </div>
+
+                <!-- Builder Controls -->
+                <div class="builder-controls">
+                    <!-- Flavor Selection -->
+                    <div class="control-section">
+                        <h3 class="section-title">🍰 Choose Your Base Flavor</h3>
+                        <div class="flavor-grid">
+                            <button class="flavor-option" data-flavor="vanilla" data-color="#F5F5DC">
+                                <div class="flavor-preview vanilla"></div>
+                                <span>Vanilla Bean</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="chocolate" data-color="#8B4513">
+                                <div class="flavor-preview chocolate"></div>
+                                <span>Chocolate Fudge</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="red-velvet" data-color="#DC143C">
+                                <div class="flavor-preview red-velvet"></div>
+                                <span>Red Velvet</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="lemon" data-color="#FFE135">
+                                <div class="flavor-preview lemon"></div>
+                                <span>Lemon Burst</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="strawberry" data-color="#FF69B4">
+                                <div class="flavor-preview strawberry"></div>
+                                <span>Strawberry</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="funfetti" data-color="#FFE4E1">
+                                <div class="flavor-preview funfetti"></div>
+                                <span>Funfetti</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Frosting Selection -->
+                    <div class="control-section">
+                        <h3 class="section-title">🧁 Choose Your Frosting</h3>
+                        <div class="frosting-grid">
+                            <button class="frosting-option" data-frosting="vanilla-buttercream" data-color="#FFF8DC">
+                                <div class="frosting-preview vanilla-buttercream"></div>
+                                <span>Vanilla Buttercream</span>
+                            </button>
+                            <button class="frosting-option" data-frosting="chocolate-buttercream" data-color="#D2691E">
+                                <div class="frosting-preview chocolate-buttercream"></div>
+                                <span>Chocolate Buttercream</span>
+                            </button>
+                            <button class="frosting-option" data-frosting="cream-cheese" data-color="#F0E68C">
+                                <div class="frosting-preview cream-cheese"></div>
+                                <span>Cream Cheese</span>
+                            </button>
+                            <button class="frosting-option" data-frosting="whipped-cream" data-color="#FFFFFF">
+                                <div class="frosting-preview whipped-cream"></div>
+                                <span>Whipped Cream</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Toppings Selection -->
+                    <div class="control-section">
+                        <h3 class="section-title">🍓 Add Your Toppings</h3>
+                        <div class="toppings-grid">
+                            <button class="topping-option" data-topping="sprinkles" data-icon="✨">
+                                <span class="topping-icon">✨</span>
+                                <span>Rainbow Sprinkles</span>
+                            </button>
+                            <button class="topping-option" data-topping="chocolate-chips" data-icon="🍫">
+                                <span class="topping-icon">🍫</span>
+                                <span>Chocolate Chips</span>
+                            </button>
+                            <button class="topping-option" data-topping="strawberries" data-icon="🍓">
+                                <span class="topping-icon">🍓</span>
+                                <span>Fresh Strawberries</span>
+                            </button>
+                            <button class="topping-option" data-topping="cherries" data-icon="🍒">
+                                <span class="topping-icon">🍒</span>
+                                <span>Cherries</span>
+                            </button>
+                            <button class="topping-option" data-topping="nuts" data-icon="🥜">
+                                <span class="topping-icon">🥜</span>
+                                <span>Chopped Nuts</span>
+                            </button>
+                            <button class="topping-option" data-topping="coconut" data-icon="🥥">
+                                <span class="topping-icon">🥥</span>
+                                <span>Shredded Coconut</span>
+                            </button>
+                            <button class="topping-option" data-topping="oreos" data-icon="🍪">
+                                <span class="topping-icon">🍪</span>
+                                <span>Oreo Crumbs</span>
+                            </button>
+                            <button class="topping-option" data-topping="edible-glitter" data-icon="✨">
+                                <span class="topping-icon">✨</span>
+                                <span>Edible Glitter</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Special Decorations -->
+                    <div class="control-section">
+                        <h3 class="section-title">🎨 Special Decorations</h3>
+                        <div class="decoration-grid">
+                            <button class="decoration-option" data-decoration="drip" data-icon="💧">
+                                <span class="decoration-icon">💧</span>
+                                <span>Chocolate Drip</span>
+                            </button>
+                            <button class="decoration-option" data-decoration="flowers" data-icon="🌸">
+                                <span class="decoration-icon">🌸</span>
+                                <span>Frosting Flowers</span>
+                            </button>
+                            <button class="decoration-option" data-decoration="writing" data-icon="✍️">
+                                <span class="decoration-icon">✍️</span>
+                                <span>Custom Writing</span>
+                            </button>
+                            <button class="decoration-option" data-decoration="ribbon" data-icon="🎀">
+                                <span class="decoration-icon">🎀</span>
+                                <span>Ribbon Border</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn btn-yellow" id="resetCake">🔄 Start Over</button>
+                        <button class="btn btn-pink" id="saveCake">💾 Save Design</button>
+                        <button class="btn btn-pink" id="orderCake">🍰 Order This Cake</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© <span id="currentYear"></span> Spooky Baby Sweets • Made with sugar, spice, and tiny ghosts.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="cakebuilder.js"></script>
+</body>
+</html>

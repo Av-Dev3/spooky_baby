@@ -1,0 +1,792 @@
+/* ===== CAKE BUILDER STYLES ===== */
+
+/* Cake Builder Hero Section */
+.cakebuilder-hero {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 1rem 4rem;
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(246, 182, 207, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(247, 213, 106, 0.15) 0%, transparent 50%),
+        var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.cakebuilder-hero .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cakebuilder-hero .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.cakebuilder-hero .hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Cake Builder Main Layout */
+.cakebuilder-main {
+    padding: 4rem 1rem;
+    background-color: var(--bg-secondary);
+    min-height: 80vh;
+}
+
+.cakebuilder-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+/* Cake Display Area */
+.cake-display {
+    position: sticky;
+    top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.cake-container {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.cake-base {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    transform-style: preserve-3d;
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cake-layer {
+    width: 100%;
+    height: 80px;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 2px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.4s ease;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.cake-layer:nth-child(1) {
+    background: linear-gradient(135deg, #F5F5DC 0%, #E6E6FA 100%);
+    z-index: 3;
+}
+
+.cake-layer:nth-child(2) {
+    background: linear-gradient(135deg, #F5F5DC 0%, #E6E6FA 100%);
+    z-index: 2;
+    transform: scale(0.95);
+}
+
+.cake-layer:nth-child(3) {
+    background: linear-gradient(135deg, #F5F5DC 0%, #E6E6FA 100%);
+    z-index: 1;
+    transform: scale(0.9);
+}
+
+.cake-frosting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #FFF8DC 0%, #F0E68C 100%);
+    border-radius: 0 0 20px 20px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 4;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.cake-frosting.visible {
+    opacity: 1;
+}
+
+.cake-toppings {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px;
+    pointer-events: none;
+}
+
+.topping-item {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: toppingDrop 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes toppingDrop {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.5);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(10px) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.cake-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.decoration-item {
+    font-size: 2rem;
+    animation: decorationAppear 0.8s ease-out;
+    pointer-events: none;
+}
+
+@keyframes decorationAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(180deg);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.2) rotate(90deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.cake-info {
+    text-align: center;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(38, 38, 38, 0.95) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 2px solid rgba(246, 182, 207, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    min-width: 300px;
+}
+
+.cake-info h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--accent-pink);
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cake-info p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.cake-price {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--accent-yellow);
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Builder Controls */
+.builder-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.control-section {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(38, 38, 38, 0.95) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 2px solid rgba(246, 182, 207, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.control-section:hover {
+    border-color: var(--accent-pink);
+    box-shadow: 0 12px 40px rgba(246, 182, 207, 0.2);
+    transform: translateY(-2px);
+}
+
+.control-section .section-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--accent-pink);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Flavor Grid */
+.flavor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.flavor-option {
+    background: linear-gradient(135deg, rgba(38, 38, 38, 0.9) 0%, rgba(46, 46, 46, 0.95) 100%);
+    border: 2px solid rgba(246, 182, 207, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.flavor-option:hover {
+    border-color: var(--accent-pink);
+    background: linear-gradient(135deg, rgba(246, 182, 207, 0.1) 0%, rgba(46, 46, 46, 0.95) 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(246, 182, 207, 0.3);
+}
+
+.flavor-option.selected {
+    border-color: var(--accent-yellow);
+    background: linear-gradient(135deg, rgba(247, 213, 106, 0.2) 0%, rgba(46, 46, 46, 0.95) 100%);
+    box-shadow: 0 0 20px rgba(247, 213, 106, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.flavor-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.flavor-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.flavor-preview.vanilla {
+    background: linear-gradient(135deg, #F5F5DC 0%, #E6E6FA 100%);
+}
+
+.flavor-preview.chocolate {
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+}
+
+.flavor-preview.red-velvet {
+    background: linear-gradient(135deg, #DC143C 0%, #B22222 100%);
+}
+
+.flavor-preview.lemon {
+    background: linear-gradient(135deg, #FFE135 0%, #FFD700 100%);
+}
+
+.flavor-preview.strawberry {
+    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+}
+
+.flavor-preview.funfetti {
+    background: linear-gradient(135deg, #FFE4E1 0%, #FFF0F5 100%);
+    position: relative;
+}
+
+.flavor-preview.funfetti::after {
+    content: '✨';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Frosting Grid */
+.frosting-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.frosting-option {
+    background: linear-gradient(135deg, rgba(38, 38, 38, 0.9) 0%, rgba(46, 46, 46, 0.95) 100%);
+    border: 2px solid rgba(246, 182, 207, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.frosting-option:hover {
+    border-color: var(--accent-pink);
+    background: linear-gradient(135deg, rgba(246, 182, 207, 0.1) 0%, rgba(46, 46, 46, 0.95) 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(246, 182, 207, 0.3);
+}
+
+.frosting-option.selected {
+    border-color: var(--accent-yellow);
+    background: linear-gradient(135deg, rgba(247, 213, 106, 0.2) 0%, rgba(46, 46, 46, 0.95) 100%);
+    box-shadow: 0 0 20px rgba(247, 213, 106, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.frosting-preview {
+    width: 50px;
+    height: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.frosting-preview.vanilla-buttercream {
+    background: linear-gradient(135deg, #FFF8DC 0%, #F0E68C 100%);
+}
+
+.frosting-preview.chocolate-buttercream {
+    background: linear-gradient(135deg, #D2691E 0%, #8B4513 100%);
+}
+
+.frosting-preview.cream-cheese {
+    background: linear-gradient(135deg, #F0E68C 0%, #FFE4B5 100%);
+}
+
+.frosting-preview.whipped-cream {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+}
+
+/* Toppings Grid */
+.toppings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.topping-option {
+    background: linear-gradient(135deg, rgba(38, 38, 38, 0.9) 0%, rgba(46, 46, 46, 0.95) 100%);
+    border: 2px solid rgba(246, 182, 207, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.topping-option:hover {
+    border-color: var(--accent-pink);
+    background: linear-gradient(135deg, rgba(246, 182, 207, 0.1) 0%, rgba(46, 46, 46, 0.95) 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(246, 182, 207, 0.3);
+}
+
+.topping-option.selected {
+    border-color: var(--accent-yellow);
+    background: linear-gradient(135deg, rgba(247, 213, 106, 0.2) 0%, rgba(46, 46, 46, 0.95) 100%);
+    box-shadow: 0 0 20px rgba(247, 213, 106, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.topping-icon {
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.topping-option:hover .topping-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+/* Decoration Grid */
+.decoration-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.decoration-option {
+    background: linear-gradient(135deg, rgba(38, 38, 38, 0.9) 0%, rgba(46, 46, 46, 0.95) 100%);
+    border: 2px solid rgba(246, 182, 207, 0.3);
+    border-radius: 15px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.decoration-option:hover {
+    border-color: var(--accent-pink);
+    background: linear-gradient(135deg, rgba(246, 182, 207, 0.1) 0%, rgba(46, 46, 46, 0.95) 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(246, 182, 207, 0.3);
+}
+
+.decoration-option.selected {
+    border-color: var(--accent-yellow);
+    background: linear-gradient(135deg, rgba(247, 213, 106, 0.2) 0%, rgba(46, 46, 46, 0.95) 100%);
+    box-shadow: 0 0 20px rgba(247, 213, 106, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.decoration-icon {
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.decoration-option:hover .decoration-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.action-buttons .btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 25px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.action-buttons .btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(246, 182, 207, 0.4);
+}
+
+.action-buttons .btn:active {
+    transform: translateY(0) scale(1);
+}
+
+/* Cake Animation Effects */
+.cake-container:hover .cake-base {
+    transform: rotateY(5deg) rotateX(5deg);
+}
+
+.cake-layer {
+    animation: cakeFloat 3s ease-in-out infinite;
+}
+
+.cake-layer:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.cake-layer:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.cake-layer:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes cakeFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .cakebuilder-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .cake-display {
+        position: static;
+        order: 2;
+    }
+    
+    .builder-controls {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .cakebuilder-hero {
+        padding: 6rem 1rem 2rem;
+    }
+    
+    .cakebuilder-main {
+        padding: 2rem 1rem;
+    }
+    
+    .cake-container {
+        width: 250px;
+        height: 350px;
+    }
+    
+    .cake-base {
+        width: 180px;
+        height: 250px;
+    }
+    
+    .cake-layer {
+        height: 60px;
+    }
+    
+    .flavor-grid,
+    .frosting-grid,
+    .toppings-grid,
+    .decoration-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .flavor-option,
+    .frosting-option,
+    .topping-option,
+    .decoration-option {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .flavor-preview {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .frosting-preview {
+        width: 40px;
+        height: 15px;
+    }
+    
+    .topping-icon,
+    .decoration-icon {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cakebuilder-hero .hero-title {
+        font-size: 2rem;
+    }
+    
+    .cakebuilder-hero .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .cake-container {
+        width: 200px;
+        height: 300px;
+    }
+    
+    .cake-base {
+        width: 150px;
+        height: 200px;
+    }
+    
+    .cake-layer {
+        height: 50px;
+    }
+    
+    .flavor-grid,
+    .frosting-grid,
+    .toppings-grid,
+    .decoration-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .flavor-option,
+    .frosting-option,
+    .topping-option,
+    .decoration-option {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .flavor-preview {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .frosting-preview {
+        width: 35px;
+        height: 12px;
+    }
+    
+    .topping-icon,
+    .decoration-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* Special Effects */
+.cake-container::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: radial-gradient(circle, rgba(246, 182, 207, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.cake-container:hover::before {
+    opacity: 1;
+}
+
+/* Loading Animation */
+.cake-container.loading .cake-layer {
+    animation: cakeBuild 0.8s ease-out;
+}
+
+@keyframes cakeBuild {
+    0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(-10px) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Success Animation */
+.cake-container.success {
+    animation: cakeSuccess 1s ease-out;
+}
+
+@keyframes cakeSuccess {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.05) rotate(2deg);
+    }
+    50% {
+        transform: scale(1.1) rotate(-2deg);
+    }
+    75% {
+        transform: scale(1.05) rotate(1deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
