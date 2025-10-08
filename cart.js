@@ -169,7 +169,7 @@ class CartPage {
     }
 }
 
-// Global cart functions for menu page
+// Global cart functions for menu page - moved outside DOMContentLoaded
 window.addToCart = function(item) {
     const cart = JSON.parse(localStorage.getItem('spookyCart') || '[]');
     
@@ -190,10 +190,11 @@ window.addToCart = function(item) {
     localStorage.setItem('spookyCart', JSON.stringify(cart));
     
     // Show success message
-    showCartMessage(`${item.name} added to cart! 🛒`, 'success');
+    window.showCartMessage(`${item.name} added to cart! 🛒`, 'success');
 };
 
-function showCartMessage(message, type = 'info') {
+// Global function for cart messages
+window.showCartMessage = function(message, type = 'info') {
     // Create message element
     const messageEl = document.createElement('div');
     messageEl.className = `cart-message ${type}`;
@@ -221,34 +222,37 @@ function showCartMessage(message, type = 'info') {
             messageEl.remove();
         }, 300);
     }, 3000);
-}
+};
 
-// Add CSS animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes messageSlide {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
+// Add CSS animations (only if not already added)
+if (!document.getElementById('cart-animations')) {
+    const style = document.createElement('style');
+    style.id = 'cart-animations';
+    style.textContent = `
+        @keyframes messageSlide {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
-        to {
-            transform: translateX(0);
-            opacity: 1;
+        
+        @keyframes messageSlideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
         }
-    }
-    
-    @keyframes messageSlideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+    `;
+    document.head.appendChild(style);
+}
 
 // Initialize cart page when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
