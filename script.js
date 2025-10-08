@@ -1437,6 +1437,174 @@ const cardInteractions = {
             };
         }
         
+        if (itemName === 'Rainbow Variety Pack') {
+            return {
+                icon: '🌈',
+                title: 'Rainbow Variety Pack',
+                description: 'A colorful 6- or 12-pack featuring all the Fruit Blast flavors — Cherry Bomb, Blue Razz Pop, Watermelon Splash, and surprise limited-edition flavors! A party in every box.',
+                flavors: ['Mixed Flavors', 'Vibrant Colors', 'Party Perfect'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Perfect for parties and celebrations with a mix of all our Fruit Blast flavors!'
+            };
+        }
+        
+        if (itemName === 'Red Velvet Bliss') {
+            return {
+                icon: '❤️',
+                title: 'Red Velvet Bliss Cake Pop',
+                description: 'Classic red velvet cake blended with smooth cream cheese–flavored frosting, dipped in creamy white chocolate, and sprinkled with red velvet crumbs for a timeless, elegant look.',
+                flavors: ['Sweet Cream', 'Velvety', 'Southern Classic'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'A timeless classic with elegant cream cheese frosting.'
+            };
+        }
+        
+        if (itemName === 'Birthday Confetti') {
+            return {
+                icon: '🎉',
+                title: 'Birthday Confetti Cake Pop',
+                description: 'Colorful Funfetti cake mixed with fluffy vanilla frosting, dipped in creamy white chocolate, and topped with bright rainbow sprinkles — every bite is a party!',
+                flavors: ['Sweet', 'Buttery', 'Fun'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Perfect for birthday celebrations and special occasions!'
+            };
+        }
+        
+        if (itemName === 'Chocolate Fudge') {
+            return {
+                icon: '🍫',
+                title: 'Chocolate Fudge Cake Pop',
+                description: 'Rich, fudgy chocolate cake blended with chocolate frosting, dipped in dark chocolate coating, and topped with a dusting of chocolate cake crumbs for a bold, melt-in-your-mouth treat.',
+                flavors: ['Deep Cocoa', 'Silky', 'Indulgent'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Rich chocolate indulgence in every bite.'
+            };
+        }
+        
+        if (itemName === 'Cookies & Cream Dream') {
+            return {
+                icon: '🍪',
+                title: 'Cookies & Cream Dream Cake Pop',
+                description: 'Vanilla cake mixed with crushed chocolate sandwich cookies and vanilla frosting, dipped in smooth vanilla chocolate coating, and topped with Oreo crumbs for a creamy, crunchy finish.',
+                flavors: ['Creamy', 'Crunchy', 'Classic Cookies & Cream'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'The perfect blend of creamy and crunchy textures.'
+            };
+        }
+        
+        if (itemName === 'Specialty Shapes (Ghosts, Pumpkins, etc.)') {
+            return {
+                icon: '👻',
+                title: 'Specialty Shapes Cake Pops',
+                description: 'Themed cake pops hand-shaped and custom-decorated for holidays and special events.',
+                flavors: ['Custom Shaped', 'Holiday Themed', 'Special Occasion'],
+                pricing: [
+                    { quantity: '6-Pack', price: '$14' },
+                    { quantity: 'Dozen', price: '$25' }
+                ],
+                specialNotes: 'Perfect for Halloween, holidays, and special celebrations!'
+            };
+        }
+        
+        if (itemName === 'Red Velvet Bliss Cakesicle') {
+            return {
+                icon: '🍰',
+                title: 'Red Velvet Bliss Cakesicle',
+                description: 'Rich red velvet cake blended with cream cheese–flavored frosting, dipped in white chocolate, and topped with red cake crumbs.',
+                flavors: ['Rich', 'Creamy', 'Classic'],
+                pricing: [
+                    { quantity: 'Each', price: '$4' },
+                    { quantity: 'Dozen', price: '$36' }
+                ],
+                specialNotes: 'A classic red velvet flavor in cakesicle form.'
+            };
+        }
+        
+        if (itemName === 'Chocolate Fudge Cakesicle') {
+            return {
+                icon: '🍫',
+                title: 'Chocolate Fudge Cakesicle',
+                description: 'Dark chocolate cake mixed with chocolate frosting, dipped in fudge coating, topped with cocoa crumbs.',
+                flavors: ['Rich', 'Fudgy', 'Decadent'],
+                pricing: [
+                    { quantity: 'Each', price: '$4' },
+                    { quantity: 'Dozen', price: '$36' }
+                ],
+                specialNotes: 'Rich chocolate indulgence in every bite.'
+            };
+        }
+        
+        if (itemName === 'Cookies & Cream Dream Cakesicle') {
+            return {
+                icon: '🍪',
+                title: 'Cookies & Cream Dream Cakesicle',
+                description: 'Vanilla cake blended with crushed Oreos and frosting, coated in white chocolate, topped with cookie crumbs.',
+                flavors: ['Creamy', 'Crunchy', 'Classic'],
+                pricing: [
+                    { quantity: 'Each', price: '$4' },
+                    { quantity: 'Dozen', price: '$36' }
+                ],
+                specialNotes: 'The perfect blend of creamy and crunchy textures.'
+            };
+        }
+        
+        if (itemName === 'Birthday Confetti Cakesicle') {
+            return {
+                icon: '🎉',
+                title: 'Birthday Confetti Cakesicle',
+                description: 'Funfetti cake mixed with vanilla frosting, dipped in white chocolate, and finished with rainbow sprinkles.',
+                flavors: ['Sweet', 'Colorful', 'Fun'],
+                pricing: [
+                    { quantity: 'Each', price: '$4' },
+                    { quantity: 'Dozen', price: '$36' }
+                ],
+                specialNotes: 'Perfect for birthday celebrations!'
+            };
+        }
+        
+        if (itemName === 'Custom / Party Design Cakesicles') {
+            return {
+                icon: '💕',
+                title: 'Custom / Party Design Cakesicles',
+                description: 'Choose your flavor, color palette, or theme — includes colored drizzle, multiple sets, or molded shapes.',
+                flavors: ['Custom Flavors', 'Themed Designs', 'Party Perfect'],
+                pricing: [
+                    { quantity: 'Starting at', price: '$3 each' },
+                    { quantity: 'Party Packs', price: '$55-$90' }
+                ],
+                specialNotes: 'Add-ons: +$0.25–$1.00 each for detailing. Party Packs: $55–$90 depending on quantity and designs.'
+            };
+        }
+        
+        if (itemName === 'Custom Cakes') {
+            return {
+                icon: '🎂',
+                title: 'Custom Cakes by Spooky Sweets',
+                description: 'Your dream cake, made from scratch! Choose your size, flavor, and style — from simple buttercream designs to full themed creations. Every cake is handcrafted and completely customizable.',
+                flavors: ['Vanilla Bean', 'Funfetti', 'Chocolate Fudge', 'Red Velvet', 'Cookies & Cream', 'Lemon Burst', 'Strawberry Shortcake', 'Orange Cranberry', 'Key Lime', 'Custom Request Flavors'],
+                pricing: [
+                    { quantity: '6" Cakes', price: 'Starting at $45' },
+                    { quantity: 'Prices vary by', price: 'Size, flavor & design' }
+                ],
+                specialNotes: 'All cakes include 2 layers, filled and frosted in buttercream. Customize with buttercream, cream cheese, or whipped frosting, fondant or chocolate glaze, drip designs, shimmer, glitter effects, molded toppers, hand-piped flowers, ombré styles, multi-tier, sculpted, or character cakes.'
+            };
+        }
+        
         if (itemName === 'Cherry Bomb') {
             return {
                 icon: '🍒',
