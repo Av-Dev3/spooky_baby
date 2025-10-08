@@ -250,7 +250,7 @@ html, body {
 
 .remove-item-btn {
     background: transparent;
-    border: 1px solid rgba(255, 105, 180, 0.3);
+    border: 1px solid rgba(255, 193, 7, 0.3);
     color: var(--text-secondary);
     padding: 0.5rem;
     border-radius: 50%;
@@ -265,9 +265,9 @@ html, body {
 }
 
 .remove-item-btn:hover {
-    background: rgba(255, 105, 180, 0.1);
-    border-color: var(--accent-pink);
-    color: var(--accent-pink);
+    background: rgba(255, 193, 7, 0.1);
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
     transform: scale(1.1);
 }
 
