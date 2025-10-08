@@ -1,5 +1,18 @@
 /* ===== MENU PAGE STYLES ===== */
 
+/* Hide any giveaway elements */
+.giveaway-banner,
+#giveawayBanner,
+.giveaway-popup,
+#giveawayPopup {
+    display: none !important;
+}
+
+/* Ensure no banner space */
+body {
+    padding-top: 0 !important;
+}
+
 /* Menu Hero Section */
 .menu-hero {
     background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-yellow) 100%);
