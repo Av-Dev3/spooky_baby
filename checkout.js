@@ -101,83 +101,35 @@ class CheckoutPage {
     }
     
     handleFormSubmission(e) {
-        e.preventDefault();
+        // Don't prevent default - let the form submit naturally
+        // This avoids CORS issues with Formspree
         
-        const form = e.target;
-        const formData = new FormData(form);
+        // Add cart data to hidden field before submission
+        const cartDataField = document.getElementById('cartData');
+        if (cartDataField) {
+            cartDataField.value = JSON.stringify(this.cart);
+        }
         
-        // Add cart data to form data
-        formData.set('cartData', JSON.stringify(this.cart));
+        // Add cart summary to notes
+        const notesField = document.getElementById('notes');
+        if (notesField && this.cart.length > 0) {
+            const cartSummary = this.createCartSummary();
+            const existingNotes = notesField.value.replace(/Cart Order:[\s\S]*?Total: \$\d+\.\d+\n\n/, '');
+            notesField.value = `Cart Order:\n${cartSummary}\n\n${existingNotes}`;
+        }
         
         // Show loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
+        const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Submitting...';
         submitBtn.disabled = true;
         
-        // Submit form
-        fetch(form.action, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (response.ok) {
-                this.showSuccessMessage();
-                // Clear cart after successful submission
-                localStorage.removeItem('spookyCart');
-                // Redirect to main page after a delay
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 3000);
-            } else {
-                throw new Error('Form submission failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            this.showErrorMessage();
-        })
-        .finally(() => {
-            // Reset button
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        });
+        // Clear cart after form submission starts
+        setTimeout(() => {
+            localStorage.removeItem('spookyCart');
+        }, 1000);
     }
     
-    showSuccessMessage() {
-        const messageEl = document.getElementById('formMessage');
-        messageEl.innerHTML = `
-            <div class="success-message">
-                <h3>🎉 Order Submitted Successfully!</h3>
-                <p>Thank you for your order! We'll contact you soon to coordinate pickup/delivery details.</p>
-                <p>Redirecting to homepage...</p>
-            </div>
-        `;
-        messageEl.style.display = 'block';
-        messageEl.style.background = 'var(--accent-yellow)';
-        messageEl.style.color = 'var(--bg-primary)';
-        messageEl.style.padding = '2rem';
-        messageEl.style.borderRadius = '15px';
-        messageEl.style.textAlign = 'center';
-        messageEl.style.marginTop = '2rem';
-    }
-    
-    showErrorMessage() {
-        const messageEl = document.getElementById('formMessage');
-        messageEl.innerHTML = `
-            <div class="error-message">
-                <h3>❌ Error Submitting Order</h3>
-                <p>There was a problem submitting your order. Please try again or contact us directly.</p>
-            </div>
-        `;
-        messageEl.style.display = 'block';
-        messageEl.style.background = 'var(--accent-pink)';
-        messageEl.style.color = 'var(--bg-primary)';
-        messageEl.style.padding = '2rem';
-        messageEl.style.borderRadius = '15px';
-        messageEl.style.textAlign = 'center';
-        messageEl.style.marginTop = '2rem';
-    }
     
     animateHero() {
         // Animate hero elements
