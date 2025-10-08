@@ -133,19 +133,23 @@ html, body {
 }
 
 .clear-cart-btn {
-    background: transparent;
+    background: var(--accent-pink);
     border: 2px solid var(--accent-pink);
-    color: var(--accent-pink);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    color: var(--bg-primary);
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .clear-cart-btn:hover {
-    background: var(--accent-pink);
+    background: var(--accent-yellow);
+    border-color: var(--accent-yellow);
     color: var(--bg-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
 
 /* Cart Item */
@@ -209,9 +213,9 @@ html, body {
 .quantity-btn {
     background: var(--accent-pink);
     color: var(--bg-primary);
-    border: none;
-    width: 30px;
-    height: 30px;
+    border: 2px solid var(--accent-pink);
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     font-weight: 600;
     cursor: pointer;
@@ -219,17 +223,22 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.1rem;
 }
 
 .quantity-btn:hover {
     background: var(--accent-yellow);
+    border-color: var(--accent-yellow);
     transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
 
 .quantity-btn:disabled {
     background: #ccc;
+    border-color: #ccc;
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
 }
 
 .quantity-display {
@@ -240,19 +249,22 @@ html, body {
 }
 
 .remove-item-btn {
-    background: transparent;
+    background: #ff6b6b;
     border: 2px solid #ff6b6b;
-    color: #ff6b6b;
-    padding: 0.5rem;
-    border-radius: 20px;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .remove-item-btn:hover {
-    background: #ff6b6b;
-    color: white;
+    background: #ff4757;
+    border-color: #ff4757;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
 }
 
 .cart-item-total {
@@ -314,6 +326,21 @@ html, body {
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.cart-actions .btn {
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.cart-actions .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Animations */
