@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu — Spooky Baby Sweets</title>
+    <meta name="description" content="Explore our full menu of handmade cupcakes, cake pops, cakesicles, custom cakes, and seasonal treats with a cute spooky twist.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Menu — Spooky Baby Sweets">
+    <meta property="og:description" content="Explore our full menu of handmade cupcakes, cake pops, cakesicles, custom cakes, and seasonal treats with a cute spooky twist.">
+    <meta property="og:image" content="assets/logo_spooky.png">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+    <!-- Header / Navigation -->
+    <header class="header" id="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <img src="assets/logo_spooky.png" alt="Spooky Baby Sweets Logo" class="logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#menu" class="nav-link">Menu</a></li>
+                <li><a href="index.html#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="index.html#order" class="nav-link">Order</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <ul class="nav-socials">
+                <li><a href="https://www.instagram.com/spookybabysweets/" target="_blank" rel="noopener noreferrer" class="nav-link social-link" aria-label="Follow us on Instagram" onclick="window.open(this.href, '_blank'); return false;">
+                    <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="currentColor"/>
+                    </svg>
+                    <span class="social-text">Instagram</span>
+                </a></li>
+                <li><a href="https://www.facebook.com/share/178VrCCTsx/" target="_blank" rel="noopener noreferrer" class="nav-link social-link facebook-link" aria-label="Follow us on Facebook" onclick="window.open(this.href, '_blank'); return false;">
+                    <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/>
+                    </svg>
+                    <span class="social-text">Facebook</span>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Menu Hero Section -->
+    <section class="menu-hero">
+        <div class="container">
+            <div class="menu-hero-content">
+                <h1 class="menu-hero-title">
+                    <span class="word-animate" data-delay="0">Our</span>
+                    <span class="word-animate" data-delay="100">Sweet</span>
+                    <span class="word-animate" data-delay="200">Menu</span>
+                </h1>
+                <p class="menu-hero-subtitle">
+                    <span class="word-animate" data-delay="400">Handmade</span>
+                    <span class="word-animate" data-delay="500">treats</span>
+                    <span class="word-animate" data-delay="600">with</span>
+                    <span class="word-animate" data-delay="700">a</span>
+                    <span class="word-animate" data-delay="800">cute</span>
+                    <span class="word-animate" data-delay="900">spooky</span>
+                    <span class="word-animate" data-delay="1000">twist</span>
+                </p>
+                <div class="menu-hero-cta">
+                    <a href="index.html#order" class="btn btn-yellow hero-btn-animate" data-delay="1200">Place an Order</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Navigation -->
+    <section class="menu-nav">
+        <div class="container">
+            <div class="menu-nav-tabs">
+                <button class="menu-tab active" data-category="all">All Items</button>
+                <button class="menu-tab" data-category="cupcakes">🧁 Cupcakes</button>
+                <button class="menu-tab" data-category="cake-pops">🍭 Cake Pops</button>
+                <button class="menu-tab" data-category="cakecicles">🍰 Cakecicles</button>
+                <button class="menu-tab" data-category="cakes">🎂 Cakes</button>
+                <button class="menu-tab" data-category="seasonal">🎃 Seasonal</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="container">
+            <!-- Cupcakes Section -->
+            <div class="menu-category" data-category="cupcakes">
+                <div class="category-header">
+                    <h2 class="category-title">🧁 Cupcakes</h2>
+                    <p class="category-description">Gourmet cupcakes in heritage and Kool Aid fruit blast flavors</p>
+                </div>
+                
+                <div class="flavor-lines">
+                    <div class="flavor-line">
+                        <h3 class="flavor-line-title">Gourmet Heritage Line</h3>
+                        <div class="flavor-grid">
+                            <div class="flavor-item">
+                                <div class="flavor-icon">🍋</div>
+                                <h4 class="flavor-name">Lemon Burst</h4>
+                                <p class="flavor-description">Bright, buttery lemon cake with fresh zest and smooth lemon buttercream</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $20</span>
+                                    <span class="price">Dozen: $35</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flavor-item">
+                                <div class="flavor-icon">🍊</div>
+                                <h4 class="flavor-name">Orange Cranberry</h4>
+                                <p class="flavor-description">Zesty orange cake with tart cranberry swirls and cream cheese frosting</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $20</span>
+                                    <span class="price">Dozen: $35</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flavor-item">
+                                <div class="flavor-icon">🥧</div>
+                                <h4 class="flavor-name">Key Lime Pie</h4>
+                                <p class="flavor-description">Tangy key lime cake with graham cracker crust and whipped topping</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $20</span>
+                                    <span class="price">Dozen: $35</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flavor-item">
+                                <div class="flavor-icon">🍫</div>
+                                <h4 class="flavor-name">Chocolate Crunch</h4>
+                                <p class="flavor-description">Rich chocolate cake with crunchy toffee bits and chocolate ganache</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $20</span>
+                                    <span class="price">Dozen: $35</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-line">
+                        <h3 class="flavor-line-title">Kool Aid Fruit Blast Line</h3>
+                        <div class="flavor-grid">
+                            <div class="flavor-item">
+                                <div class="flavor-icon">🍒</div>
+                                <h4 class="flavor-name">Cherry Bomb</h4>
+                                <p class="flavor-description">Bursting cherry flavor with vanilla buttercream and cherry drizzle</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $18</span>
+                                    <span class="price">Dozen: $32</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flavor-item">
+                                <div class="flavor-icon">💙</div>
+                                <h4 class="flavor-name">Blue Razz Pop</h4>
+                                <p class="flavor-description">Electric blue raspberry cake with matching blue frosting</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $18</span>
+                                    <span class="price">Dozen: $32</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flavor-item">
+                                <div class="flavor-icon">🍉</div>
+                                <h4 class="flavor-name">Watermelon Splash</h4>
+                                <p class="flavor-description">Refreshing watermelon cake with pink and green ombré frosting</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $18</span>
+                                    <span class="price">Dozen: $32</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flavor-item">
+                                <div class="flavor-icon">🌈</div>
+                                <h4 class="flavor-name">Rainbow Variety Pack</h4>
+                                <p class="flavor-description">Mix of all Kool Aid flavors in one colorful pack</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $18</span>
+                                    <span class="price">Dozen: $32</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flavor-item">
+                                <div class="flavor-icon">✨</div>
+                                <h4 class="flavor-name">Pick Your Own Flavor</h4>
+                                <p class="flavor-description">Custom Kool Aid flavor of your choice</p>
+                                <div class="flavor-pricing">
+                                    <span class="price">6-Pack: $18</span>
+                                    <span class="price">Dozen: $32</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category-note">
+                    <p>More flavors + rotating options available!</p>
+                </div>
+            </div>
+
+            <!-- Cake Pops Section -->
+            <div class="menu-category" data-category="cake-pops">
+                <div class="category-header">
+                    <h2 class="category-title">🍭 Cake Pops</h2>
+                    <p class="category-description">Hand-dipped cake pops in classic and specialty flavors</p>
+                </div>
+                
+                <div class="flavor-grid">
+                    <div class="flavor-item">
+                        <div class="flavor-icon">❤️</div>
+                        <h4 class="flavor-name">Red Velvet Bliss</h4>
+                        <p class="flavor-description">Classic red velvet cake dipped in white chocolate</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Individual: $3</span>
+                            <span class="price">Dozen: $30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🎉</div>
+                        <h4 class="flavor-name">Birthday Confetti</h4>
+                        <p class="flavor-description">Vanilla cake with rainbow sprinkles and chocolate coating</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Individual: $3</span>
+                            <span class="price">Dozen: $30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🍫</div>
+                        <h4 class="flavor-name">Chocolate Fudge</h4>
+                        <p class="flavor-description">Rich chocolate cake with dark chocolate coating</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Individual: $3</span>
+                            <span class="price">Dozen: $30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🍪</div>
+                        <h4 class="flavor-name">Cookies & Cream Dream</h4>
+                        <p class="flavor-description">Oreo-studded cake with white chocolate coating</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Individual: $3</span>
+                            <span class="price">Dozen: $30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">👻</div>
+                        <h4 class="flavor-name">Specialty Shapes</h4>
+                        <p class="flavor-description">Ghosts, pumpkins, and seasonal shapes available</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Custom pricing for events</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category-note">
+                    <p>More flavors to be added! Custom pricing for events</p>
+                </div>
+            </div>
+
+            <!-- Cakecicles Section -->
+            <div class="menu-category" data-category="cakecicles">
+                <div class="category-header">
+                    <h2 class="category-title">🍰 Cakecicles</h2>
+                    <p class="category-description">Cake popsicles with creamy fillings and chocolate coatings</p>
+                </div>
+                
+                <div class="flavor-grid">
+                    <div class="flavor-item">
+                        <div class="flavor-icon">❤️</div>
+                        <h4 class="flavor-name">Red Velvet Bliss Cakesicle</h4>
+                        <p class="flavor-description">Red velvet cake with cream cheese filling and white chocolate coating</p>
+                        <div class="flavor-pricing">
+                            <span class="price">$4 each</span>
+                            <span class="price">$36/dozen</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🍫</div>
+                        <h4 class="flavor-name">Chocolate Fudge Cakesicle</h4>
+                        <p class="flavor-description">Rich chocolate cake with chocolate mousse filling</p>
+                        <div class="flavor-pricing">
+                            <span class="price">$4 each</span>
+                            <span class="price">$36/dozen</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🍪</div>
+                        <h4 class="flavor-name">Cookies & Cream Dream Cakesicle</h4>
+                        <p class="flavor-description">Oreo cake with vanilla cream filling and chocolate coating</p>
+                        <div class="flavor-pricing">
+                            <span class="price">$4 each</span>
+                            <span class="price">$36/dozen</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🎉</div>
+                        <h4 class="flavor-name">Birthday Confetti Cakesicle</h4>
+                        <p class="flavor-description">Vanilla cake with rainbow sprinkles and colorful coating</p>
+                        <div class="flavor-pricing">
+                            <span class="price">$4 each</span>
+                            <span class="price">$36/dozen</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🎨</div>
+                        <h4 class="flavor-name">Custom / Party Design Cakesicles</h4>
+                        <p class="flavor-description">Custom designs and flavors for special events</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Custom pricing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cakes Section -->
+            <div class="menu-category" data-category="cakes">
+                <div class="category-header">
+                    <h2 class="category-title">🎂 Custom Cakes</h2>
+                    <p class="category-description">Fully customized cakes for any celebration</p>
+                </div>
+                
+                <div class="cake-info">
+                    <div class="cake-details">
+                        <h3 class="cake-section-title">What's Included</h3>
+                        <div class="cake-features">
+                            <div class="feature-item">
+                                <span class="feature-icon">🍰</span>
+                                <span class="feature-text">2 layers, filled and frosted</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">🧈</span>
+                                <span class="feature-text">Buttercream base frosting</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">🎨</span>
+                                <span class="feature-text">Custom design consultation</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="customization-options">
+                        <h3 class="cake-section-title">Customization Options</h3>
+                        <div class="options-grid">
+                            <div class="option-category">
+                                <h4 class="option-title">Frosting Types</h4>
+                                <ul class="option-list">
+                                    <li>Buttercream</li>
+                                    <li>Cream Cheese</li>
+                                    <li>Whipped Cream</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="option-category">
+                                <h4 class="option-title">Special Effects</h4>
+                                <ul class="option-list">
+                                    <li>Fondant Accents</li>
+                                    <li>Chocolate Glaze</li>
+                                    <li>Drip Designs</li>
+                                    <li>Shimmer & Glitter</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="option-category">
+                                <h4 class="option-title">Decorations</h4>
+                                <ul class="option-list">
+                                    <li>Molded Toppers</li>
+                                    <li>Hand-Piped Flowers</li>
+                                    <li>Ombré Styles</li>
+                                    <li>Multi-Tier Designs</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="option-category">
+                                <h4 class="option-title">Special Cakes</h4>
+                                <ul class="option-list">
+                                    <li>Sculpted Cakes</li>
+                                    <li>Character Cakes</li>
+                                    <li>Themed Designs</li>
+                                    <li>3D Creations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category-note">
+                    <p>Custom designs and flavors available! Contact us for pricing and consultation.</p>
+                </div>
+            </div>
+
+            <!-- Seasonal & Specialty Section -->
+            <div class="menu-category" data-category="seasonal">
+                <div class="category-header">
+                    <h2 class="category-title">🎃 Seasonal & Specialty</h2>
+                    <p class="category-description">Limited-time treats and special creations</p>
+                </div>
+                
+                <div class="flavor-grid">
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🎃</div>
+                        <h4 class="flavor-name">Pumpkin Butterscotch Bundts</h4>
+                        <p class="flavor-description">Spiced pumpkin cake with butterscotch glaze and seasonal spices</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Seasonal availability</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">❄️</div>
+                        <h4 class="flavor-name">Peppermint Mocha Pops</h4>
+                        <p class="flavor-description">Chocolate cake with peppermint cream and mocha coating</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Holiday season</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">💔</div>
+                        <h4 class="flavor-name">Breakable Hearts</h4>
+                        <p class="flavor-description">Chocolate hearts filled with treats and surprises</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Valentine's Day</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🍫</div>
+                        <h4 class="flavor-name">Dubai Chocolate Bars</h4>
+                        <p class="flavor-description">Premium chocolate bars with exotic flavors and gold accents</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Limited edition</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🍓</div>
+                        <h4 class="flavor-name">Chocolate-Dipped Strawberries</h4>
+                        <p class="flavor-description">Fresh strawberries dipped in premium chocolate with decorations</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Seasonal availability</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-item">
+                        <div class="flavor-icon">🎁</div>
+                        <h4 class="flavor-name">Seasonal Variety Packs</h4>
+                        <p class="flavor-description">Mixed selection of seasonal treats and flavors</p>
+                        <div class="flavor-pricing">
+                            <span class="price">Limited time</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category-note">
+                    <p>Requests open for custom creations! Seasonal items available during specific times.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order CTA Section -->
+    <section class="order-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Order?</h2>
+                <p class="cta-text">Place your order and we'll coordinate pickup or delivery details</p>
+                <a href="index.html#order" class="btn btn-yellow">Place an Order</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© <span id="currentYear"></span> Spooky Baby Sweets • Made with sugar, spice, and tiny ghosts.</p>
+        </div>
+    </footer>
+
+    <script src="script.js?v=20"></script>
+    <script src="menu.js"></script>
+</body>
+</html>
