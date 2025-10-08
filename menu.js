@@ -64,26 +64,24 @@ class MenuPage {
         
         // Scroll to the selected category or menu section
         setTimeout(() => {
-            // Always scroll to menu section first
-            const menuSection = document.querySelector('.menu-section');
-            if (menuSection) {
-                menuSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-            
-            // Then scroll to specific category if not "all"
-            if (category !== 'all') {
-                setTimeout(() => {
-                    const selectedCategory = document.querySelector(`[data-category="${category}"]`);
-                    if (selectedCategory) {
-                        selectedCategory.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                }, 300);
+            if (category === 'all') {
+                // Scroll to menu section for "all"
+                const menuSection = document.querySelector('.menu-section');
+                if (menuSection) {
+                    menuSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            } else {
+                // Scroll directly to the specific category
+                const selectedCategory = document.querySelector(`[data-category="${category}"]`);
+                if (selectedCategory) {
+                    selectedCategory.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             }
         }, 200);
         
