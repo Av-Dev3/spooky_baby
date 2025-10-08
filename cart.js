@@ -76,7 +76,7 @@ class CartPage {
                     <span class="quantity-display">${item.quantity}</span>
                     <button class="quantity-btn" onclick="cartPage.updateQuantity(${index}, 1)">+</button>
                 </div>
-                <button class="remove-item-btn" onclick="cartPage.removeItem(${index})">Remove</button>
+                <button class="remove-item-btn" onclick="cartPage.removeItem(${index})" title="Remove item">🗑️</button>
             </div>
             <div class="cart-item-total">$${(item.price * item.quantity).toFixed(2)}</div>
         `;
