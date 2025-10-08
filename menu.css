@@ -288,6 +288,7 @@ html, body {
     padding: 3rem;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+    color: var(--text-primary);
 }
 
 .cake-details {
@@ -330,6 +331,15 @@ html, body {
 
 .feature-text {
     font-weight: 600;
+    color: var(--text-primary);
+}
+
+.cake-info p,
+.cake-info li {
+    color: var(--text-primary);
+}
+
+.option-list li {
     color: var(--text-primary);
 }
 
