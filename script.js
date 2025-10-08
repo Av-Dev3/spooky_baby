@@ -284,7 +284,7 @@ const formHandler = {
             // Handle flavor dropdown visibility
             const customFlavorGroup = document.getElementById('customFlavorGroup');
             
-            if (value && value !== 'custom' && value !== 'cakecicles') {
+            if (value && value !== 'custom') {
                 flavorGroup.style.display = 'block';
                 if (customFlavorGroup) customFlavorGroup.style.display = 'none';
                 this.updateFlavorOptions(value, flavorOptions);
@@ -686,7 +686,7 @@ const customDropdown = {
             
             // Handle flavor dropdown visibility
             const flavorGroup = document.getElementById('flavorGroup');
-            if (value && value !== 'custom' && value !== 'cakecicles') {
+            if (value && value !== 'custom') {
                 // Show flavor dropdown and populate options
                 flavorGroup.style.display = 'block';
                 setTimeout(() => {
@@ -2071,8 +2071,16 @@ function updateFlavorOptions(selectedItem) {
         'cake-pops': [
             { value: 'red-velvet-bliss', text: '❤️ Red Velvet Bliss' },
             { value: 'birthday-confetti', text: '🎉 Birthday Confetti' },
-            { value: 'spooky-pop', text: '👻 Spooky Pop' },
-            { value: 'cookies-cream-dream', text: '🍪 Cookies & Cream Dream' }
+            { value: 'chocolate-fudge', text: '🍫 Chocolate Fudge' },
+            { value: 'cookies-cream-dream', text: '🍪 Cookies & Cream Dream' },
+            { value: 'specialty-shapes', text: '👻 Specialty Shapes (Ghosts, Pumpkins, etc.)' }
+        ],
+        'cakecicles': [
+            { value: 'red-velvet-bliss-cakesicle', text: '🍰 Red Velvet Bliss Cakesicle' },
+            { value: 'chocolate-fudge-cakesicle', text: '🍫 Chocolate Fudge Cakesicle' },
+            { value: 'cookies-cream-dream-cakesicle', text: '🍪 Cookies & Cream Dream Cakesicle' },
+            { value: 'birthday-confetti-cakesicle', text: '🎉 Birthday Confetti Cakesicle' },
+            { value: 'custom-party-design-cakesicles', text: '💕 Custom / Party Design Cakesicles' }
         ],
         'cakes': [
             { value: 'custom-cakes', text: '🎂 Custom Cakes' }
