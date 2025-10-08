@@ -49,10 +49,12 @@ class MenuPage {
         document.querySelectorAll('.menu-category').forEach(categoryEl => {
             if (category === 'all' || categoryEl.dataset.category === category) {
                 categoryEl.classList.remove('hidden');
+                categoryEl.style.display = 'block';
                 categoryEl.style.opacity = '1';
                 categoryEl.style.transform = 'translateY(0)';
             } else {
                 categoryEl.classList.add('hidden');
+                categoryEl.style.display = 'none';
                 categoryEl.style.opacity = '0';
                 categoryEl.style.transform = 'translateY(20px)';
             }
@@ -62,26 +64,28 @@ class MenuPage {
         
         // Scroll to the selected category or menu section
         setTimeout(() => {
-            if (category === 'all') {
-                // Scroll to menu section for "all"
-                const menuSection = document.querySelector('.menu-section');
-                if (menuSection) {
-                    menuSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            } else {
-                // Scroll to the specific category
-                const selectedCategory = document.querySelector(`[data-category="${category}"]`);
-                if (selectedCategory) {
-                    selectedCategory.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+            // Always scroll to menu section first
+            const menuSection = document.querySelector('.menu-section');
+            if (menuSection) {
+                menuSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
-        }, 100);
+            
+            // Then scroll to specific category if not "all"
+            if (category !== 'all') {
+                setTimeout(() => {
+                    const selectedCategory = document.querySelector(`[data-category="${category}"]`);
+                    if (selectedCategory) {
+                        selectedCategory.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 300);
+            }
+        }, 200);
         
         // Add a subtle animation to the visible categories
         setTimeout(() => {
