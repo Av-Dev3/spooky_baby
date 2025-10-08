@@ -60,6 +60,17 @@ class MenuPage {
         
         this.currentCategory = category;
         
+        // Scroll to the menu section
+        setTimeout(() => {
+            const menuSection = document.querySelector('.menu-section');
+            if (menuSection) {
+                menuSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }, 100);
+        
         // Add a subtle animation to the visible categories
         setTimeout(() => {
             document.querySelectorAll('.menu-category:not(.hidden)').forEach((categoryEl, index) => {
