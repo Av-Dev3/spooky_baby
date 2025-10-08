@@ -60,14 +60,26 @@ class MenuPage {
         
         this.currentCategory = category;
         
-        // Scroll to the menu section
+        // Scroll to the selected category or menu section
         setTimeout(() => {
-            const menuSection = document.querySelector('.menu-section');
-            if (menuSection) {
-                menuSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+            if (category === 'all') {
+                // Scroll to menu section for "all"
+                const menuSection = document.querySelector('.menu-section');
+                if (menuSection) {
+                    menuSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            } else {
+                // Scroll to the specific category
+                const selectedCategory = document.querySelector(`[data-category="${category}"]`);
+                if (selectedCategory) {
+                    selectedCategory.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             }
         }, 100);
         
