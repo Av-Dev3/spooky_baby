@@ -133,8 +133,8 @@ class CartPage {
             timestamp: new Date().toISOString()
         }));
         
-        // Redirect to order page
-        window.location.href = 'index.html#order';
+        // Redirect to checkout page
+        window.location.href = 'checkout.html';
     }
     
     createOrderSummary() {

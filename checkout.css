@@ -1,0 +1,344 @@
+/* ===== CHECKOUT PAGE STYLES ===== */
+
+/* Hide any giveaway elements */
+.giveaway-banner,
+#giveawayBanner,
+.giveaway-popup,
+#giveawayPopup {
+    display: none !important;
+}
+
+/* Ensure no banner space */
+body {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Remove any top spacing from header */
+.header {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    width: 100% !important;
+}
+
+/* Ensure body starts at very top */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Checkout Hero Section */
+.checkout-hero {
+    background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-yellow) 100%);
+    padding: 8rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0 !important;
+}
+
+.checkout-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.checkout-hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.checkout-hero-title {
+    font-family: 'Chewy', cursive;
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: var(--bg-primary);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-hero-subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: var(--bg-primary);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkout Content */
+.checkout-content {
+    padding: 4rem 0;
+    background: var(--bg-primary);
+    min-height: 60vh;
+}
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Order Summary */
+.order-summary {
+    background: transparent;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.summary-title {
+    font-family: 'Chewy', cursive;
+    font-size: 1.8rem;
+    color: var(--accent-pink);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.summary-items {
+    margin-bottom: 2rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.summary-item-quantity {
+    color: var(--text-secondary);
+    margin: 0 1rem;
+}
+
+.summary-item-price {
+    font-weight: 600;
+    color: var(--accent-yellow);
+}
+
+.summary-totals {
+    border-top: 2px solid var(--accent-pink);
+    padding-top: 1rem;
+}
+
+.summary-subtotal,
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.summary-subtotal {
+    border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+    margin-bottom: 1rem;
+}
+
+.summary-label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.summary-amount {
+    font-weight: 600;
+    color: var(--accent-yellow);
+    font-size: 1.1rem;
+}
+
+.summary-total .summary-label {
+    font-size: 1.2rem;
+}
+
+.summary-total .summary-amount {
+    font-size: 1.3rem;
+    color: var(--accent-pink);
+}
+
+/* Checkout Form Section */
+.checkout-form-section {
+    background: transparent;
+    border: 1px solid rgba(255, 105, 180, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.form-title {
+    font-family: 'Chewy', cursive;
+    font-size: 1.8rem;
+    color: var(--accent-pink);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.form-subtitle {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid rgba(255, 105, 180, 0.3);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--accent-pink);
+    box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.1);
+}
+
+/* Delivery Options */
+.delivery-options {
+    display: flex;
+    gap: 1rem;
+}
+
+.delivery-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid rgba(255, 105, 180, 0.3);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.delivery-option:hover {
+    border-color: var(--accent-pink);
+    background: rgba(255, 105, 180, 0.05);
+}
+
+.delivery-option input[type="radio"] {
+    margin: 0;
+}
+
+.delivery-option input[type="radio"]:checked + .delivery-text {
+    color: var(--accent-pink);
+    font-weight: 600;
+}
+
+.delivery-option input[type="radio"]:checked {
+    accent-color: var(--accent-pink);
+}
+
+.delivery-text {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-actions .btn {
+    flex: 1;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+.form-actions .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Animations */
+.word-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.word-animate.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .order-summary {
+        position: static;
+    }
+    
+    .delivery-options {
+        flex-direction: column;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkout-hero {
+        padding: 6rem 0 3rem;
+    }
+    
+    .checkout-content {
+        padding: 3rem 0;
+    }
+    
+    .order-summary,
+    .checkout-form-section {
+        padding: 1.5rem;
+    }
+}
