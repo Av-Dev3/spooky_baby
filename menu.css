@@ -108,7 +108,7 @@
 /* Menu Section */
 .menu-section {
     padding: 4rem 0;
-    background: linear-gradient(180deg, #fafafa 0%, #f5f5f5 100%);
+    background: var(--bg-primary);
 }
 
 .menu-category {
@@ -183,7 +183,7 @@
 }
 
 .flavor-item {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 20px;
     padding: 2rem;
     text-align: center;
@@ -250,7 +250,7 @@
 
 /* Cake Info Section */
 .cake-info {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 20px;
     padding: 3rem;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
