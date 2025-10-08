@@ -254,14 +254,19 @@ if (!document.getElementById('cart-animations')) {
     document.head.appendChild(style);
 }
 
-// Initialize cart page when DOM is loaded
+// Initialize cart page when DOM is loaded (only on cart page)
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🛒 Cart Page - Initializing...');
-    
-    try {
-        window.cartPage = new CartPage();
-        console.log('✨ Cart Page ready!');
-    } catch (error) {
-        console.error('❌ Cart Page initialization error:', error);
+    // Only initialize CartPage if we're on the cart page
+    if (window.location.pathname.includes('cart.html') || window.location.pathname === '/cart') {
+        console.log('🛒 Cart Page - Initializing...');
+        
+        try {
+            window.cartPage = new CartPage();
+            console.log('✨ Cart Page ready!');
+        } catch (error) {
+            console.error('❌ Cart Page initialization error:', error);
+        }
+    } else {
+        console.log('🛒 Cart functions loaded (menu page)');
     }
 });
