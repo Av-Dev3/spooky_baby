@@ -203,7 +203,7 @@ window.showCartMessage = function(message, type = 'info') {
         position: fixed;
         top: 100px;
         right: 20px;
-        background: ${type === 'success' ? 'var(--accent-yellow)' : type === 'error' ? '#ff6b6b' : 'var(--accent-pink)'};
+        background: ${type === 'success' ? 'var(--accent-yellow)' : type === 'error' ? 'var(--accent-pink)' : 'var(--accent-pink)'};
         color: var(--bg-primary);
         padding: 1rem 2rem;
         border-radius: 25px;
