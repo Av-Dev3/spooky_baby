@@ -97,19 +97,55 @@
                 <!-- Cake Display Area -->
                 <div class="cake-display">
                     <div class="cake-container">
-                        <div class="cake-base" id="cakeBase">
-                            <div class="cake-layer" id="cakeLayer1"></div>
-                            <div class="cake-layer" id="cakeLayer2"></div>
-                            <div class="cake-layer" id="cakeLayer3"></div>
-                        </div>
-                        <div class="cake-frosting" id="cakeFrosting"></div>
-                        <div class="cake-toppings" id="cakeToppings"></div>
-                        <div class="cake-decoration" id="cakeDecoration"></div>
+                        <svg viewBox="0 0 400 500" class="cake-svg" id="cakeSvg">
+                            <!-- Cake Stand/Plate -->
+                            <ellipse cx="200" cy="460" rx="120" ry="15" fill="#E8E8E8" stroke="#CCCCCC" stroke-width="2"/>
+                            
+                            <!-- Bottom Cake Layer -->
+                            <g id="bottomLayer">
+                                <ellipse cx="200" cy="380" rx="100" ry="12" fill="#F5F5DC" class="cake-layer-top"/>
+                                <rect x="100" y="380" width="200" height="80" fill="#F5F5DC" class="cake-layer-side"/>
+                                <ellipse cx="200" cy="460" rx="100" ry="12" fill="#E6E6C8" class="cake-layer-bottom"/>
+                            </g>
+                            
+                            <!-- Middle Cake Layer -->
+                            <g id="middleLayer">
+                                <ellipse cx="200" cy="310" rx="80" ry="10" fill="#F5F5DC" class="cake-layer-top"/>
+                                <rect x="120" y="310" width="160" height="70" fill="#F5F5DC" class="cake-layer-side"/>
+                                <ellipse cx="200" cy="380" rx="80" ry="10" fill="#E6E6C8" class="cake-layer-bottom"/>
+                            </g>
+                            
+                            <!-- Top Cake Layer -->
+                            <g id="topLayer">
+                                <ellipse cx="200" cy="250" rx="60" ry="8" fill="#F5F5DC" class="cake-layer-top"/>
+                                <rect x="140" y="250" width="120" height="60" fill="#F5F5DC" class="cake-layer-side"/>
+                                <ellipse cx="200" cy="310" rx="60" ry="8" fill="#E6E6C8" class="cake-layer-bottom"/>
+                            </g>
+                            
+                            <!-- Frosting Layer -->
+                            <g id="frostingLayer" class="frosting-group">
+                                <!-- Bottom frosting -->
+                                <path d="M 100 460 Q 105 455, 110 460 T 120 460 T 130 460 T 140 460 T 150 460 T 160 460 T 170 460 T 180 460 T 190 460 T 200 460 T 210 460 T 220 460 T 230 460 T 240 460 T 250 460 T 260 460 T 270 460 T 280 460 T 290 460 T 300 460 L 300 380 L 100 380 Z" 
+                                      fill="#FFFAF0" class="frosting-bottom" opacity="0"/>
+                                <!-- Middle frosting -->
+                                <path d="M 120 380 Q 123 376, 126 380 T 132 380 T 138 380 T 144 380 T 150 380 T 156 380 T 162 380 T 168 380 T 174 380 T 180 380 T 186 380 T 192 380 T 198 380 T 204 380 T 210 380 T 216 380 T 222 380 T 228 380 T 234 380 T 240 380 T 246 380 T 252 380 T 258 380 T 264 380 T 270 380 T 276 380 T 280 380 L 280 310 L 120 310 Z" 
+                                      fill="#FFFAF0" class="frosting-middle" opacity="0"/>
+                                <!-- Top frosting -->
+                                <path d="M 140 310 Q 142 307, 144 310 T 148 310 T 152 310 T 156 310 T 160 310 T 164 310 T 168 310 T 172 310 T 176 310 T 180 310 T 184 310 T 188 310 T 192 310 T 196 310 T 200 310 T 204 310 T 208 310 T 212 310 T 216 310 T 220 310 T 224 310 T 228 310 T 232 310 T 236 310 T 240 310 T 244 310 T 248 310 T 252 310 T 256 310 T 260 310 L 260 250 L 140 250 Z" 
+                                      fill="#FFFAF0" class="frosting-top" opacity="0"/>
+                            </g>
+                            
+                            <!-- Toppings Container -->
+                            <g id="toppingsContainer"></g>
+                            
+                            <!-- Decorations Container -->
+                            <g id="decorationsContainer"></g>
+                        </svg>
                     </div>
                     <div class="cake-info">
                         <h3 id="cakeName">Your Custom Cake</h3>
                         <p id="cakeDescription">Start building by selecting your base flavor!</p>
-                        <div class="cake-price" id="cakePrice">$0</div>
+                        <div class="cake-price" id="cakePrice">Starting at $45</div>
                     </div>
                 </div>
 
@@ -119,11 +155,15 @@
                     <div class="control-section">
                         <h3 class="section-title">🍰 Choose Your Base Flavor</h3>
                         <div class="flavor-grid">
-                            <button class="flavor-option" data-flavor="vanilla" data-color="#F5F5DC">
+                            <button class="flavor-option" data-flavor="vanilla-bean" data-color="#F5F5DC">
                                 <div class="flavor-preview vanilla"></div>
                                 <span>Vanilla Bean</span>
                             </button>
-                            <button class="flavor-option" data-flavor="chocolate" data-color="#8B4513">
+                            <button class="flavor-option" data-flavor="funfetti" data-color="#FFE4E1">
+                                <div class="flavor-preview funfetti"></div>
+                                <span>Funfetti</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="chocolate-fudge" data-color="#8B4513">
                                 <div class="flavor-preview chocolate"></div>
                                 <span>Chocolate Fudge</span>
                             </button>
@@ -131,17 +171,25 @@
                                 <div class="flavor-preview red-velvet"></div>
                                 <span>Red Velvet</span>
                             </button>
-                            <button class="flavor-option" data-flavor="lemon" data-color="#FFE135">
+                            <button class="flavor-option" data-flavor="cookies-cream" data-color="#E8E8E8">
+                                <div class="flavor-preview cookies-cream"></div>
+                                <span>Cookies & Cream</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="lemon-burst" data-color="#FFE135">
                                 <div class="flavor-preview lemon"></div>
                                 <span>Lemon Burst</span>
                             </button>
-                            <button class="flavor-option" data-flavor="strawberry" data-color="#FF69B4">
+                            <button class="flavor-option" data-flavor="strawberry-shortcake" data-color="#FF69B4">
                                 <div class="flavor-preview strawberry"></div>
-                                <span>Strawberry</span>
+                                <span>Strawberry Shortcake</span>
                             </button>
-                            <button class="flavor-option" data-flavor="funfetti" data-color="#FFE4E1">
-                                <div class="flavor-preview funfetti"></div>
-                                <span>Funfetti</span>
+                            <button class="flavor-option" data-flavor="orange-cranberry" data-color="#FF8C00">
+                                <div class="flavor-preview orange"></div>
+                                <span>Orange Cranberry</span>
+                            </button>
+                            <button class="flavor-option" data-flavor="key-lime" data-color="#32CD32">
+                                <div class="flavor-preview key-lime"></div>
+                                <span>Key Lime</span>
                             </button>
                         </div>
                     </div>
@@ -169,66 +217,80 @@
                         </div>
                     </div>
 
-                    <!-- Toppings Selection -->
+                    <!-- Cake Size Selection -->
                     <div class="control-section">
-                        <h3 class="section-title">🍓 Add Your Toppings</h3>
-                        <div class="toppings-grid">
-                            <button class="topping-option" data-topping="sprinkles" data-icon="✨">
-                                <span class="topping-icon">✨</span>
-                                <span>Rainbow Sprinkles</span>
+                        <h3 class="section-title">📏 Choose Cake Size</h3>
+                        <div class="size-grid">
+                            <button class="size-option" data-size="6-inch" data-price="45">
+                                <span class="size-label">6"</span>
+                                <span class="size-serves">Serves 8-10</span>
+                                <span class="size-price">$45</span>
                             </button>
-                            <button class="topping-option" data-topping="chocolate-chips" data-icon="🍫">
-                                <span class="topping-icon">🍫</span>
-                                <span>Chocolate Chips</span>
+                            <button class="size-option" data-size="8-inch" data-price="65">
+                                <span class="size-label">8"</span>
+                                <span class="size-serves">Serves 15-20</span>
+                                <span class="size-price">$65</span>
                             </button>
-                            <button class="topping-option" data-topping="strawberries" data-icon="🍓">
-                                <span class="topping-icon">🍓</span>
-                                <span>Fresh Strawberries</span>
-                            </button>
-                            <button class="topping-option" data-topping="cherries" data-icon="🍒">
-                                <span class="topping-icon">🍒</span>
-                                <span>Cherries</span>
-                            </button>
-                            <button class="topping-option" data-topping="nuts" data-icon="🥜">
-                                <span class="topping-icon">🥜</span>
-                                <span>Chopped Nuts</span>
-                            </button>
-                            <button class="topping-option" data-topping="coconut" data-icon="🥥">
-                                <span class="topping-icon">🥥</span>
-                                <span>Shredded Coconut</span>
-                            </button>
-                            <button class="topping-option" data-topping="oreos" data-icon="🍪">
-                                <span class="topping-icon">🍪</span>
-                                <span>Oreo Crumbs</span>
-                            </button>
-                            <button class="topping-option" data-topping="edible-glitter" data-icon="✨">
-                                <span class="topping-icon">✨</span>
-                                <span>Edible Glitter</span>
+                            <button class="size-option" data-size="10-inch" data-price="85">
+                                <span class="size-label">10"</span>
+                                <span class="size-serves">Serves 25-30</span>
+                                <span class="size-price">$85</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Special Decorations -->
+                    <!-- Toppings & Decorations -->
                     <div class="control-section">
-                        <h3 class="section-title">🎨 Special Decorations</h3>
-                        <div class="decoration-grid">
-                            <button class="decoration-option" data-decoration="drip" data-icon="💧">
-                                <span class="decoration-icon">💧</span>
+                        <h3 class="section-title">✨ Add Toppings & Decorations</h3>
+                        <div class="toppings-grid">
+                            <button class="topping-option" data-topping="sprinkles" data-price="2">
+                                <span class="topping-icon">✨</span>
+                                <span>Rainbow Sprinkles</span>
+                                <span class="addon-price">+$2</span>
+                            </button>
+                            <button class="topping-option" data-topping="fresh-fruit" data-price="8">
+                                <span class="topping-icon">🍓</span>
+                                <span>Fresh Fruit</span>
+                                <span class="addon-price">+$8</span>
+                            </button>
+                            <button class="topping-option" data-topping="chocolate-drip" data-price="10">
+                                <span class="topping-icon">🍫</span>
                                 <span>Chocolate Drip</span>
+                                <span class="addon-price">+$10</span>
                             </button>
-                            <button class="decoration-option" data-decoration="flowers" data-icon="🌸">
-                                <span class="decoration-icon">🌸</span>
-                                <span>Frosting Flowers</span>
+                            <button class="topping-option" data-topping="fondant" data-price="15">
+                                <span class="topping-icon">🎀</span>
+                                <span>Fondant Accents</span>
+                                <span class="addon-price">+$15</span>
                             </button>
-                            <button class="decoration-option" data-decoration="writing" data-icon="✍️">
-                                <span class="decoration-icon">✍️</span>
-                                <span>Custom Writing</span>
+                            <button class="topping-option" data-topping="edible-flowers" data-price="12">
+                                <span class="topping-icon">🌸</span>
+                                <span>Edible Flowers</span>
+                                <span class="addon-price">+$12</span>
                             </button>
-                            <button class="decoration-option" data-decoration="ribbon" data-icon="🎀">
-                                <span class="decoration-icon">🎀</span>
-                                <span>Ribbon Border</span>
+                            <button class="topping-option" data-topping="shimmer" data-price="5">
+                                <span class="topping-icon">✨</span>
+                                <span>Shimmer/Glitter</span>
+                                <span class="addon-price">+$5</span>
+                            </button>
+                            <button class="topping-option" data-topping="hand-piped-flowers" data-price="18">
+                                <span class="topping-icon">🌺</span>
+                                <span>Hand-Piped Flowers</span>
+                                <span class="addon-price">+$18</span>
+                            </button>
+                            <button class="topping-option" data-topping="ombre" data-price="12">
+                                <span class="topping-icon">🌈</span>
+                                <span>Ombré Design</span>
+                                <span class="addon-price">+$12</span>
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Custom Message -->
+                    <div class="control-section">
+                        <h3 class="section-title">✍️ Add Custom Message (Optional)</h3>
+                        <input type="text" id="customMessage" class="custom-message-input" placeholder="Happy Birthday, Congratulations, etc." maxlength="50">
+                        <p class="help-text">Character limit: 50</p>
                     </div>
 
                     <!-- Action Buttons -->

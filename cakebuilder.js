@@ -4,43 +4,14 @@ class CakeBuilder {
     constructor() {
         this.cake = {
             flavor: null,
+            flavorColor: null,
             frosting: null,
+            frostingColor: null,
+            size: null,
+            sizePrice: 0,
             toppings: [],
-            decorations: [],
+            customMessage: '',
             basePrice: 0
-        };
-        
-        this.prices = {
-            flavors: {
-                'vanilla': 0,
-                'chocolate': 5,
-                'red-velvet': 8,
-                'lemon': 6,
-                'strawberry': 7,
-                'funfetti': 4
-            },
-            frostings: {
-                'vanilla-buttercream': 0,
-                'chocolate-buttercream': 3,
-                'cream-cheese': 5,
-                'whipped-cream': 2
-            },
-            toppings: {
-                'sprinkles': 2,
-                'chocolate-chips': 3,
-                'strawberries': 8,
-                'cherries': 4,
-                'nuts': 5,
-                'coconut': 3,
-                'oreos': 4,
-                'edible-glitter': 6
-            },
-            decorations: {
-                'drip': 10,
-                'flowers': 15,
-                'writing': 8,
-                'ribbon': 5
-            }
         };
         
         this.init();
@@ -48,7 +19,6 @@ class CakeBuilder {
     
     init() {
         this.setupEventListeners();
-        this.updateCakeDisplay();
         this.updatePrice();
         this.animateHero();
     }
@@ -57,30 +27,43 @@ class CakeBuilder {
         // Flavor selection
         document.querySelectorAll('.flavor-option').forEach(option => {
             option.addEventListener('click', (e) => {
-                this.selectFlavor(e.currentTarget.dataset.flavor, e.currentTarget.dataset.color);
+                const button = e.currentTarget;
+                this.selectFlavor(button.dataset.flavor, button.dataset.color, button);
             });
         });
         
         // Frosting selection
         document.querySelectorAll('.frosting-option').forEach(option => {
             option.addEventListener('click', (e) => {
-                this.selectFrosting(e.currentTarget.dataset.frosting, e.currentTarget.dataset.color);
+                const button = e.currentTarget;
+                this.selectFrosting(button.dataset.frosting, button.dataset.color, button);
+            });
+        });
+        
+        // Size selection
+        document.querySelectorAll('.size-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                const button = e.currentTarget;
+                this.selectSize(button.dataset.size, parseInt(button.dataset.price), button);
             });
         });
         
         // Toppings selection
         document.querySelectorAll('.topping-option').forEach(option => {
             option.addEventListener('click', (e) => {
-                this.toggleTopping(e.currentTarget.dataset.topping, e.currentTarget.dataset.icon);
+                const button = e.currentTarget;
+                this.toggleTopping(button.dataset.topping, parseInt(button.dataset.price), button);
             });
         });
         
-        // Decorations selection
-        document.querySelectorAll('.decoration-option').forEach(option => {
-            option.addEventListener('click', (e) => {
-                this.toggleDecoration(e.currentTarget.dataset.decoration, e.currentTarget.dataset.icon);
+        // Custom message
+        const messageInput = document.getElementById('customMessage');
+        if (messageInput) {
+            messageInput.addEventListener('input', (e) => {
+                this.cake.customMessage = e.target.value;
+                this.updateCakeInfo();
             });
-        });
+        }
         
         // Action buttons
         document.getElementById('resetCake')?.addEventListener('click', () => {
@@ -96,179 +79,218 @@ class CakeBuilder {
         });
     }
     
-    selectFlavor(flavor, color) {
+    selectFlavor(flavor, color, button) {
         // Remove previous selection
         document.querySelectorAll('.flavor-option').forEach(option => {
             option.classList.remove('selected');
         });
         
         // Add selection to clicked option
-        event.currentTarget.classList.add('selected');
+        button.classList.add('selected');
         
         // Update cake
         this.cake.flavor = flavor;
+        this.cake.flavorColor = color;
         this.updateCakeLayers(color);
         this.updateCakeInfo();
         this.updatePrice();
-        this.animateCake();
     }
     
-    selectFrosting(frosting, color) {
+    selectFrosting(frosting, color, button) {
         // Remove previous selection
         document.querySelectorAll('.frosting-option').forEach(option => {
             option.classList.remove('selected');
         });
         
         // Add selection to clicked option
-        event.currentTarget.classList.add('selected');
+        button.classList.add('selected');
         
         // Update cake
         this.cake.frosting = frosting;
+        this.cake.frostingColor = color;
         this.updateCakeFrosting(color);
         this.updateCakeInfo();
         this.updatePrice();
-        this.animateCake();
     }
     
-    toggleTopping(topping, icon) {
-        const option = event.currentTarget;
-        const isSelected = option.classList.contains('selected');
+    selectSize(size, price, button) {
+        // Remove previous selection
+        document.querySelectorAll('.size-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        // Add selection to clicked option
+        button.classList.add('selected');
+        
+        // Update cake
+        this.cake.size = size;
+        this.cake.sizePrice = price;
+        this.updateCakeSize(size);
+        this.updateCakeInfo();
+        this.updatePrice();
+    }
+    
+    toggleTopping(topping, price, button) {
+        const isSelected = button.classList.contains('selected');
         
         if (isSelected) {
             // Remove topping
-            option.classList.remove('selected');
-            this.cake.toppings = this.cake.toppings.filter(t => t !== topping);
+            button.classList.remove('selected');
+            this.cake.toppings = this.cake.toppings.filter(t => t.name !== topping);
         } else {
             // Add topping
-            option.classList.add('selected');
-            this.cake.toppings.push(topping);
+            button.classList.add('selected');
+            this.cake.toppings.push({ name: topping, price: price });
         }
         
         this.updateCakeToppings();
         this.updateCakeInfo();
         this.updatePrice();
-        this.animateCake();
-    }
-    
-    toggleDecoration(decoration, icon) {
-        const option = event.currentTarget;
-        const isSelected = option.classList.contains('selected');
-        
-        if (isSelected) {
-            // Remove decoration
-            option.classList.remove('selected');
-            this.cake.decorations = this.cake.decorations.filter(d => d !== decoration);
-        } else {
-            // Add decoration
-            option.classList.add('selected');
-            this.cake.decorations.push(decoration);
-        }
-        
-        this.updateCakeDecorations();
-        this.updateCakeInfo();
-        this.updatePrice();
-        this.animateCake();
     }
     
     updateCakeLayers(color) {
-        const layers = document.querySelectorAll('.cake-layer');
+        // Update all cake layer colors
+        const layers = document.querySelectorAll('.cake-layer-side, .cake-layer-top');
+        const bottomLayers = document.querySelectorAll('.cake-layer-bottom');
+        
         layers.forEach(layer => {
-            layer.style.background = `linear-gradient(135deg, ${color} 0%, ${this.lightenColor(color, 20)} 100%)`;
+            layer.style.fill = color;
+            layer.style.transition = 'fill 0.6s ease';
+        });
+        
+        // Make bottom layers slightly darker
+        const darkerColor = this.darkenColor(color, 20);
+        bottomLayers.forEach(layer => {
+            layer.style.fill = darkerColor;
+            layer.style.transition = 'fill 0.6s ease';
         });
     }
     
     updateCakeFrosting(color) {
-        const frosting = document.getElementById('cakeFrosting');
-        frosting.style.background = `linear-gradient(135deg, ${color} 0%, ${this.lightenColor(color, 20)} 100%)`;
-        frosting.classList.add('visible');
+        const frostingLayer = document.getElementById('frostingLayer');
+        const frostingPaths = frostingLayer.querySelectorAll('path');
+        
+        frostingPaths.forEach(path => {
+            path.style.fill = color;
+            path.style.opacity = '0.95';
+        });
+        
+        frostingLayer.classList.add('visible');
+    }
+    
+    updateCakeSize(size) {
+        // Update SVG viewBox or scale based on size
+        const svg = document.getElementById('cakeSvg');
+        if (svg) {
+            svg.style.transform = size === '10-inch' ? 'scale(1.1)' : 
+                                  size === '6-inch' ? 'scale(0.9)' : 
+                                  'scale(1)';
+            svg.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        }
     }
     
     updateCakeToppings() {
-        const toppingsContainer = document.getElementById('cakeToppings');
+        const toppingsContainer = document.getElementById('toppingsContainer');
         toppingsContainer.innerHTML = '';
         
-        this.cake.toppings.forEach((topping, index) => {
-            const toppingElement = document.createElement('div');
-            toppingElement.className = 'topping-item';
-            toppingElement.style.left = `${Math.random() * 80 + 10}%`;
-            toppingElement.style.top = `${Math.random() * 60 + 20}%`;
-            toppingElement.style.animationDelay = `${index * 0.1}s`;
-            
-            // Get icon for topping
-            const icon = this.getToppingIcon(topping);
-            toppingElement.textContent = icon;
-            
-            toppingsContainer.appendChild(toppingElement);
-        });
-    }
-    
-    updateCakeDecorations() {
-        const decorationsContainer = document.getElementById('cakeDecoration');
-        decorationsContainer.innerHTML = '';
+        if (this.cake.toppings.length === 0) return;
         
-        this.cake.decorations.forEach((decoration, index) => {
-            const decorationElement = document.createElement('div');
-            decorationElement.className = 'decoration-item';
-            decorationElement.style.animationDelay = `${index * 0.2}s`;
+        // Add visual indicators for toppings
+        this.cake.toppings.forEach((topping, index) => {
+            const icon = this.getToppingIcon(topping.name);
             
-            // Get icon for decoration
-            const icon = this.getDecorationIcon(decoration);
-            decorationElement.textContent = icon;
-            
-            decorationsContainer.appendChild(decorationElement);
+            // Add multiple icons scattered on the cake
+            for (let i = 0; i < 5; i++) {
+                const x = 140 + Math.random() * 120;
+                const y = 240 + (index * 20) + Math.random() * 40;
+                
+                const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                textElement.setAttribute('x', x);
+                textElement.setAttribute('y', y);
+                textElement.setAttribute('font-size', '12');
+                textElement.setAttribute('opacity', '0');
+                textElement.textContent = icon;
+                
+                toppingsContainer.appendChild(textElement);
+                
+                // Animate appearance
+                setTimeout(() => {
+                    textElement.style.transition = 'opacity 0.6s ease';
+                    textElement.setAttribute('opacity', '1');
+                }, i * 100);
+            }
         });
     }
     
     getToppingIcon(topping) {
         const icons = {
             'sprinkles': '✨',
-            'chocolate-chips': '🍫',
-            'strawberries': '🍓',
-            'cherries': '🍒',
-            'nuts': '🥜',
-            'coconut': '🥥',
-            'oreos': '🍪',
-            'edible-glitter': '✨'
+            'fresh-fruit': '🍓',
+            'chocolate-drip': '🍫',
+            'fondant': '🎀',
+            'edible-flowers': '🌸',
+            'shimmer': '✨',
+            'hand-piped-flowers': '🌺',
+            'ombre': '🌈'
         };
         return icons[topping] || '✨';
-    }
-    
-    getDecorationIcon(decoration) {
-        const icons = {
-            'drip': '💧',
-            'flowers': '🌸',
-            'writing': '✍️',
-            'ribbon': '🎀'
-        };
-        return icons[decoration] || '✨';
     }
     
     updateCakeInfo() {
         const cakeName = document.getElementById('cakeName');
         const cakeDescription = document.getElementById('cakeDescription');
         
-        if (this.cake.flavor) {
-            const flavorName = this.getFlavorName(this.cake.flavor);
-            const frostingName = this.cake.frosting ? this.getFrostingName(this.cake.frosting) : '';
-            const toppingsText = this.cake.toppings.length > 0 ? ` with ${this.cake.toppings.join(', ')}` : '';
-            const decorationsText = this.cake.decorations.length > 0 ? ` and ${this.cake.decorations.join(', ')} decorations` : '';
-            
-            cakeName.textContent = `${flavorName} ${frostingName ? frostingName + ' ' : ''}Cake${decorationsText}`;
-            cakeDescription.textContent = `A delicious ${flavorName.toLowerCase()} cake${frostingName ? ' with ' + frostingName.toLowerCase() + ' frosting' : ''}${toppingsText}${decorationsText}. Perfect for any celebration!`;
-        } else {
+        if (!this.cake.flavor && !this.cake.size) {
             cakeName.textContent = 'Your Custom Cake';
-            cakeDescription.textContent = 'Start building by selecting your base flavor!';
+            cakeDescription.textContent = 'Start building by selecting your base flavor and size!';
+            return;
         }
+        
+        const flavorName = this.getFlavorName(this.cake.flavor);
+        const frostingName = this.cake.frosting ? this.getFrostingName(this.cake.frosting) : '';
+        const sizeName = this.cake.size ? this.getSizeName(this.cake.size) : '';
+        
+        let name = '';
+        if (this.cake.size) {
+            name += `${sizeName} `;
+        }
+        if (this.cake.flavor) {
+            name += `${flavorName}`;
+        }
+        if (this.cake.frosting) {
+            name += ` with ${frostingName}`;
+        }
+        name += ' Cake';
+        
+        cakeName.textContent = name;
+        
+        let description = `A delicious ${sizeName || 'custom'} ${flavorName || ''} cake`;
+        if (this.cake.frosting) {
+            description += ` with ${frostingName.toLowerCase()} frosting`;
+        }
+        if (this.cake.toppings.length > 0) {
+            const toppingNames = this.cake.toppings.map(t => t.name.replace(/-/g, ' ')).join(', ');
+            description += `, featuring ${toppingNames}`;
+        }
+        if (this.cake.customMessage) {
+            description += `. Custom message: "${this.cake.customMessage}"`;
+        }
+        description += '. Perfect for any celebration!';
+        
+        cakeDescription.textContent = description;
     }
     
     getFlavorName(flavor) {
         const names = {
-            'vanilla': 'Vanilla Bean',
-            'chocolate': 'Chocolate Fudge',
+            'vanilla-bean': 'Vanilla Bean',
+            'funfetti': 'Funfetti',
+            'chocolate-fudge': 'Chocolate Fudge',
             'red-velvet': 'Red Velvet',
-            'lemon': 'Lemon Burst',
-            'strawberry': 'Strawberry',
-            'funfetti': 'Funfetti'
+            'cookies-cream': 'Cookies & Cream',
+            'lemon-burst': 'Lemon Burst',
+            'strawberry-shortcake': 'Strawberry Shortcake',
+            'orange-cranberry': 'Orange Cranberry',
+            'key-lime': 'Key Lime'
         };
         return names[flavor] || flavor;
     }
@@ -283,56 +305,33 @@ class CakeBuilder {
         return names[frosting] || frosting;
     }
     
+    getSizeName(size) {
+        const names = {
+            '6-inch': '6"',
+            '8-inch': '8"',
+            '10-inch': '10"'
+        };
+        return names[size] || size;
+    }
+    
     updatePrice() {
-        let totalPrice = 0;
+        let totalPrice = this.cake.sizePrice;
         
-        // Base price
-        totalPrice += 25;
-        
-        // Flavor price
-        if (this.cake.flavor && this.prices.flavors[this.cake.flavor]) {
-            totalPrice += this.prices.flavors[this.cake.flavor];
-        }
-        
-        // Frosting price
-        if (this.cake.frosting && this.prices.frostings[this.cake.frosting]) {
-            totalPrice += this.prices.frostings[this.cake.frosting];
-        }
-        
-        // Toppings price
+        // Add toppings prices
         this.cake.toppings.forEach(topping => {
-            if (this.prices.toppings[topping]) {
-                totalPrice += this.prices.toppings[topping];
-            }
-        });
-        
-        // Decorations price
-        this.cake.decorations.forEach(decoration => {
-            if (this.prices.decorations[decoration]) {
-                totalPrice += this.prices.decorations[decoration];
-            }
+            totalPrice += topping.price;
         });
         
         this.cake.basePrice = totalPrice;
         
         const priceElement = document.getElementById('cakePrice');
         if (priceElement) {
-            priceElement.textContent = `$${totalPrice}`;
+            if (totalPrice === 0) {
+                priceElement.textContent = 'Starting at $45';
+            } else {
+                priceElement.textContent = `$${totalPrice}`;
+            }
         }
-    }
-    
-    animateCake() {
-        const cakeContainer = document.querySelector('.cake-container');
-        cakeContainer.classList.add('loading');
-        
-        setTimeout(() => {
-            cakeContainer.classList.remove('loading');
-            cakeContainer.classList.add('success');
-            
-            setTimeout(() => {
-                cakeContainer.classList.remove('success');
-            }, 1000);
-        }, 300);
     }
     
     animateHero() {
@@ -351,38 +350,57 @@ class CakeBuilder {
         // Reset cake object
         this.cake = {
             flavor: null,
+            flavorColor: null,
             frosting: null,
+            frostingColor: null,
+            size: null,
+            sizePrice: 0,
             toppings: [],
-            decorations: [],
+            customMessage: '',
             basePrice: 0
         };
         
         // Reset UI
-        document.querySelectorAll('.flavor-option, .frosting-option, .topping-option, .decoration-option').forEach(option => {
+        document.querySelectorAll('.flavor-option, .frosting-option, .size-option, .topping-option').forEach(option => {
             option.classList.remove('selected');
         });
         
-        // Reset cake display
-        const layers = document.querySelectorAll('.cake-layer');
-        layers.forEach(layer => {
-            layer.style.background = 'linear-gradient(135deg, #F5F5DC 0%, #E6E6FA 100%)';
+        // Reset cake visual
+        const defaultColor = '#F5F5DC';
+        this.updateCakeLayers(defaultColor);
+        
+        // Hide frosting
+        const frostingLayer = document.getElementById('frostingLayer');
+        const frostingPaths = frostingLayer.querySelectorAll('path');
+        frostingPaths.forEach(path => {
+            path.style.opacity = '0';
         });
+        frostingLayer.classList.remove('visible');
         
-        const frosting = document.getElementById('cakeFrosting');
-        frosting.classList.remove('visible');
-        frosting.style.background = '';
+        // Clear toppings
+        document.getElementById('toppingsContainer').innerHTML = '';
         
-        document.getElementById('cakeToppings').innerHTML = '';
-        document.getElementById('cakeDecoration').innerHTML = '';
+        // Reset SVG size
+        const svg = document.getElementById('cakeSvg');
+        if (svg) {
+            svg.style.transform = 'scale(1)';
+        }
+        
+        // Clear custom message
+        const messageInput = document.getElementById('customMessage');
+        if (messageInput) {
+            messageInput.value = '';
+        }
         
         this.updateCakeInfo();
         this.updatePrice();
-        this.animateCake();
+        
+        this.showMessage('Cake builder reset! Start fresh 🎂', 'info');
     }
     
     saveCake() {
-        if (!this.cake.flavor) {
-            alert('Please select a flavor first!');
+        if (!this.cake.flavor || !this.cake.size) {
+            this.showMessage('Please select a flavor and size first!', 'error');
             return;
         }
         
@@ -398,25 +416,40 @@ class CakeBuilder {
     }
     
     orderCake() {
-        if (!this.cake.flavor) {
-            alert('Please select a flavor first!');
+        if (!this.cake.flavor || !this.cake.size) {
+            this.showMessage('Please select a flavor and size first!', 'error');
             return;
         }
         
-        // Create order data
-        const orderData = {
-            type: 'Custom Cake',
-            flavor: this.cake.flavor,
-            frosting: this.cake.frosting,
-            toppings: this.cake.toppings,
-            decorations: this.cake.decorations,
-            price: this.cake.basePrice,
-            timestamp: new Date().toISOString()
-        };
+        // Create order summary
+        const flavorName = this.getFlavorName(this.cake.flavor);
+        const frostingName = this.cake.frosting ? this.getFrostingName(this.cake.frosting) : 'None selected';
+        const sizeName = this.getSizeName(this.cake.size);
+        const toppingsList = this.cake.toppings.length > 0 
+            ? this.cake.toppings.map(t => t.name.replace(/-/g, ' ')).join(', ')
+            : 'None';
         
-        // Redirect to order page with data
-        const orderUrl = `index.html#order?cake=${encodeURIComponent(JSON.stringify(orderData))}`;
-        window.location.href = orderUrl;
+        const orderSummary = `
+Custom Cake Order:
+- Size: ${sizeName}
+- Flavor: ${flavorName}
+- Frosting: ${frostingName}
+- Toppings/Decorations: ${toppingsList}
+${this.cake.customMessage ? `- Custom Message: "${this.cake.customMessage}"` : ''}
+- Total Price: $${this.cake.basePrice}
+
+Ready to order this custom cake!
+        `;
+        
+        // Store in localStorage for the order page
+        localStorage.setItem('customCakeOrder', JSON.stringify({
+            summary: orderSummary,
+            details: this.cake,
+            timestamp: new Date().toISOString()
+        }));
+        
+        // Redirect to order page
+        window.location.href = 'index.html#order';
     }
     
     showMessage(message, type = 'info') {
@@ -426,15 +459,16 @@ class CakeBuilder {
         messageEl.textContent = message;
         messageEl.style.cssText = `
             position: fixed;
-            top: 20px;
+            top: 100px;
             right: 20px;
-            background: ${type === 'success' ? 'var(--accent-yellow)' : 'var(--accent-pink)'};
+            background: ${type === 'success' ? 'var(--accent-yellow)' : type === 'error' ? '#ff6b6b' : 'var(--accent-pink)'};
             color: var(--bg-primary);
             padding: 1rem 2rem;
             border-radius: 25px;
             font-weight: 600;
             z-index: 10000;
             animation: messageSlide 0.3s ease-out;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         `;
         
         document.body.appendChild(messageEl);
@@ -448,15 +482,13 @@ class CakeBuilder {
         }, 3000);
     }
     
-    lightenColor(color, percent) {
+    darkenColor(color, percent) {
         const num = parseInt(color.replace("#", ""), 16);
         const amt = Math.round(2.55 * percent);
-        const R = (num >> 16) + amt;
-        const G = (num >> 8 & 0x00FF) + amt;
-        const B = (num & 0x0000FF) + amt;
-        return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-            (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-            (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        const R = Math.max((num >> 16) - amt, 0);
+        const G = Math.max((num >> 8 & 0x00FF) - amt, 0);
+        const B = Math.max((num & 0x0000FF) - amt, 0);
+        return "#" + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
     }
 }
 
@@ -496,26 +528,5 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('✨ Cake Builder ready!');
     } catch (error) {
         console.error('❌ Cake Builder initialization error:', error);
-    }
-});
-
-// Handle order data from URL parameters
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const cakeData = urlParams.get('cake');
-    
-    if (cakeData) {
-        try {
-            const orderData = JSON.parse(decodeURIComponent(cakeData));
-            console.log('Received cake order data:', orderData);
-            
-            // You can use this data to pre-populate the order form
-            // or show a confirmation message
-            if (orderData.type === 'Custom Cake') {
-                alert(`Custom ${orderData.flavor} cake order received! Price: $${orderData.price}`);
-            }
-        } catch (error) {
-            console.error('Error parsing cake order data:', error);
-        }
     }
 });
