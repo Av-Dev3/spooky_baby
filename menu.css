@@ -18,6 +18,12 @@ body {
 .header {
     margin-top: 0 !important;
     padding-top: 0 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    width: 100% !important;
 }
 
 /* Ensure body starts at very top */
@@ -32,6 +38,7 @@ html, body {
     padding: 8rem 0 4rem;
     position: relative;
     overflow: hidden;
+    margin-top: 0 !important;
 }
 
 .menu-hero::before {
