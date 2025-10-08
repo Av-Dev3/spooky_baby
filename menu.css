@@ -347,6 +347,30 @@ html, body {
     color: var(--text-primary);
 }
 
+/* Cart Button Styles */
+.flavor-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.add-to-cart-btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
 .customization-options {
     margin-top: 2rem;
 }
