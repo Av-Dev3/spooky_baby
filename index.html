@@ -388,6 +388,54 @@
         </div>
     </section>
 
+    <!-- Reviews Section -->
+    <section class="reviews-section" id="reviews">
+        <div class="container">
+            <h2 class="reviews-section-title scroll-animate">Customer Reviews</h2>
+            <p class="reviews-section-subtitle scroll-animate">Share your experience with Spooky Baby Sweets!</p>
+            
+            <!-- Review Form -->
+            <div class="review-form-container scroll-animate-scale">
+                <h3 class="review-form-title">Write a Review</h3>
+                <form class="review-form" id="reviewForm">
+                    <div class="form-group">
+                        <label for="reviewName" class="form-label">Your Name *</label>
+                        <input type="text" id="reviewName" name="name" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Rating *</label>
+                        <div class="star-rating" id="starRating">
+                            <input type="radio" id="star5" name="rating" value="5" required>
+                            <label for="star5" class="star" data-rating="5">★</label>
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4" class="star" data-rating="4">★</label>
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3" class="star" data-rating="3">★</label>
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2" class="star" data-rating="2">★</label>
+                            <input type="radio" id="star1" name="rating" value="1">
+                            <label for="star1" class="star" data-rating="1">★</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText" class="form-label">Your Review *</label>
+                        <textarea id="reviewText" name="text" class="form-textarea" rows="4" placeholder="Tell us about your experience..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-pink">Submit Review</button>
+                    <div class="review-form-message" id="reviewFormMessage"></div>
+                </form>
+            </div>
+            
+            <!-- Reviews Display -->
+            <div class="reviews-display scroll-animate-scale" id="reviewsDisplay">
+                <div class="reviews-loading">Loading reviews...</div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section class="contact" id="contact">
         <div class="container">
@@ -404,7 +452,17 @@
         </div>
     </footer>
 
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase Configuration -->
+    <script>
+        // Configure your Supabase credentials here
+        // Get these from your Supabase project settings: https://app.supabase.com/project/_/settings/api
+        window.SUPABASE_URL = 'https://ckccxrkymluiryrtolhg.supabase.co'; // Your Supabase project URL
+        window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrY2N4cmt5bWx1aXJ5cnRvbGhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNTYzODYsImV4cCI6MjA4MDYzMjM4Nn0.DQNY03yAGwwiVBP00EBOu6eWaHt84-L_4Ub1sYw9o2w'; // Your Supabase anon/public key
+    </script>
     <script src="script.js?v=20"></script>
     <script src="drive-gallery.js?v=18"></script>
+    <script src="reviews.js"></script>
 </body>
 </html>

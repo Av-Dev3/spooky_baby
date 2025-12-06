@@ -328,6 +328,204 @@ html, body {
     }
 }
 
+/* Reviews Section */
+.reviews-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.reviews-section-title {
+    font-family: 'Chewy', cursive;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--accent-pink);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.reviews-section-subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+}
+
+/* Review Form */
+.review-form-container {
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    background: transparent;
+    border: 1px solid rgba(255, 105, 180, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.review-form-title {
+    font-family: 'Chewy', cursive;
+    font-size: 1.5rem;
+    color: var(--accent-pink);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.review-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Star Rating */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label.star {
+    font-size: 2rem;
+    color: rgba(255, 193, 7, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.star-rating label.star:hover,
+.star-rating label.star:hover ~ label.star {
+    color: var(--accent-yellow);
+}
+
+.star-rating input[type="radio"]:checked ~ label.star {
+    color: var(--accent-yellow);
+}
+
+/* Highlight all stars up to and including the checked one */
+.star-rating input[type="radio"]:checked ~ label.star,
+.star-rating input[type="radio"]:checked ~ label.star ~ label.star {
+    color: var(--accent-yellow);
+}
+
+/* Reviews Display */
+.reviews-display {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.reviews-loading {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+}
+
+.reviews-empty {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 3rem;
+    font-style: italic;
+}
+
+.review-card {
+    background: transparent;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.review-card:hover {
+    border-color: rgba(255, 105, 180, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.review-name {
+    font-weight: 600;
+    color: var(--accent-pink);
+    font-size: 1.1rem;
+}
+
+.review-date {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.review-rating {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.review-rating .star {
+    font-size: 1.2rem;
+    color: var(--accent-yellow);
+}
+
+.review-rating .star.empty {
+    color: rgba(255, 193, 7, 0.2);
+}
+
+.review-text {
+    color: var(--text-primary);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.review-form-message {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    display: none;
+}
+
+.review-form-message.success {
+    display: block;
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.review-form-message.error {
+    display: block;
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+/* Responsive Design for Reviews */
+@media (max-width: 768px) {
+    .review-form-container {
+        padding: 1.5rem;
+    }
+    
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .star-rating {
+        gap: 0.25rem;
+    }
+    
+    .star-rating label.star {
+        font-size: 1.5rem;
+    }
+}
+
 @media (max-width: 480px) {
     .checkout-hero {
         padding: 6rem 0 3rem;
@@ -340,5 +538,17 @@ html, body {
     .order-summary,
     .checkout-form-section {
         padding: 1.5rem;
+    }
+    
+    .reviews-section {
+        padding: 3rem 0;
+    }
+    
+    .review-form-container {
+        padding: 1rem;
+    }
+    
+    .review-card {
+        padding: 1rem;
     }
 }
