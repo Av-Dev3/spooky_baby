@@ -53,7 +53,11 @@ Now add the following columns:
 - Type: `text`
 - Is nullable: ✗ (uncheck)
 
-### Column 5: `created_at`
+### Column 5: `image_url`
+- Type: `text`
+- Is nullable: ✓ (check - this is optional)
+
+### Column 6: `created_at`
 - Type: `timestamptz`
 - Default value: `now()`
 - Is nullable: ✗ (uncheck)
@@ -73,6 +77,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   name TEXT NOT NULL,
   rating SMALLINT NOT NULL CHECK (rating >= 1 AND rating <= 5),
   text TEXT NOT NULL,
+  image_url TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
@@ -92,7 +97,44 @@ CREATE POLICY "Anyone can insert reviews" ON reviews
 
 4. Click **"Run"** (or press Cmd/Ctrl + Enter)
 
-## Step 3: Get Your API Credentials
+## Step 3: Set Up Supabase Storage for Review Photos
+
+1. Go to **Storage** in the left sidebar
+2. Click **"New bucket"**
+3. Name it: `review-photos`
+4. Make it **Public** (toggle "Public bucket" to ON)
+5. Click **"Create bucket"**
+
+### Set Up Storage Policies
+
+After creating the bucket, you need to set up policies:
+
+1. Click on the `review-photos` bucket
+2. Go to the **"Policies"** tab
+3. Click **"New Policy"**
+4. Choose **"For full customization"**
+5. Name it: `Allow public uploads`
+6. Use this SQL:
+
+```sql
+-- Allow anyone to upload photos
+CREATE POLICY "Allow public uploads"
+ON storage.objects FOR INSERT
+TO public
+WITH CHECK (bucket_id = 'review-photos');
+
+-- Allow anyone to read photos
+CREATE POLICY "Allow public reads"
+ON storage.objects FOR SELECT
+TO public
+USING (bucket_id = 'review-photos');
+```
+
+7. Click **"Review"** and then **"Save policy"**
+
+**Note:** If you want to restrict uploads (e.g., only authenticated users), you can modify these policies. For a public review system, allowing public uploads is fine since you can add moderation later.
+
+## Step 4: Get Your API Credentials
 
 1. Go to **Settings** (gear icon) in the left sidebar
 2. Click **"API"**
@@ -100,10 +142,10 @@ CREATE POLICY "Anyone can insert reviews" ON reviews
    - **Project URL**: Copy this (looks like `https://xxxxx.supabase.co`)
    - **anon/public key**: Copy this (long string starting with `eyJ...`)
 
-## Step 4: Configure Your Website
+## Step 5: Configure Your Website
 
-1. Open `checkout.html` in your project
-2. Find the Supabase configuration section (around line 170):
+1. Open `index.html` in your project
+2. Find the Supabase configuration section (around line 410):
    ```html
    <script>
        window.SUPABASE_URL = ''; // Your Supabase project URL
@@ -118,13 +160,14 @@ CREATE POLICY "Anyone can insert reviews" ON reviews
    </script>
    ```
 
-## Step 5: Test It Out
+## Step 6: Test It Out
 
 1. Deploy your site or test locally
-2. Go to the checkout page
-3. Scroll down to the "Customer Reviews" section
-4. Try submitting a test review
+2. Go to the homepage
+3. Scroll down to the "Customer Reviews" section (below the order form)
+4. Try submitting a test review with a photo
 5. Check your Supabase dashboard → Table Editor → reviews table to see if it appears
+6. Check your Supabase dashboard → Storage → review-photos bucket to see uploaded photos
 
 ## Security Notes
 
@@ -154,7 +197,14 @@ CREATE POLICY "Anyone can insert reviews" ON reviews
 ### Database connection errors?
 - Verify your Supabase project is active (not paused)
 - Check that the table name is exactly `reviews` (lowercase)
-- Verify column names match: `id`, `name`, `rating`, `text`, `created_at`
+- Verify column names match: `id`, `name`, `rating`, `text`, `image_url`, `created_at`
+
+### Photo upload errors?
+- Make sure the `review-photos` bucket exists and is public
+- Check that Storage policies are set up correctly
+- Verify file size is under 5MB
+- Check browser console for detailed error messages
+- Ensure the bucket name matches exactly: `review-photos`
 
 ## Optional: Add Review Moderation
 
@@ -175,6 +225,24 @@ If you want to moderate reviews before they appear:
    ```
 
 3. Approve reviews manually in Supabase dashboard by setting `approved = true`
+
+## Photo Upload Features
+
+The review system now supports photo uploads:
+
+- **File size limit**: 5MB per photo
+- **Supported formats**: JPG, PNG, WebP
+- **Storage**: Photos are stored in Supabase Storage bucket `review-photos`
+- **Display**: Photos appear in review cards below the rating and above the text
+- **Optional**: Users can submit reviews with or without photos
+
+### Storage Limits
+
+Supabase free tier includes:
+- 1GB of storage
+- 2GB bandwidth per month
+
+For most small businesses, this is plenty for review photos. If you need more, Supabase has affordable paid plans.
 
 ## Need Help?
 

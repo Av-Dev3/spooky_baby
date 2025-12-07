@@ -19,6 +19,7 @@ class ReviewsManager {
     
     init() {
         this.setupFormHandling();
+        this.setupPhotoPreview();
         this.loadReviews();
     }
     
@@ -84,16 +85,31 @@ class ReviewsManager {
         const name = formData.get('name').trim();
         const rating = parseInt(formData.get('rating'));
         const text = formData.get('text').trim();
+        const photoFile = formData.get('photo');
         
         // Validate
         if (!name || !rating || !text) {
-            this.showMessage('Please fill in all fields.', 'error');
+            this.showMessage('Please fill in all required fields.', 'error');
             return;
         }
         
         if (rating < 1 || rating > 5) {
             this.showMessage('Please select a valid rating.', 'error');
             return;
+        }
+        
+        // Validate photo if provided
+        if (photoFile && photoFile.size > 0) {
+            if (photoFile.size > 5 * 1024 * 1024) { // 5MB limit
+                this.showMessage('Photo size must be less than 5MB.', 'error');
+                return;
+            }
+            
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!validTypes.includes(photoFile.type)) {
+                this.showMessage('Please upload a valid image file (JPG, PNG, or WebP).', 'error');
+                return;
+            }
         }
         
         // Disable form
@@ -103,17 +119,34 @@ class ReviewsManager {
         submitBtn.disabled = true;
         
         try {
+            let imageUrl = null;
+            
+            // Upload photo to Supabase Storage if provided
+            if (photoFile && photoFile.size > 0) {
+                submitBtn.textContent = 'Uploading photo...';
+                imageUrl = await this.uploadPhoto(photoFile, name);
+                if (!imageUrl) {
+                    throw new Error('Failed to upload photo');
+                }
+            }
+            
+            submitBtn.textContent = 'Submitting review...';
+            
             // Insert review into Supabase
+            const reviewData = {
+                name: name,
+                rating: rating,
+                text: text,
+                created_at: new Date().toISOString()
+            };
+            
+            if (imageUrl) {
+                reviewData.image_url = imageUrl;
+            }
+            
             const { data, error } = await this.supabase
                 .from('reviews')
-                .insert([
-                    {
-                        name: name,
-                        rating: rating,
-                        text: text,
-                        created_at: new Date().toISOString()
-                    }
-                ])
+                .insert([reviewData])
                 .select();
             
             if (error) {
@@ -124,6 +157,7 @@ class ReviewsManager {
             this.showMessage('Thank you for your review! It will appear shortly.', 'success');
             form.reset();
             this.highlightStars(0);
+            this.clearPhotoPreview();
             
             // Reload reviews
             setTimeout(() => {
@@ -137,6 +171,80 @@ class ReviewsManager {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         }
+    }
+    
+    async uploadPhoto(file, userName) {
+        try {
+            // Create a unique filename
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const filePath = `review-photos/${fileName}`;
+            
+            // Upload to Supabase Storage
+            const { data, error } = await this.supabase.storage
+                .from('review-photos')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+            
+            if (error) {
+                console.error('Upload error:', error);
+                throw error;
+            }
+            
+            // Get public URL
+            const { data: urlData } = this.supabase.storage
+                .from('review-photos')
+                .getPublicUrl(filePath);
+            
+            return urlData.publicUrl;
+            
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            throw error;
+        }
+    }
+    
+    setupPhotoPreview() {
+        const photoInput = document.getElementById('reviewPhoto');
+        const photoPreview = document.getElementById('photoPreview');
+        const photoPreviewImg = document.getElementById('photoPreviewImg');
+        const photoRemove = document.getElementById('photoRemove');
+        const photoUploadLabel = document.querySelector('.photo-upload-label');
+        
+        if (!photoInput || !photoPreview || !photoPreviewImg) return;
+        
+        // Show preview when file is selected
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photoPreviewImg.src = e.target.result;
+                    photoPreview.style.display = 'block';
+                    photoUploadLabel.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Remove photo
+        if (photoRemove) {
+            photoRemove.addEventListener('click', () => {
+                this.clearPhotoPreview();
+            });
+        }
+    }
+    
+    clearPhotoPreview() {
+        const photoInput = document.getElementById('reviewPhoto');
+        const photoPreview = document.getElementById('photoPreview');
+        const photoUploadLabel = document.querySelector('.photo-upload-label');
+        
+        if (photoInput) photoInput.value = '';
+        if (photoPreview) photoPreview.style.display = 'none';
+        if (photoUploadLabel) photoUploadLabel.style.display = 'flex';
     }
     
     async loadReviews() {
@@ -200,6 +308,12 @@ class ReviewsManager {
             }
         }
         
+        const imageHtml = review.image_url 
+            ? `<div class="review-image-wrapper">
+                <img src="${this.escapeHtml(review.image_url)}" alt="Review photo" class="review-image" loading="lazy">
+               </div>`
+            : '';
+        
         card.innerHTML = `
             <div class="review-header">
                 <div>
@@ -210,6 +324,7 @@ class ReviewsManager {
             <div class="review-rating">
                 ${starsHtml}
             </div>
+            ${imageHtml}
             <div class="review-text">${this.escapeHtml(review.text)}</div>
         `;
         
