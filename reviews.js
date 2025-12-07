@@ -308,11 +308,19 @@ class ReviewsManager {
             }
         }
         
-        const imageHtml = review.image_url 
-            ? `<div class="review-image-wrapper">
-                <img src="${this.escapeHtml(review.image_url)}" alt="Review photo" class="review-image" loading="lazy">
-               </div>`
-            : '';
+        // Create image HTML if image_url exists
+        let imageHtml = '';
+        if (review.image_url && review.image_url.trim() !== '') {
+            imageHtml = `
+                <div class="review-image-wrapper">
+                    <img src="${this.escapeHtml(review.image_url)}" 
+                         alt="Review photo by ${this.escapeHtml(review.name)}" 
+                         class="review-image" 
+                         loading="lazy"
+                         onerror="this.style.display='none'; this.parentElement.style.display='none';">
+                </div>
+            `;
+        }
         
         card.innerHTML = `
             <div class="review-header">
