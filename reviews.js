@@ -85,7 +85,7 @@ class ReviewsManager {
         const name = formData.get('name').trim();
         const rating = parseInt(formData.get('rating'));
         const text = formData.get('text').trim();
-        const photoFile = formData.get('photo');
+        const photoFiles = form.querySelector('#reviewPhoto').files;
         
         // Validate
         if (!name || !rating || !text) {
@@ -98,17 +98,24 @@ class ReviewsManager {
             return;
         }
         
-        // Validate photo if provided
-        if (photoFile && photoFile.size > 0) {
-            if (photoFile.size > 5 * 1024 * 1024) { // 5MB limit
-                this.showMessage('Photo size must be less than 5MB.', 'error');
+        // Validate photos if provided
+        if (photoFiles && photoFiles.length > 0) {
+            if (photoFiles.length > 5) {
+                this.showMessage('You can upload up to 5 photos.', 'error');
                 return;
             }
             
             const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-            if (!validTypes.includes(photoFile.type)) {
-                this.showMessage('Please upload a valid image file (JPG, PNG, or WebP).', 'error');
-                return;
+            for (let i = 0; i < photoFiles.length; i++) {
+                const file = photoFiles[i];
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit per file
+                    this.showMessage(`Photo "${file.name}" is too large. Max size is 5MB per photo.`, 'error');
+                    return;
+                }
+                if (!validTypes.includes(file.type)) {
+                    this.showMessage(`Photo "${file.name}" is not a valid format. Please use JPG, PNG, or WebP.`, 'error');
+                    return;
+                }
             }
         }
         
@@ -119,14 +126,23 @@ class ReviewsManager {
         submitBtn.disabled = true;
         
         try {
-            let imageUrl = null;
+            let imageUrls = [];
             
-            // Upload photo to Supabase Storage if provided
-            if (photoFile && photoFile.size > 0) {
-                submitBtn.textContent = 'Uploading photo...';
-                imageUrl = await this.uploadPhoto(photoFile, name);
-                if (!imageUrl) {
-                    throw new Error('Failed to upload photo');
+            // Upload photos to Supabase Storage if provided
+            if (photoFiles && photoFiles.length > 0) {
+                submitBtn.textContent = `Uploading ${photoFiles.length} photo${photoFiles.length > 1 ? 's' : ''}...`;
+                
+                // Upload all photos
+                for (let i = 0; i < photoFiles.length; i++) {
+                    const file = photoFiles[i];
+                    const imageUrl = await this.uploadPhoto(file, name);
+                    if (imageUrl) {
+                        imageUrls.push(imageUrl);
+                    }
+                }
+                
+                if (imageUrls.length === 0 && photoFiles.length > 0) {
+                    throw new Error('Failed to upload photos');
                 }
             }
             
@@ -140,8 +156,9 @@ class ReviewsManager {
                 created_at: new Date().toISOString()
             };
             
-            if (imageUrl) {
-                reviewData.image_url = imageUrl;
+            // Store image URLs as JSON array
+            if (imageUrls.length > 0) {
+                reviewData.image_url = JSON.stringify(imageUrls);
             }
             
             const { data, error } = await this.supabase
@@ -157,7 +174,7 @@ class ReviewsManager {
             this.showMessage('Thank you for your review! It will appear shortly.', 'success');
             form.reset();
             this.highlightStars(0);
-            this.clearPhotoPreview();
+            this.clearPhotoPreviews();
             
             // Reload reviews
             setTimeout(() => {
@@ -208,42 +225,80 @@ class ReviewsManager {
     
     setupPhotoPreview() {
         const photoInput = document.getElementById('reviewPhoto');
-        const photoPreview = document.getElementById('photoPreview');
-        const photoPreviewImg = document.getElementById('photoPreviewImg');
-        const photoRemove = document.getElementById('photoRemove');
+        const photoPreviewContainer = document.getElementById('photoPreviewContainer');
         const photoUploadLabel = document.querySelector('.photo-upload-label');
         
-        if (!photoInput || !photoPreview || !photoPreviewImg) return;
+        if (!photoInput || !photoPreviewContainer) return;
         
-        // Show preview when file is selected
+        // Show previews when files are selected
         photoInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    photoPreviewImg.src = e.target.result;
-                    photoPreview.style.display = 'block';
-                    photoUploadLabel.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
+            const files = Array.from(e.target.files);
+            
+            if (files.length > 5) {
+                this.showMessage('You can only upload up to 5 photos.', 'error');
+                photoInput.value = '';
+                return;
+            }
+            
+            // Clear previous previews
+            photoPreviewContainer.innerHTML = '';
+            
+            if (files.length > 0) {
+                photoUploadLabel.style.display = 'none';
+                
+                files.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const previewDiv = document.createElement('div');
+                        previewDiv.className = 'photo-preview-item';
+                        previewDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview ${index + 1}" class="photo-preview-img">
+                            <button type="button" class="photo-remove" data-index="${index}">×</button>
+                        `;
+                        photoPreviewContainer.appendChild(previewDiv);
+                        
+                        // Add remove button handler
+                        const removeBtn = previewDiv.querySelector('.photo-remove');
+                        removeBtn.addEventListener('click', () => {
+                            this.removePhotoPreview(index);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                photoUploadLabel.style.display = 'flex';
             }
         });
-        
-        // Remove photo
-        if (photoRemove) {
-            photoRemove.addEventListener('click', () => {
-                this.clearPhotoPreview();
-            });
-        }
     }
     
-    clearPhotoPreview() {
+    removePhotoPreview(index) {
         const photoInput = document.getElementById('reviewPhoto');
-        const photoPreview = document.getElementById('photoPreview');
+        const photoPreviewContainer = document.getElementById('photoPreviewContainer');
+        const photoUploadLabel = document.querySelector('.photo-upload-label');
+        
+        if (!photoInput || !photoPreviewContainer) return;
+        
+        // Create new FileList without the removed file
+        const dt = new DataTransfer();
+        const files = Array.from(photoInput.files);
+        files.forEach((file, i) => {
+            if (i !== index) {
+                dt.items.add(file);
+            }
+        });
+        photoInput.files = dt.files;
+        
+        // Re-render previews
+        photoInput.dispatchEvent(new Event('change'));
+    }
+    
+    clearPhotoPreviews() {
+        const photoInput = document.getElementById('reviewPhoto');
+        const photoPreviewContainer = document.getElementById('photoPreviewContainer');
         const photoUploadLabel = document.querySelector('.photo-upload-label');
         
         if (photoInput) photoInput.value = '';
-        if (photoPreview) photoPreview.style.display = 'none';
+        if (photoPreviewContainer) photoPreviewContainer.innerHTML = '';
         if (photoUploadLabel) photoUploadLabel.style.display = 'flex';
     }
     
@@ -311,15 +366,36 @@ class ReviewsManager {
         // Create image HTML if image_url exists
         let imageHtml = '';
         if (review.image_url && review.image_url.trim() !== '') {
-            imageHtml = `
-                <div class="review-image-wrapper">
-                    <img src="${this.escapeHtml(review.image_url)}" 
-                         alt="Review photo by ${this.escapeHtml(review.name)}" 
-                         class="review-image" 
-                         loading="lazy"
-                         onerror="this.style.display='none'; this.parentElement.style.display='none';">
-                </div>
-            `;
+            try {
+                // Try to parse as JSON array (new format with multiple images)
+                let imageUrls = [];
+                try {
+                    imageUrls = JSON.parse(review.image_url);
+                    if (!Array.isArray(imageUrls)) {
+                        // Fallback: treat as single image URL (backward compatibility)
+                        imageUrls = [review.image_url];
+                    }
+                } catch (e) {
+                    // Not JSON, treat as single image URL (backward compatibility)
+                    imageUrls = [review.image_url];
+                }
+                
+                if (imageUrls.length > 0) {
+                    const imagesHtml = imageUrls.map((url, index) => `
+                        <div class="review-image-wrapper">
+                            <img src="${this.escapeHtml(url)}" 
+                                 alt="Review photo ${index + 1} by ${this.escapeHtml(review.name)}" 
+                                 class="review-image" 
+                                 loading="lazy"
+                                 onerror="this.style.display='none'; this.parentElement.style.display='none';">
+                        </div>
+                    `).join('');
+                    
+                    imageHtml = `<div class="review-images-container">${imagesHtml}</div>`;
+                }
+            } catch (e) {
+                console.error('Error parsing image URLs:', e);
+            }
         }
         
         card.innerHTML = `

@@ -425,19 +425,16 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="reviewPhoto" class="form-label">Add a Photo (Optional)</label>
+                        <label for="reviewPhoto" class="form-label">Add Photos (Optional)</label>
                         <div class="photo-upload-wrapper">
-                            <input type="file" id="reviewPhoto" name="photo" accept="image/*" class="photo-input">
+                            <input type="file" id="reviewPhoto" name="photo" accept="image/*" multiple class="photo-input">
                             <label for="reviewPhoto" class="photo-upload-label">
                                 <span class="photo-upload-icon">📷</span>
-                                <span class="photo-upload-text">Choose a photo</span>
+                                <span class="photo-upload-text">Choose photos (up to 5)</span>
                             </label>
-                            <div class="photo-preview" id="photoPreview" style="display: none;">
-                                <img id="photoPreviewImg" src="" alt="Preview">
-                                <button type="button" class="photo-remove" id="photoRemove">×</button>
-                            </div>
+                            <div class="photo-preview-container" id="photoPreviewContainer"></div>
                         </div>
-                        <p class="photo-upload-hint">Max file size: 5MB. Supported formats: JPG, PNG, WebP</p>
+                        <p class="photo-upload-hint">Max file size: 5MB per photo. Up to 5 photos. Supported formats: JPG, PNG, WebP</p>
                     </div>
                     
                     <button type="submit" class="btn btn-pink">Submit Review</button>
