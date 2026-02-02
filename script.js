@@ -1091,29 +1091,48 @@ const customDropdown = {
             }
         });
         
-        // Remove existing event listeners by cloning
+        // Remove existing event listeners by cloning (only trigger, keep options)
         const newTrigger = multiSelectTrigger.cloneNode(true);
         multiSelectTrigger.parentNode.replaceChild(newTrigger, multiSelectTrigger);
-        const newOptions = multiSelectOptions.cloneNode(true);
-        multiSelectOptions.parentNode.replaceChild(newOptions, multiSelectOptions);
+        
+        // Get fresh references after cloning
+        const currentTrigger = document.getElementById('breakableHeartsTrigger');
+        const currentOptions = document.getElementById('breakableHeartsOptions');
         
         // Toggle dropdown
-        newTrigger.addEventListener('click', (e) => {
+        currentTrigger.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             multiSelectDropdown.classList.toggle('open');
+            
+            // Update form group z-index
+            const formGroup = multiSelectDropdown.closest('.form-group');
+            if (multiSelectDropdown.classList.contains('open')) {
+                if (formGroup) formGroup.classList.add('dropdown-open');
+            } else {
+                if (formGroup) formGroup.classList.remove('dropdown-open');
+            }
         });
         
-        // Handle checkbox changes
-        newOptions.addEventListener('change', (e) => {
+        // Handle checkbox changes and option clicks
+        currentOptions.addEventListener('change', (e) => {
             if (e.target.type === 'checkbox') {
+                e.stopPropagation();
                 this.updateBreakableHeartsSelection();
             }
         });
         
-        // Prevent dropdown from closing when clicking inside
-        newOptions.addEventListener('click', (e) => {
+        // Also handle clicks on the option itself to toggle checkbox
+        currentOptions.addEventListener('click', (e) => {
             e.stopPropagation();
+            const option = e.target.closest('.multi-select-option');
+            if (option && !option.classList.contains('disabled')) {
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                if (checkbox && !checkbox.disabled) {
+                    checkbox.checked = !checkbox.checked;
+                    this.updateBreakableHeartsSelection();
+                }
+            }
         });
         
         console.log('Breakable hearts multi-select initialized');
