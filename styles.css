@@ -245,12 +245,27 @@ body {
   display: flex;
   list-style: none;
   gap: 2rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  display: flex;
+  align-items: center;
 }
 
 .nav-socials {
   display: flex;
   list-style: none;
   gap: 1rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-socials li {
+  display: flex;
   align-items: center;
 }
 
@@ -261,6 +276,9 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 25px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  line-height: 1;
   position: relative;
   overflow: hidden;
   display: inline-block;
