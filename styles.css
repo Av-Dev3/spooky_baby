@@ -2323,15 +2323,28 @@ select option {
     gap: 1.5rem;
   }
   
-  .pricing-menu-item:nth-child(1),
-  .pricing-menu-item:nth-child(2),
-  .pricing-menu-item:nth-child(3) {
-    grid-column: auto;
+  /* Top row: 2 images side by side */
+  .pricing-menu-item:nth-child(1) {
+    grid-column: 1;
   }
   
+  .pricing-menu-item:nth-child(2) {
+    grid-column: 2;
+  }
+  
+  /* Middle row: 1 image centered */
+  .pricing-menu-item:nth-child(3) {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Bottom row: 2 images side by side, centered */
   .pricing-menu-item-bottom-wrapper {
     grid-column: 1 / -1;
     flex-direction: row;
+    justify-content: center;
     gap: 1.5rem;
   }
   
