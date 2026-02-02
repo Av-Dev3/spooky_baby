@@ -2210,25 +2210,37 @@ select.form-select option:hover,
 .multi-select-selected-item {
   background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
   color: var(--bg-primary);
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 600;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.multi-select-selected-item span {
+  flex: 1;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
-.multi-select-selected-item .remove-btn {
-  background: none;
-  border: none;
+.quantity-btn {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: var(--bg-primary);
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
   line-height: 1;
-  padding: 0;
-  width: 20px;
-  height: 20px;
+  padding: 0.25rem 0.5rem;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2236,8 +2248,42 @@ select.form-select option:hover,
   transition: all 0.2s ease;
 }
 
+.quantity-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+}
+
+.quantity-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantity-value {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.multi-select-selected-item .remove-btn {
+  background: rgba(244, 67, 54, 0.8);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  margin-left: 0.5rem;
+}
+
 .multi-select-selected-item .remove-btn:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(244, 67, 54, 1);
   transform: scale(1.1);
 }
 

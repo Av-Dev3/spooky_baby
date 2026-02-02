@@ -541,23 +541,33 @@ const formHandler = {
                 const multiSelectDropdown = document.getElementById('breakableHeartsDropdown');
                 
                 if (breakableHeartsItems && multiSelectDropdown) {
-                    const selectedItems = breakableHeartsItems.value.split(',').filter(v => v.trim());
+                    const selectedItemsStr = breakableHeartsItems.value;
                     const minSelections = parseInt(multiSelectDropdown.dataset.minSelections) || 4;
                     const maxSelections = parseInt(multiSelectDropdown.dataset.maxSelections) || 5;
                     
-                    if (selectedItems.length < minSelections) {
+                    // Parse items with quantities (format: "value:quantity,value:quantity")
+                    let totalCount = 0;
+                    if (selectedItemsStr) {
+                        selectedItemsStr.split(',').forEach(item => {
+                            const parts = item.trim().split(':');
+                            const quantity = parts.length > 1 ? parseInt(parts[1]) || 1 : 1;
+                            totalCount += quantity;
+                        });
+                    }
+                    
+                    if (totalCount < minSelections) {
                         utils.showMessage(
                             elements.formMessage,
-                            `Please select at least ${minSelections} items for the bundle (${selectedItems.length}/${minSelections} selected)`,
+                            `Please select at least ${minSelections} items total for the bundle (${totalCount}/${minSelections} selected)`,
                             'error'
                         );
                         return false;
                     }
                     
-                    if (selectedItems.length > maxSelections) {
+                    if (totalCount > maxSelections) {
                         utils.showMessage(
                             elements.formMessage,
-                            `Maximum ${maxSelections} items allowed for this bundle`,
+                            `Maximum ${maxSelections} items total allowed for this bundle`,
                             'error'
                         );
                         return false;
@@ -1114,23 +1124,38 @@ const customDropdown = {
             }
         });
         
-        // Handle checkbox changes and option clicks
-        currentOptions.addEventListener('change', (e) => {
-            if (e.target.type === 'checkbox') {
+        // Handle checkbox clicks directly
+        currentOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('click', (e) => {
                 e.stopPropagation();
+                // Don't prevent default - let checkbox toggle naturally
+            });
+            
+            checkbox.addEventListener('change', (e) => {
+                e.stopPropagation();
+                // Set initial quantity to 1 when checked
+                if (checkbox.checked && !checkbox.dataset.quantity) {
+                    checkbox.dataset.quantity = '1';
+                }
                 this.updateBreakableHeartsSelection();
-            }
+            });
         });
         
-        // Also handle clicks on the option itself to toggle checkbox
+        // Handle clicks on the option itself (but not on checkbox)
         currentOptions.addEventListener('click', (e) => {
+            // If clicking directly on checkbox, let it handle itself
+            if (e.target.type === 'checkbox') {
+                return;
+            }
+            
             e.stopPropagation();
             const option = e.target.closest('.multi-select-option');
             if (option && !option.classList.contains('disabled')) {
                 const checkbox = option.querySelector('input[type="checkbox"]');
                 if (checkbox && !checkbox.disabled) {
                     checkbox.checked = !checkbox.checked;
-                    this.updateBreakableHeartsSelection();
+                    // Trigger change event
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             }
         });
@@ -1150,17 +1175,24 @@ const customDropdown = {
         const minSelections = parseInt(multiSelectDropdown.dataset.minSelections) || 4;
         const maxSelections = parseInt(multiSelectDropdown.dataset.maxSelections) || 5;
         
-        // Get selected items
+        // Get selected items with quantities from data attributes
         const checkboxes = multiSelectOptions.querySelectorAll('input[type="checkbox"]:checked');
-        const selectedItems = Array.from(checkboxes).map(cb => ({
-            value: cb.value,
-            label: cb.closest('.multi-select-option').querySelector('label').textContent
-        }));
+        const selectedItems = Array.from(checkboxes).map(cb => {
+            const quantity = parseInt(cb.dataset.quantity || '1');
+            return {
+                value: cb.value,
+                label: cb.closest('.multi-select-option').querySelector('label').textContent,
+                quantity: quantity
+            };
+        });
         
-        // Update hidden input
-        hiddenInput.value = selectedItems.map(item => item.value).join(',');
+        // Calculate total item count (sum of quantities)
+        const totalCount = selectedItems.reduce((sum, item) => sum + item.quantity, 0);
         
-        // Update selected items display
+        // Update hidden input with quantities
+        hiddenInput.value = selectedItems.map(item => `${item.value}:${item.quantity}`).join(',');
+        
+        // Update selected items display with quantity controls
         selectedContainer.innerHTML = '';
         if (selectedItems.length > 0) {
             selectedItems.forEach(item => {
@@ -1168,34 +1200,69 @@ const customDropdown = {
                 selectedItem.className = 'multi-select-selected-item';
                 selectedItem.innerHTML = `
                     <span>${item.label}</span>
-                    <button type="button" class="remove-btn" data-value="${item.value}">×</button>
+                    <div class="quantity-controls">
+                        <button type="button" class="quantity-btn quantity-minus" data-value="${item.value}">−</button>
+                        <span class="quantity-value">${item.quantity}</span>
+                        <button type="button" class="quantity-btn quantity-plus" data-value="${item.value}">+</button>
+                        <button type="button" class="remove-btn" data-value="${item.value}">×</button>
+                    </div>
                 `;
                 selectedContainer.appendChild(selectedItem);
                 
-                // Add remove handler
-                selectedItem.querySelector('.remove-btn').addEventListener('click', (e) => {
+                // Add quantity handlers
+                const minusBtn = selectedItem.querySelector('.quantity-minus');
+                const plusBtn = selectedItem.querySelector('.quantity-plus');
+                const removeBtn = selectedItem.querySelector('.remove-btn');
+                
+                minusBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const value = e.target.dataset.value;
-                    const checkbox = multiSelectOptions.querySelector(`input[value="${value}"]`);
+                    const checkbox = multiSelectOptions.querySelector(`input[value="${item.value}"]`);
+                    if (checkbox) {
+                        const currentQty = parseInt(checkbox.dataset.quantity || '1');
+                        if (currentQty > 1) {
+                            checkbox.dataset.quantity = (currentQty - 1).toString();
+                            this.updateBreakableHeartsSelection();
+                        } else {
+                            // Remove item if quantity reaches 0
+                            checkbox.checked = false;
+                            delete checkbox.dataset.quantity;
+                            this.updateBreakableHeartsSelection();
+                        }
+                    }
+                });
+                
+                plusBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const checkbox = multiSelectOptions.querySelector(`input[value="${item.value}"]`);
+                    if (checkbox) {
+                        const currentQty = parseInt(checkbox.dataset.quantity || '1');
+                        checkbox.dataset.quantity = (currentQty + 1).toString();
+                        this.updateBreakableHeartsSelection();
+                    }
+                });
+                
+                removeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const checkbox = multiSelectOptions.querySelector(`input[value="${item.value}"]`);
                     if (checkbox) {
                         checkbox.checked = false;
+                        delete checkbox.dataset.quantity;
                         this.updateBreakableHeartsSelection();
                     }
                 });
             });
         }
         
-        // Update message and validation
-        const selectedCount = selectedItems.length;
+        // Update message and validation based on total count
         messageContainer.className = 'multi-select-message';
         
-        if (selectedCount < minSelections) {
-            messageContainer.textContent = `Please select at least ${minSelections} items (${selectedCount}/${minSelections} selected)`;
+        if (totalCount < minSelections) {
+            messageContainer.textContent = `Please select at least ${minSelections} items total (${totalCount}/${minSelections} selected)`;
             messageContainer.classList.add('info');
-        } else if (selectedCount >= maxSelections) {
+        } else if (totalCount >= maxSelections) {
             messageContainer.textContent = 'Max selected';
             messageContainer.classList.add('error');
-            // Disable unchecked options
+            // Disable unchecked options and disable plus buttons
             multiSelectOptions.querySelectorAll('input[type="checkbox"]:not(:checked)').forEach(checkbox => {
                 const option = checkbox.closest('.multi-select-option');
                 if (option) {
@@ -1203,8 +1270,14 @@ const customDropdown = {
                     checkbox.disabled = true;
                 }
             });
+            // Disable all plus buttons
+            selectedContainer.querySelectorAll('.quantity-plus').forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            });
         } else {
-            messageContainer.textContent = `${selectedCount} item(s) selected`;
+            messageContainer.textContent = `${totalCount} item(s) selected`;
             messageContainer.classList.add('success');
             // Enable all options
             multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
@@ -1213,6 +1286,12 @@ const customDropdown = {
                     option.classList.remove('disabled');
                     checkbox.disabled = false;
                 }
+            });
+            // Enable all plus buttons
+            selectedContainer.querySelectorAll('.quantity-plus').forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
             });
         }
     },
@@ -1233,6 +1312,7 @@ const customDropdown = {
             multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = false;
                 checkbox.disabled = false;
+                delete checkbox.dataset.quantity;
                 const option = checkbox.closest('.multi-select-option');
                 if (option) {
                     option.classList.remove('disabled');
