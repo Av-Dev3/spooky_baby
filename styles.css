@@ -2105,7 +2105,7 @@ select.form-select option:hover,
   top: 100%;
   left: 0;
   right: 0;
-  background: rgba(26, 26, 26, 0.98);
+  background: rgba(26, 26, 26, 1) !important;
   border: 2px solid var(--accent-pink);
   border-top: none;
   border-radius: 0 0 16px 16px;
@@ -2140,6 +2140,15 @@ select.form-select option:hover,
   gap: 0.75rem;
   position: relative;
   z-index: 10000;
+}
+
+/* Ensure solid background on mobile */
+@media (max-width: 768px) {
+  .multi-select-option {
+    background: linear-gradient(135deg, 
+      rgba(38, 38, 38, 1) 0%, 
+      rgba(46, 46, 46, 1) 100%) !important;
+  }
 }
 
 .multi-select-option:last-child {
@@ -2194,6 +2203,17 @@ select.form-select option:hover,
   pointer-events: auto;
   margin: 0;
   padding: 0;
+  display: block;
+  width: 100%;
+}
+
+.multi-select-option {
+  cursor: pointer;
+}
+
+.multi-select-option input[type="checkbox"] {
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .option-quantity-controls {
@@ -2359,6 +2379,63 @@ select.form-select option:hover,
 
 .multi-select-message.info {
   color: var(--accent-yellow);
+}
+
+/* Mobile-specific styles for multi-select dropdown */
+@media (max-width: 768px) {
+  .multi-select-options {
+    background: rgba(26, 26, 26, 1) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+  
+  .multi-select-option {
+    padding: 1rem;
+  }
+  
+  .multi-select-trigger {
+    padding: 1rem 3rem 1rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  
+  .option-quantity-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+  
+  .option-quantity-value {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .multi-select-options {
+    background: rgba(26, 26, 26, 1) !important;
+    max-height: 250px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+  
+  .multi-select-option {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .multi-select-trigger {
+    padding: 0.875rem 2.5rem 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .option-quantity-controls {
+    gap: 0.4rem;
+  }
+  
+  .option-quantity-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.9rem;
+  }
 }
 
 /* Hidden inputs for form submission - no styling needed */

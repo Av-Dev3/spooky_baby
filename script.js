@@ -1127,15 +1127,9 @@ const customDropdown = {
             }
         });
         
-        // Handle checkbox clicks directly
+        // Handle checkbox change events
         currentOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // Don't prevent default - let checkbox toggle naturally
-            });
-            
             checkbox.addEventListener('change', (e) => {
-                e.stopPropagation();
                 const value = checkbox.value;
                 // Set initial quantity to 1 when checked, 0 when unchecked
                 if (checkbox.checked) {
@@ -1189,13 +1183,18 @@ const customDropdown = {
         
         // Handle clicks on the option itself (but not on checkbox or buttons)
         currentOptions.addEventListener('click', (e) => {
-            // If clicking on checkbox or quantity buttons, let them handle it
-            if (e.target.type === 'checkbox' || 
-                e.target.classList.contains('option-quantity-btn') ||
+            // If clicking directly on checkbox, let it handle itself (don't interfere)
+            if (e.target.type === 'checkbox') {
+                return;
+            }
+            
+            // If clicking on quantity buttons, let them handle it
+            if (e.target.classList.contains('option-quantity-btn') ||
                 e.target.closest('.option-quantity-controls')) {
                 return;
             }
             
+            // Clicking on the option area (label or empty space) should toggle checkbox
             e.stopPropagation();
             const option = e.target.closest('.multi-select-option');
             if (option && !option.classList.contains('disabled')) {
@@ -1213,6 +1212,7 @@ const customDropdown = {
                             this.updateOptionQuantityDisplay(checkbox.value);
                         }
                     }
+                    // Trigger change event to update selection
                     checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             }
