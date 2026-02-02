@@ -2376,7 +2376,6 @@ const heroCarousel = {
     indicators: [],
     intervalId: null,
     autoSwipeInterval: 4000, // 4 seconds
-    isPaused: false,
 
     init() {
         this.slides = document.querySelectorAll('.hero-slide');
@@ -2404,25 +2403,11 @@ const heroCarousel = {
             });
         });
         
-        // Pause on hover
-        const heroCarouselElement = document.querySelector('.hero-carousel');
-        if (heroCarouselElement) {
-            heroCarouselElement.addEventListener('mouseenter', () => {
-                this.isPaused = true;
-                this.stopAutoSwipe();
-            });
-            
-            heroCarouselElement.addEventListener('mouseleave', () => {
-                this.isPaused = false;
-                this.startAutoSwipe();
-            });
-        }
-        
         // Pause when page is not visible (tab switching)
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 this.stopAutoSwipe();
-            } else if (!this.isPaused) {
+            } else {
                 this.startAutoSwipe();
             }
         });
@@ -2456,18 +2441,21 @@ const heroCarousel = {
     },
 
     startAutoSwipe() {
-        // Don't start if paused or no slides
-        if (this.isPaused || this.slides.length === 0) return;
+        // Don't start if no slides
+        if (this.slides.length === 0) {
+            console.warn('Hero carousel: Cannot start - no slides found');
+            return;
+        }
         
         // Clear any existing interval first
         this.stopAutoSwipe();
         
-        // Start new interval
+        // Start new interval - always runs regardless of mouse position
         this.intervalId = setInterval(() => {
-            if (!this.isPaused) {
-                this.nextSlide();
-            }
+            this.nextSlide();
         }, this.autoSwipeInterval);
+        
+        console.log('Hero carousel: Auto-swipe started');
     },
 
     stopAutoSwipe() {
