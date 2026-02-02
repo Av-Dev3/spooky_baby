@@ -495,7 +495,9 @@ body {
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  transition: opacity 0.8s ease-in-out;
+  will-change: opacity;
+  z-index: 1;
 }
 
 .hero-slide img {
@@ -509,6 +511,7 @@ body {
 .hero-slide.active {
   opacity: 1;
   z-index: 2;
+  will-change: auto;
 }
 
 .hero-content {

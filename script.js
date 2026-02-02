@@ -2376,37 +2376,64 @@ const heroCarousel = {
     indicators: [],
     intervalId: null,
     autoSwipeInterval: 4000, // 4 seconds
+    isPaused: false,
 
     init() {
-        this.slides = document.querySelectorAll('.hero-slide');
-        this.indicators = document.querySelectorAll('.hero-indicator');
-        
-        if (this.slides.length === 0) return;
-        
-        // Set up indicator click handlers
-        this.indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                this.goToSlide(index);
-            });
-        });
-        
-        // Start auto-swipe
-        this.startAutoSwipe();
-        
-        // Pause on hover
-        const heroCarousel = document.querySelector('.hero-carousel');
-        if (heroCarousel) {
-            heroCarousel.addEventListener('mouseenter', () => {
-                this.stopAutoSwipe();
+        // Wait a bit to ensure DOM is ready
+        setTimeout(() => {
+            this.slides = document.querySelectorAll('.hero-slide');
+            this.indicators = document.querySelectorAll('.hero-indicator');
+            
+            if (this.slides.length === 0) {
+                console.warn('Hero carousel: No slides found');
+                return;
+            }
+            
+            // Ensure first slide is active
+            if (this.slides.length > 0 && !this.slides[0].classList.contains('active')) {
+                this.goToSlide(0);
+            }
+            
+            // Set up indicator click handlers
+            this.indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    this.goToSlide(index);
+                    // Restart auto-swipe after manual navigation
+                    this.startAutoSwipe();
+                });
             });
             
-            heroCarousel.addEventListener('mouseleave', () => {
-                this.startAutoSwipe();
+            // Start auto-swipe
+            this.startAutoSwipe();
+            
+            // Pause on hover
+            const heroCarouselElement = document.querySelector('.hero-carousel');
+            if (heroCarouselElement) {
+                heroCarouselElement.addEventListener('mouseenter', () => {
+                    this.isPaused = true;
+                    this.stopAutoSwipe();
+                });
+                
+                heroCarouselElement.addEventListener('mouseleave', () => {
+                    this.isPaused = false;
+                    this.startAutoSwipe();
+                });
+            }
+            
+            // Pause when page is not visible (tab switching)
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    this.stopAutoSwipe();
+                } else if (!this.isPaused) {
+                    this.startAutoSwipe();
+                }
             });
-        }
+        }, 100);
     },
 
     goToSlide(index) {
+        if (index < 0 || index >= this.slides.length) return;
+        
         // Remove active class from all slides and indicators
         this.slides.forEach(slide => slide.classList.remove('active'));
         this.indicators.forEach(indicator => indicator.classList.remove('active'));
@@ -2423,14 +2450,23 @@ const heroCarousel = {
     },
 
     nextSlide() {
+        if (this.slides.length === 0) return;
         const nextIndex = (this.currentSlide + 1) % this.slides.length;
         this.goToSlide(nextIndex);
     },
 
     startAutoSwipe() {
-        this.stopAutoSwipe(); // Clear any existing interval
+        // Don't start if paused or no slides
+        if (this.isPaused || this.slides.length === 0) return;
+        
+        // Clear any existing interval first
+        this.stopAutoSwipe();
+        
+        // Start new interval
         this.intervalId = setInterval(() => {
-            this.nextSlide();
+            if (!this.isPaused) {
+                this.nextSlide();
+            }
         }, this.autoSwipeInterval);
     },
 
@@ -2453,5 +2489,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize hero carousel
     heroCarousel.init();
+});
+
+// Also initialize carousel on window load as backup
+window.addEventListener('load', () => {
+    // Re-initialize carousel if it hasn't started properly
+    if (heroCarousel.slides.length === 0 || !heroCarousel.intervalId) {
+        console.log('Re-initializing hero carousel on window load');
+        heroCarousel.init();
+    }
 });
 
