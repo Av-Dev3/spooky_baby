@@ -86,24 +86,43 @@
     <!-- Pricing & Menu Images Section -->
     <section class="pricing-menu-section">
         <div class="container">
-            <div class="pricing-menu-grid">
-                <div class="pricing-menu-item">
+            <div class="pricing-menu-carousel">
+                <div class="pricing-menu-slide active">
                     <img src="v_day_menu.jpg" alt="Valentine's Day Menu">
                 </div>
-                <div class="pricing-menu-item">
+                <div class="pricing-menu-slide">
                     <img src="brk_hrt_pricing.jpg" alt="Breakable Hearts Pricing">
                 </div>
-                <div class="pricing-menu-item">
+                <div class="pricing-menu-slide">
                     <img src="dubai_pricing.jpg" alt="Dubai Pricing">
                 </div>
-                <div class="pricing-menu-item-bottom-wrapper">
-                    <div class="pricing-menu-item">
-                        <img src="truffle_pricing.jpg" alt="Truffle Pricing">
-                    </div>
-                    <div class="pricing-menu-item">
-                        <img src="v_day_preorder.jpg" alt="Valentine's Day Preorder">
-                    </div>
+                <div class="pricing-menu-slide">
+                    <img src="truffle_pricing.jpg" alt="Truffle Pricing">
                 </div>
+                <div class="pricing-menu-slide">
+                    <img src="v_day_preorder.jpg" alt="Valentine's Day Preorder">
+                </div>
+                
+                <!-- Navigation Arrows -->
+                <button class="pricing-menu-arrow pricing-menu-arrow-left" aria-label="Previous image">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="pricing-menu-arrow pricing-menu-arrow-right" aria-label="Next image">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Carousel Indicators -->
+            <div class="pricing-menu-indicators">
+                <button class="pricing-menu-indicator active" data-slide="0" aria-label="Go to slide 1"></button>
+                <button class="pricing-menu-indicator" data-slide="1" aria-label="Go to slide 2"></button>
+                <button class="pricing-menu-indicator" data-slide="2" aria-label="Go to slide 3"></button>
+                <button class="pricing-menu-indicator" data-slide="3" aria-label="Go to slide 4"></button>
+                <button class="pricing-menu-indicator" data-slide="4" aria-label="Go to slide 5"></button>
             </div>
         </div>
     </section>

@@ -2498,3 +2498,135 @@ window.addEventListener('load', () => {
     }
 });
 
+// ===== PRICING MENU CAROUSEL =====
+const pricingMenuCarousel = {
+    currentSlide: 0,
+    slides: [],
+    indicators: [],
+    intervalId: null,
+    autoSwipeInterval: 4000, // 4 seconds
+
+    init() {
+        this.slides = document.querySelectorAll('.pricing-menu-slide');
+        this.indicators = document.querySelectorAll('.pricing-menu-indicator');
+        
+        if (this.slides.length === 0) {
+            setTimeout(() => {
+                this.init();
+            }, 50);
+            return;
+        }
+        
+        // Ensure first slide is active immediately
+        if (this.slides.length > 0) {
+            this.goToSlide(0);
+        }
+        
+        // Set up indicator click handlers
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                this.goToSlide(index);
+                this.startAutoSwipe();
+            });
+        });
+        
+        // Set up arrow navigation
+        const leftArrow = document.querySelector('.pricing-menu-arrow-left');
+        const rightArrow = document.querySelector('.pricing-menu-arrow-right');
+        
+        if (leftArrow) {
+            leftArrow.addEventListener('click', () => {
+                this.prevSlide();
+                this.startAutoSwipe();
+            });
+        }
+        
+        if (rightArrow) {
+            rightArrow.addEventListener('click', () => {
+                this.nextSlide();
+                this.startAutoSwipe();
+            });
+        }
+        
+        // Pause when page is not visible (tab switching)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopAutoSwipe();
+            } else {
+                this.startAutoSwipe();
+            }
+        });
+        
+        // Start auto-swipe immediately
+        this.startAutoSwipe();
+    },
+
+    goToSlide(index) {
+        if (index < 0 || index >= this.slides.length) return;
+        
+        // Remove active class from all slides and indicators
+        this.slides.forEach(slide => slide.classList.remove('active'));
+        this.indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Add active class to current slide and indicator
+        if (this.slides[index]) {
+            this.slides[index].classList.add('active');
+        }
+        if (this.indicators[index]) {
+            this.indicators[index].classList.add('active');
+        }
+        
+        this.currentSlide = index;
+    },
+
+    nextSlide() {
+        if (this.slides.length === 0) return;
+        const nextIndex = (this.currentSlide + 1) % this.slides.length;
+        this.goToSlide(nextIndex);
+    },
+
+    prevSlide() {
+        if (this.slides.length === 0) return;
+        const prevIndex = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+        this.goToSlide(prevIndex);
+    },
+
+    startAutoSwipe() {
+        if (this.slides.length === 0) {
+            console.warn('Pricing menu carousel: Cannot start - no slides found');
+            return;
+        }
+        
+        this.stopAutoSwipe();
+        
+        this.intervalId = setInterval(() => {
+            this.nextSlide();
+        }, this.autoSwipeInterval);
+        
+        console.log('Pricing menu carousel: Auto-swipe started');
+    },
+
+    stopAutoSwipe() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+    }
+};
+
+// Initialize pricing menu carousel
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        pricingMenuCarousel.init();
+    });
+} else {
+    pricingMenuCarousel.init();
+}
+
+// Also initialize on window load as backup
+window.addEventListener('load', () => {
+    if (pricingMenuCarousel.slides.length === 0 || !pricingMenuCarousel.intervalId) {
+        pricingMenuCarousel.init();
+    }
+});
+
