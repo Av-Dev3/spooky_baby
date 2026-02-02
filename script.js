@@ -2379,56 +2379,56 @@ const heroCarousel = {
     isPaused: false,
 
     init() {
-        // Wait a bit to ensure DOM is ready
-        setTimeout(() => {
-            this.slides = document.querySelectorAll('.hero-slide');
-            this.indicators = document.querySelectorAll('.hero-indicator');
-            
-            if (this.slides.length === 0) {
-                console.warn('Hero carousel: No slides found');
-                return;
-            }
-            
-            // Ensure first slide is active
-            if (this.slides.length > 0 && !this.slides[0].classList.contains('active')) {
-                this.goToSlide(0);
-            }
-            
-            // Set up indicator click handlers
-            this.indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => {
-                    this.goToSlide(index);
-                    // Restart auto-swipe after manual navigation
-                    this.startAutoSwipe();
-                });
+        this.slides = document.querySelectorAll('.hero-slide');
+        this.indicators = document.querySelectorAll('.hero-indicator');
+        
+        if (this.slides.length === 0) {
+            // Retry once if slides aren't found yet
+            setTimeout(() => {
+                this.init();
+            }, 50);
+            return;
+        }
+        
+        // Ensure first slide is active immediately
+        if (this.slides.length > 0) {
+            this.goToSlide(0);
+        }
+        
+        // Set up indicator click handlers
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                this.goToSlide(index);
+                // Restart auto-swipe after manual navigation
+                this.startAutoSwipe();
+            });
+        });
+        
+        // Pause on hover
+        const heroCarouselElement = document.querySelector('.hero-carousel');
+        if (heroCarouselElement) {
+            heroCarouselElement.addEventListener('mouseenter', () => {
+                this.isPaused = true;
+                this.stopAutoSwipe();
             });
             
-            // Start auto-swipe
-            this.startAutoSwipe();
-            
-            // Pause on hover
-            const heroCarouselElement = document.querySelector('.hero-carousel');
-            if (heroCarouselElement) {
-                heroCarouselElement.addEventListener('mouseenter', () => {
-                    this.isPaused = true;
-                    this.stopAutoSwipe();
-                });
-                
-                heroCarouselElement.addEventListener('mouseleave', () => {
-                    this.isPaused = false;
-                    this.startAutoSwipe();
-                });
-            }
-            
-            // Pause when page is not visible (tab switching)
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    this.stopAutoSwipe();
-                } else if (!this.isPaused) {
-                    this.startAutoSwipe();
-                }
+            heroCarouselElement.addEventListener('mouseleave', () => {
+                this.isPaused = false;
+                this.startAutoSwipe();
             });
-        }, 100);
+        }
+        
+        // Pause when page is not visible (tab switching)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.stopAutoSwipe();
+            } else if (!this.isPaused) {
+                this.startAutoSwipe();
+            }
+        });
+        
+        // Start auto-swipe immediately
+        this.startAutoSwipe();
     },
 
     goToSlide(index) {
@@ -2478,18 +2478,28 @@ const heroCarousel = {
     }
 };
 
-// Initialize giveaway functionality when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing giveaway');
+// Try to initialize carousel immediately if DOM is already ready
+if (document.readyState === 'loading') {
+    // DOM is still loading, wait for DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeAll();
+    });
+} else {
+    // DOM is already ready, initialize immediately
+    initializeAll();
+}
+
+function initializeAll() {
+    console.log('Initializing features');
     
     // For testing - clear localStorage to simulate first visit
     localStorage.removeItem('giveaway-popup-seen');
     
     giveaway.init();
     
-    // Initialize hero carousel
+    // Initialize hero carousel immediately
     heroCarousel.init();
-});
+}
 
 // Also initialize carousel on window load as backup
 window.addEventListener('load', () => {
