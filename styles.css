@@ -2136,6 +2136,7 @@ select.form-select option:hover,
   border-bottom: 1px solid rgba(246, 182, 207, 0.1);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
   position: relative;
   z-index: 10000;
@@ -2193,6 +2194,60 @@ select.form-select option:hover,
   pointer-events: auto;
   margin: 0;
   padding: 0;
+}
+
+.option-quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.option-quantity-btn {
+  background: rgba(246, 182, 207, 0.2);
+  border: 1px solid rgba(246, 182, 207, 0.4);
+  color: var(--accent-pink);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.option-quantity-btn:hover:not(:disabled) {
+  background: var(--accent-pink);
+  color: var(--bg-primary);
+  transform: scale(1.1);
+  border-color: var(--accent-pink);
+}
+
+.option-quantity-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.option-quantity-value {
+  min-width: 20px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--accent-pink);
+  font-size: 0.9rem;
+}
+
+.multi-select-option:hover .option-quantity-btn {
+  border-color: var(--accent-yellow);
+}
+
+.multi-select-option:hover .option-quantity-value {
+  color: var(--bg-primary);
 }
 
 .multi-select-selected {

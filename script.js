@@ -1091,14 +1091,17 @@ const customDropdown = {
         const triggerText = multiSelectTrigger.querySelector('.dropdown-text');
         triggerText.textContent = `Select items (minimum ${minSelections} required)...`;
         
-        // Reset all checkboxes
+        // Reset all checkboxes and quantity displays
         multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
             checkbox.checked = false;
             checkbox.disabled = false;
+            checkbox.dataset.quantity = '0';
             const option = checkbox.closest('.multi-select-option');
             if (option) {
                 option.classList.remove('disabled');
             }
+            // Update quantity display
+            this.updateOptionQuantityDisplay(checkbox.value);
         });
         
         // Remove existing event listeners by cloning (only trigger, keep options)
@@ -1133,18 +1136,63 @@ const customDropdown = {
             
             checkbox.addEventListener('change', (e) => {
                 e.stopPropagation();
-                // Set initial quantity to 1 when checked
-                if (checkbox.checked && !checkbox.dataset.quantity) {
-                    checkbox.dataset.quantity = '1';
+                const value = checkbox.value;
+                // Set initial quantity to 1 when checked, 0 when unchecked
+                if (checkbox.checked) {
+                    if (!checkbox.dataset.quantity || parseInt(checkbox.dataset.quantity) === 0) {
+                        checkbox.dataset.quantity = '1';
+                    }
+                } else {
+                    checkbox.dataset.quantity = '0';
                 }
+                this.updateOptionQuantityDisplay(value);
                 this.updateBreakableHeartsSelection();
             });
         });
         
-        // Handle clicks on the option itself (but not on checkbox)
+        // Handle quantity button clicks in dropdown
+        currentOptions.querySelectorAll('.option-quantity-plus').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = e.target.dataset.value;
+                const checkbox = currentOptions.querySelector(`input[value="${value}"]`);
+                if (checkbox && !checkbox.disabled) {
+                    const currentQty = parseInt(checkbox.dataset.quantity || '0');
+                    checkbox.dataset.quantity = (currentQty + 1).toString();
+                    checkbox.checked = true;
+                    this.updateOptionQuantityDisplay(value);
+                    this.updateBreakableHeartsSelection();
+                }
+            });
+        });
+        
+        currentOptions.querySelectorAll('.option-quantity-minus').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = e.target.dataset.value;
+                const checkbox = currentOptions.querySelector(`input[value="${value}"]`);
+                if (checkbox && !checkbox.disabled) {
+                    const currentQty = parseInt(checkbox.dataset.quantity || '0');
+                    if (currentQty > 1) {
+                        checkbox.dataset.quantity = (currentQty - 1).toString();
+                        this.updateOptionQuantityDisplay(value);
+                        this.updateBreakableHeartsSelection();
+                    } else if (currentQty === 1) {
+                        checkbox.dataset.quantity = '0';
+                        checkbox.checked = false;
+                        this.updateOptionQuantityDisplay(value);
+                        this.updateBreakableHeartsSelection();
+                    }
+                }
+            });
+        });
+        
+        // Handle clicks on the option itself (but not on checkbox or buttons)
         currentOptions.addEventListener('click', (e) => {
-            // If clicking directly on checkbox, let it handle itself
-            if (e.target.type === 'checkbox') {
+            // If clicking on checkbox or quantity buttons, let them handle it
+            if (e.target.type === 'checkbox' || 
+                e.target.classList.contains('option-quantity-btn') ||
+                e.target.closest('.option-quantity-controls')) {
                 return;
             }
             
@@ -1153,14 +1201,37 @@ const customDropdown = {
             if (option && !option.classList.contains('disabled')) {
                 const checkbox = option.querySelector('input[type="checkbox"]');
                 if (checkbox && !checkbox.disabled) {
-                    checkbox.checked = !checkbox.checked;
-                    // Trigger change event
+                    const currentQty = parseInt(checkbox.dataset.quantity || '0');
+                    if (currentQty === 0) {
+                        checkbox.dataset.quantity = '1';
+                        checkbox.checked = true;
+                        this.updateOptionQuantityDisplay(checkbox.value);
+                    } else {
+                        checkbox.checked = !checkbox.checked;
+                        if (!checkbox.checked) {
+                            checkbox.dataset.quantity = '0';
+                            this.updateOptionQuantityDisplay(checkbox.value);
+                        }
+                    }
                     checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             }
         });
         
         console.log('Breakable hearts multi-select initialized');
+    },
+
+    updateOptionQuantityDisplay(value) {
+        const multiSelectOptions = document.getElementById('breakableHeartsOptions');
+        if (!multiSelectOptions) return;
+        
+        const checkbox = multiSelectOptions.querySelector(`input[value="${value}"]`);
+        const quantityValue = multiSelectOptions.querySelector(`.option-quantity-value[data-value="${value}"]`);
+        
+        if (checkbox && quantityValue) {
+            const qty = parseInt(checkbox.dataset.quantity || '0');
+            quantityValue.textContent = qty;
+        }
     },
 
     updateBreakableHeartsSelection() {
@@ -1175,15 +1246,26 @@ const customDropdown = {
         const minSelections = parseInt(multiSelectDropdown.dataset.minSelections) || 4;
         const maxSelections = parseInt(multiSelectDropdown.dataset.maxSelections) || 5;
         
-        // Get selected items with quantities from data attributes
-        const checkboxes = multiSelectOptions.querySelectorAll('input[type="checkbox"]:checked');
-        const selectedItems = Array.from(checkboxes).map(cb => {
-            const quantity = parseInt(cb.dataset.quantity || '1');
-            return {
-                value: cb.value,
-                label: cb.closest('.multi-select-option').querySelector('label').textContent,
-                quantity: quantity
-            };
+        // Get all items with quantities > 0
+        const allCheckboxes = multiSelectOptions.querySelectorAll('input[type="checkbox"]');
+        const selectedItems = [];
+        
+        allCheckboxes.forEach(cb => {
+            const quantity = parseInt(cb.dataset.quantity || '0');
+            if (quantity > 0) {
+                selectedItems.push({
+                    value: cb.value,
+                    label: cb.closest('.multi-select-option').querySelector('label').textContent,
+                    quantity: quantity
+                });
+                // Ensure checkbox is checked if quantity > 0
+                cb.checked = true;
+            } else {
+                // Uncheck if quantity is 0
+                cb.checked = false;
+            }
+            // Update quantity display
+            this.updateOptionQuantityDisplay(cb.value);
         });
         
         // Calculate total item count (sum of quantities)
@@ -1262,15 +1344,22 @@ const customDropdown = {
         } else if (totalCount >= maxSelections) {
             messageContainer.textContent = 'Max selected';
             messageContainer.classList.add('error');
-            // Disable unchecked options and disable plus buttons
-            multiSelectOptions.querySelectorAll('input[type="checkbox"]:not(:checked)').forEach(checkbox => {
+            // Disable unchecked options
+            multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                const quantity = parseInt(checkbox.dataset.quantity || '0');
                 const option = checkbox.closest('.multi-select-option');
-                if (option) {
-                    option.classList.add('disabled');
-                    checkbox.disabled = true;
+                if (quantity === 0) {
+                    if (option) {
+                        option.classList.add('disabled');
+                        checkbox.disabled = true;
+                    }
                 }
             });
-            // Disable all plus buttons
+            // Disable all plus buttons in dropdown
+            multiSelectOptions.querySelectorAll('.option-quantity-plus').forEach(btn => {
+                btn.disabled = true;
+            });
+            // Disable all plus buttons in selected container
             selectedContainer.querySelectorAll('.quantity-plus').forEach(btn => {
                 btn.disabled = true;
                 btn.style.opacity = '0.5';
@@ -1287,7 +1376,11 @@ const customDropdown = {
                     checkbox.disabled = false;
                 }
             });
-            // Enable all plus buttons
+            // Enable all plus buttons in dropdown
+            multiSelectOptions.querySelectorAll('.option-quantity-plus').forEach(btn => {
+                btn.disabled = false;
+            });
+            // Enable all plus buttons in selected container
             selectedContainer.querySelectorAll('.quantity-plus').forEach(btn => {
                 btn.disabled = false;
                 btn.style.opacity = '1';
@@ -1312,11 +1405,13 @@ const customDropdown = {
             multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = false;
                 checkbox.disabled = false;
-                delete checkbox.dataset.quantity;
+                checkbox.dataset.quantity = '0';
                 const option = checkbox.closest('.multi-select-option');
                 if (option) {
                     option.classList.remove('disabled');
                 }
+                // Update quantity display
+                this.updateOptionQuantityDisplay(checkbox.value);
             });
         }
     },
