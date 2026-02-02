@@ -2253,6 +2253,101 @@ select option {
   border: 1px solid rgba(244, 67, 54, 0.2);
 }
 
+/* ===== PRICING & MENU IMAGES SECTION ===== */
+.pricing-menu-section {
+  padding: var(--section-padding);
+  background-color: var(--bg-secondary);
+}
+
+.pricing-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pricing-menu-item {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-menu-item:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(246, 182, 207, 0.3);
+}
+
+.pricing-menu-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background-color: var(--bg-primary);
+}
+
+/* First row: 3 items - natural flow (columns 1, 2, 3) */
+.pricing-menu-item:nth-child(1),
+.pricing-menu-item:nth-child(2),
+.pricing-menu-item:nth-child(3) {
+  grid-column: auto;
+}
+
+/* Second row: 2 items centered - position in columns 1 and 2, then center the group */
+.pricing-menu-item:nth-child(4) {
+  grid-column: 1;
+  margin-left: 16.666%; /* Shift right to center the pair */
+}
+
+.pricing-menu-item:nth-child(5) {
+  grid-column: 2;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .pricing-menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .pricing-menu-item:nth-child(1),
+  .pricing-menu-item:nth-child(2),
+  .pricing-menu-item:nth-child(3),
+  .pricing-menu-item:nth-child(4),
+  .pricing-menu-item:nth-child(5) {
+    grid-column: auto;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  /* On mobile, center the last item if odd number */
+  .pricing-menu-item:nth-child(5) {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .pricing-menu-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .pricing-menu-item:nth-child(1),
+  .pricing-menu-item:nth-child(2),
+  .pricing-menu-item:nth-child(3),
+  .pricing-menu-item:nth-child(4),
+  .pricing-menu-item:nth-child(5) {
+    grid-column: 1;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 /* ===== PHOTO GALLERY SECTION ===== */
 .photo-gallery {
   padding: var(--section-padding);
