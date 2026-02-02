@@ -2032,6 +2032,187 @@ select.form-select option:hover,
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
+/* Multi-select dropdown styling */
+.multi-select-container {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.multi-select-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.multi-select-trigger {
+  background: linear-gradient(135deg, 
+    rgba(38, 38, 38, 0.9) 0%, 
+    rgba(46, 46, 46, 0.95) 50%, 
+    rgba(38, 38, 38, 0.9) 100%);
+  border: 2px solid rgba(246, 182, 207, 0.3);
+  border-radius: 16px;
+  padding: 1.2rem 3.5rem 1.2rem 1.5rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(246, 182, 207, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.multi-select-dropdown.open .multi-select-trigger {
+  border-color: var(--accent-yellow);
+  background: linear-gradient(135deg, 
+    rgba(247, 213, 106, 0.1) 0%, 
+    rgba(46, 46, 46, 0.95) 50%, 
+    rgba(246, 182, 207, 0.1) 100%);
+}
+
+.multi-select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(26, 26, 26, 0.98);
+  border: 2px solid var(--accent-pink);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(246, 182, 207, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  z-index: 9999;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+  backdrop-filter: blur(10px);
+}
+
+.multi-select-dropdown.open .multi-select-options {
+  display: block;
+  animation: dropdownAppear 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.multi-select-option {
+  padding: 1rem 1.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: linear-gradient(135deg, 
+    rgba(38, 38, 38, 0.9) 0%, 
+    rgba(46, 46, 46, 0.95) 100%);
+  border-bottom: 1px solid rgba(246, 182, 207, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.multi-select-option:last-child {
+  border-bottom: none;
+  border-radius: 0 0 14px 14px;
+}
+
+.multi-select-option:hover {
+  background: linear-gradient(135deg, 
+    rgba(246, 182, 207, 0.1) 0%, 
+    rgba(247, 213, 106, 0.1) 100%);
+}
+
+.multi-select-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(38, 38, 38, 0.5);
+}
+
+.multi-select-option.disabled:hover {
+  background: rgba(38, 38, 38, 0.5);
+}
+
+.multi-select-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--accent-pink);
+}
+
+.multi-select-option label {
+  cursor: pointer;
+  flex: 1;
+  user-select: none;
+}
+
+.multi-select-selected {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(246, 182, 207, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(246, 182, 207, 0.3);
+  min-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.multi-select-selected-item {
+  background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
+  color: var(--bg-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.multi-select-selected-item .remove-btn {
+  background: none;
+  border: none;
+  color: var(--bg-primary);
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.multi-select-selected-item .remove-btn:hover {
+  background: rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+.multi-select-message {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-height: 20px;
+}
+
+.multi-select-message.error {
+  color: #E57373;
+}
+
+.multi-select-message.success {
+  color: #81C784;
+}
+
+.multi-select-message.info {
+  color: var(--accent-yellow);
+}
+
 /* Hidden inputs for form submission - no styling needed */
 
 /* FORCE STYLE ALL SELECTS - NUCLEAR OPTION */

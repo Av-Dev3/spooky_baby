@@ -360,6 +360,7 @@
                             <div class="custom-option" data-value="cakecicles">🍰 Cakecicles</div>
                             <div class="custom-option" data-value="cakes">🎂 Cakes</div>
                             <div class="custom-option" data-value="seasonal">🎃 Seasonal & Specialty</div>
+                            <div class="custom-option" data-value="valentines-day">💝 Valentine's Day</div>
                             <div class="custom-option" data-value="custom">✨ Custom Request</div>
                         </div>
                     </div>
@@ -394,6 +395,63 @@
                         </div>
                     </div>
                     <input type="hidden" id="customFlavor" name="customFlavor">
+                </div>
+
+                <!-- Valentine's Day Options -->
+                <div class="form-group" id="valentinesDayGroup" style="display: none;">
+                    <label for="valentinesDayOption" class="form-label">Valentine's Day Option *</label>
+                    <div class="custom-dropdown" id="valentinesDayDropdown">
+                        <div class="custom-dropdown-trigger" id="valentinesDayTrigger">
+                            <span class="dropdown-text">Select an option...</span>
+                            <span class="dropdown-arrow">💝</span>
+                        </div>
+                        <div class="custom-dropdown-options" id="valentinesDayOptions">
+                            <div class="custom-option" data-value="">Select an option...</div>
+                            <div class="custom-option" data-value="dubai-chocolate-bar">Dubai Chocolate Bar</div>
+                            <div class="custom-option" data-value="truffles">Truffles</div>
+                            <div class="custom-option" data-value="breakable-hearts-small">Breakable Hearts Bundle Small</div>
+                            <div class="custom-option" data-value="breakable-hearts-large">Breakable Hearts Bundle Large</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="valentinesDayOption" name="valentinesDayOption">
+                </div>
+
+                <!-- Breakable Hearts Bundle Options (Multi-select) -->
+                <div class="form-group" id="breakableHeartsGroup" style="display: none;">
+                    <label class="form-label">Select Items *</label>
+                    <div class="multi-select-container" id="breakableHeartsMultiSelect">
+                        <div class="multi-select-dropdown" id="breakableHeartsDropdown">
+                            <div class="multi-select-trigger" id="breakableHeartsTrigger">
+                                <span class="dropdown-text">Select items (minimum required)...</span>
+                                <span class="dropdown-arrow">💕</span>
+                            </div>
+                            <div class="multi-select-options" id="breakableHeartsOptions">
+                                <div class="multi-select-option" data-value="truffles">
+                                    <input type="checkbox" id="opt-truffles" value="truffles">
+                                    <label for="opt-truffles">Truffles</label>
+                                </div>
+                                <div class="multi-select-option" data-value="choc-dipped-oreos">
+                                    <input type="checkbox" id="opt-oreos" value="choc-dipped-oreos">
+                                    <label for="opt-oreos">Choc. Dipped Oreos</label>
+                                </div>
+                                <div class="multi-select-option" data-value="choc-dipped-strawberries">
+                                    <input type="checkbox" id="opt-strawberries" value="choc-dipped-strawberries">
+                                    <label for="opt-strawberries">Choc. Dipped Strawberries</label>
+                                </div>
+                                <div class="multi-select-option" data-value="brownie-cakesicles">
+                                    <input type="checkbox" id="opt-cakesicles" value="brownie-cakesicles">
+                                    <label for="opt-cakesicles">Brownie Cakesicles</label>
+                                </div>
+                                <div class="multi-select-option" data-value="mini-dubai-choc-hearts">
+                                    <input type="checkbox" id="opt-mini-hearts" value="mini-dubai-choc-hearts">
+                                    <label for="opt-mini-hearts">Mini Dubai Choc. Hearts</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="multi-select-selected" id="breakableHeartsSelected"></div>
+                        <div class="multi-select-message" id="breakableHeartsMessage"></div>
+                        <input type="hidden" id="breakableHeartsItems" name="breakableHeartsItems">
+                    </div>
                 </div>
                 
                 <div class="form-group">

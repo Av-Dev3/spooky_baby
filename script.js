@@ -529,6 +529,43 @@ const formHandler = {
             requiredFields.push('customFlavor');
         }
         
+        // Check if Valentine's Day option field is visible and add it to required fields
+        const valentinesDayGroup = document.getElementById('valentinesDayGroup');
+        if (valentinesDayGroup && valentinesDayGroup.style.display !== 'none') {
+            requiredFields.push('valentinesDayOption');
+            
+            // Validate breakable hearts multi-select if visible
+            const breakableHeartsGroup = document.getElementById('breakableHeartsGroup');
+            if (breakableHeartsGroup && breakableHeartsGroup.style.display !== 'none') {
+                const breakableHeartsItems = document.getElementById('breakableHeartsItems');
+                const multiSelectDropdown = document.getElementById('breakableHeartsDropdown');
+                
+                if (breakableHeartsItems && multiSelectDropdown) {
+                    const selectedItems = breakableHeartsItems.value.split(',').filter(v => v.trim());
+                    const minSelections = parseInt(multiSelectDropdown.dataset.minSelections) || 4;
+                    const maxSelections = parseInt(multiSelectDropdown.dataset.maxSelections) || 5;
+                    
+                    if (selectedItems.length < minSelections) {
+                        utils.showMessage(
+                            elements.formMessage,
+                            `Please select at least ${minSelections} items for the bundle (${selectedItems.length}/${minSelections} selected)`,
+                            'error'
+                        );
+                        return false;
+                    }
+                    
+                    if (selectedItems.length > maxSelections) {
+                        utils.showMessage(
+                            elements.formMessage,
+                            `Maximum ${maxSelections} items allowed for this bundle`,
+                            'error'
+                        );
+                        return false;
+                    }
+                }
+            }
+        }
+        
         const missingFields = requiredFields.filter(field => !data[field] || data[field].trim() === '');
         
         if (missingFields.length > 0) {
@@ -620,6 +657,7 @@ const customDropdown = {
     init() {
         this.initItemDropdown();
         this.initFlavorDropdown();
+        this.initValentinesDayDropdown();
     },
 
     initItemDropdown() {
@@ -686,21 +724,69 @@ const customDropdown = {
             
             // Handle flavor dropdown visibility
             const flavorGroup = document.getElementById('flavorGroup');
-            if (value && value !== 'custom') {
-                // Show flavor dropdown and populate options
-                flavorGroup.style.display = 'block';
-                setTimeout(() => {
-                    flavorGroup.classList.add('show');
-                }, 10);
-                updateFlavorOptions(value);
-            } else {
-                // Hide flavor dropdown
+            const valentinesDayGroup = document.getElementById('valentinesDayGroup');
+            const breakableHeartsGroup = document.getElementById('breakableHeartsGroup');
+            
+            if (value === 'valentines-day') {
+                // Hide flavor dropdown, show Valentine's Day dropdown
                 flavorGroup.classList.remove('show');
                 setTimeout(() => {
                     flavorGroup.style.display = 'none';
                 }, 400);
                 const flavorInput = document.getElementById('flavor');
-                flavorInput.value = '';
+                if (flavorInput) flavorInput.value = '';
+                
+                // Show Valentine's Day dropdown
+                if (valentinesDayGroup) {
+                    valentinesDayGroup.style.display = 'block';
+                    setTimeout(() => {
+                        valentinesDayGroup.classList.add('show');
+                    }, 10);
+                }
+                
+                // Hide breakable hearts group initially
+                if (breakableHeartsGroup) {
+                    breakableHeartsGroup.style.display = 'none';
+                    breakableHeartsGroup.classList.remove('show');
+                }
+            } else if (value && value !== 'custom') {
+                // Show flavor dropdown and populate options
+                if (flavorGroup) {
+                    flavorGroup.style.display = 'block';
+                    setTimeout(() => {
+                        flavorGroup.classList.add('show');
+                    }, 10);
+                    updateFlavorOptions(value);
+                }
+                
+                // Hide Valentine's Day groups
+                if (valentinesDayGroup) {
+                    valentinesDayGroup.style.display = 'none';
+                    valentinesDayGroup.classList.remove('show');
+                }
+                if (breakableHeartsGroup) {
+                    breakableHeartsGroup.style.display = 'none';
+                    breakableHeartsGroup.classList.remove('show');
+                }
+            } else {
+                // Hide all dropdowns
+                if (flavorGroup) {
+                    flavorGroup.classList.remove('show');
+                    setTimeout(() => {
+                        flavorGroup.style.display = 'none';
+                    }, 400);
+                    const flavorInput = document.getElementById('flavor');
+                    if (flavorInput) flavorInput.value = '';
+                }
+                if (valentinesDayGroup) {
+                    valentinesDayGroup.style.display = 'none';
+                    valentinesDayGroup.classList.remove('show');
+                }
+                if (breakableHeartsGroup) {
+                    breakableHeartsGroup.style.display = 'none';
+                    breakableHeartsGroup.classList.remove('show');
+                }
+                
                 // Reset flavor dropdown text
                 const flavorTrigger = document.getElementById('flavorTrigger');
                 if (flavorTrigger) {
@@ -889,6 +975,251 @@ const customDropdown = {
         });
         
         console.log('Custom flavor dropdown initialized');
+    },
+
+    initValentinesDayDropdown() {
+        const valentinesDayDropdown = document.getElementById('valentinesDayDropdown');
+        const valentinesDayTrigger = document.getElementById('valentinesDayTrigger');
+        const valentinesDayOptions = document.getElementById('valentinesDayOptions');
+        const valentinesDayInput = document.getElementById('valentinesDayOption');
+        
+        if (!valentinesDayDropdown || !valentinesDayTrigger || !valentinesDayOptions || !valentinesDayInput) {
+            console.log('Valentine\'s Day dropdown elements not found - will be initialized when needed');
+            return;
+        }
+        
+        // Toggle dropdown
+        valentinesDayTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            valentinesDayDropdown.classList.toggle('open');
+            
+            const formGroup = valentinesDayDropdown.closest('.form-group');
+            if (valentinesDayDropdown.classList.contains('open')) {
+                formGroup.classList.add('dropdown-open');
+            } else {
+                formGroup.classList.remove('dropdown-open');
+            }
+        });
+        
+        // Handle option selection
+        valentinesDayOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            if (!value) return; // Don't process placeholder
+            
+            // Update trigger text and hidden input
+            const dropdownText = valentinesDayTrigger.querySelector('.dropdown-text');
+            dropdownText.textContent = text;
+            valentinesDayInput.value = value;
+            
+            // Update selected state
+            valentinesDayOptions.querySelectorAll('.custom-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+            
+            // Close dropdown
+            valentinesDayDropdown.classList.remove('open');
+            const formGroup = valentinesDayDropdown.closest('.form-group');
+            if (formGroup) {
+                formGroup.classList.remove('dropdown-open');
+            }
+            
+            // Show/hide breakable hearts multi-select based on selection
+            const breakableHeartsGroup = document.getElementById('breakableHeartsGroup');
+            if (value === 'breakable-hearts-small' || value === 'breakable-hearts-large') {
+                if (breakableHeartsGroup) {
+                    breakableHeartsGroup.style.display = 'block';
+                    setTimeout(() => {
+                        breakableHeartsGroup.classList.add('show');
+                    }, 10);
+                    this.initBreakableHeartsMultiSelect(value);
+                }
+            } else {
+                if (breakableHeartsGroup) {
+                    breakableHeartsGroup.style.display = 'none';
+                    breakableHeartsGroup.classList.remove('show');
+                    this.clearBreakableHeartsSelection();
+                }
+            }
+        });
+        
+        console.log('Valentine\'s Day dropdown initialized');
+    },
+
+    initBreakableHeartsMultiSelect(bundleType) {
+        const multiSelectDropdown = document.getElementById('breakableHeartsDropdown');
+        const multiSelectTrigger = document.getElementById('breakableHeartsTrigger');
+        const multiSelectOptions = document.getElementById('breakableHeartsOptions');
+        const selectedContainer = document.getElementById('breakableHeartsSelected');
+        const messageContainer = document.getElementById('breakableHeartsMessage');
+        const hiddenInput = document.getElementById('breakableHeartsItems');
+        
+        if (!multiSelectDropdown || !multiSelectTrigger || !multiSelectOptions || !selectedContainer || !messageContainer || !hiddenInput) {
+            console.error('Breakable hearts multi-select elements not found');
+            return;
+        }
+        
+        // Store bundle type for validation
+        multiSelectDropdown.dataset.bundleType = bundleType;
+        
+        // Clear previous selections
+        this.clearBreakableHeartsSelection();
+        
+        // Set min/max based on bundle type
+        const minSelections = bundleType === 'breakable-hearts-small' ? 4 : 6;
+        const maxSelections = bundleType === 'breakable-hearts-small' ? 5 : 8;
+        multiSelectDropdown.dataset.minSelections = minSelections;
+        multiSelectDropdown.dataset.maxSelections = maxSelections;
+        
+        // Update trigger text
+        const triggerText = multiSelectTrigger.querySelector('.dropdown-text');
+        triggerText.textContent = `Select items (minimum ${minSelections} required)...`;
+        
+        // Reset all checkboxes
+        multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+            checkbox.disabled = false;
+            const option = checkbox.closest('.multi-select-option');
+            if (option) {
+                option.classList.remove('disabled');
+            }
+        });
+        
+        // Remove existing event listeners by cloning
+        const newTrigger = multiSelectTrigger.cloneNode(true);
+        multiSelectTrigger.parentNode.replaceChild(newTrigger, multiSelectTrigger);
+        const newOptions = multiSelectOptions.cloneNode(true);
+        multiSelectOptions.parentNode.replaceChild(newOptions, multiSelectOptions);
+        
+        // Toggle dropdown
+        newTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            multiSelectDropdown.classList.toggle('open');
+        });
+        
+        // Handle checkbox changes
+        newOptions.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                this.updateBreakableHeartsSelection();
+            }
+        });
+        
+        // Prevent dropdown from closing when clicking inside
+        newOptions.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+        
+        console.log('Breakable hearts multi-select initialized');
+    },
+
+    updateBreakableHeartsSelection() {
+        const multiSelectOptions = document.getElementById('breakableHeartsOptions');
+        const selectedContainer = document.getElementById('breakableHeartsSelected');
+        const messageContainer = document.getElementById('breakableHeartsMessage');
+        const hiddenInput = document.getElementById('breakableHeartsItems');
+        const multiSelectDropdown = document.getElementById('breakableHeartsDropdown');
+        
+        if (!multiSelectOptions || !selectedContainer || !messageContainer || !hiddenInput || !multiSelectDropdown) return;
+        
+        const minSelections = parseInt(multiSelectDropdown.dataset.minSelections) || 4;
+        const maxSelections = parseInt(multiSelectDropdown.dataset.maxSelections) || 5;
+        
+        // Get selected items
+        const checkboxes = multiSelectOptions.querySelectorAll('input[type="checkbox"]:checked');
+        const selectedItems = Array.from(checkboxes).map(cb => ({
+            value: cb.value,
+            label: cb.closest('.multi-select-option').querySelector('label').textContent
+        }));
+        
+        // Update hidden input
+        hiddenInput.value = selectedItems.map(item => item.value).join(',');
+        
+        // Update selected items display
+        selectedContainer.innerHTML = '';
+        if (selectedItems.length > 0) {
+            selectedItems.forEach(item => {
+                const selectedItem = document.createElement('div');
+                selectedItem.className = 'multi-select-selected-item';
+                selectedItem.innerHTML = `
+                    <span>${item.label}</span>
+                    <button type="button" class="remove-btn" data-value="${item.value}">×</button>
+                `;
+                selectedContainer.appendChild(selectedItem);
+                
+                // Add remove handler
+                selectedItem.querySelector('.remove-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const value = e.target.dataset.value;
+                    const checkbox = multiSelectOptions.querySelector(`input[value="${value}"]`);
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        this.updateBreakableHeartsSelection();
+                    }
+                });
+            });
+        }
+        
+        // Update message and validation
+        const selectedCount = selectedItems.length;
+        messageContainer.className = 'multi-select-message';
+        
+        if (selectedCount < minSelections) {
+            messageContainer.textContent = `Please select at least ${minSelections} items (${selectedCount}/${minSelections} selected)`;
+            messageContainer.classList.add('info');
+        } else if (selectedCount >= maxSelections) {
+            messageContainer.textContent = 'Max selected';
+            messageContainer.classList.add('error');
+            // Disable unchecked options
+            multiSelectOptions.querySelectorAll('input[type="checkbox"]:not(:checked)').forEach(checkbox => {
+                const option = checkbox.closest('.multi-select-option');
+                if (option) {
+                    option.classList.add('disabled');
+                    checkbox.disabled = true;
+                }
+            });
+        } else {
+            messageContainer.textContent = `${selectedCount} item(s) selected`;
+            messageContainer.classList.add('success');
+            // Enable all options
+            multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                const option = checkbox.closest('.multi-select-option');
+                if (option) {
+                    option.classList.remove('disabled');
+                    checkbox.disabled = false;
+                }
+            });
+        }
+    },
+
+    clearBreakableHeartsSelection() {
+        const selectedContainer = document.getElementById('breakableHeartsSelected');
+        const messageContainer = document.getElementById('breakableHeartsMessage');
+        const hiddenInput = document.getElementById('breakableHeartsItems');
+        const multiSelectOptions = document.getElementById('breakableHeartsOptions');
+        
+        if (selectedContainer) selectedContainer.innerHTML = '';
+        if (messageContainer) {
+            messageContainer.textContent = '';
+            messageContainer.className = 'multi-select-message';
+        }
+        if (hiddenInput) hiddenInput.value = '';
+        if (multiSelectOptions) {
+            multiSelectOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.disabled = false;
+                const option = checkbox.closest('.multi-select-option');
+                if (option) {
+                    option.classList.remove('disabled');
+                }
+            });
+        }
     },
 
     highlightOption(option) {
@@ -2117,6 +2448,8 @@ function updateFlavorOptions(selectedItem) {
 document.addEventListener('click', (e) => {
     const itemDropdown = document.getElementById('itemDropdown');
     const flavorDropdown = document.getElementById('flavorDropdown');
+    const valentinesDayDropdown = document.getElementById('valentinesDayDropdown');
+    const breakableHeartsDropdown = document.getElementById('breakableHeartsDropdown');
     
     if (itemDropdown && !itemDropdown.contains(e.target)) {
         itemDropdown.classList.remove('open');
@@ -2132,6 +2465,18 @@ document.addEventListener('click', (e) => {
         if (flavorFormGroup) {
             flavorFormGroup.classList.remove('dropdown-open');
         }
+    }
+    
+    if (valentinesDayDropdown && !valentinesDayDropdown.contains(e.target)) {
+        valentinesDayDropdown.classList.remove('open');
+        const valentinesDayFormGroup = valentinesDayDropdown.closest('.form-group');
+        if (valentinesDayFormGroup) {
+            valentinesDayFormGroup.classList.remove('dropdown-open');
+        }
+    }
+    
+    if (breakableHeartsDropdown && !breakableHeartsDropdown.contains(e.target)) {
+        breakableHeartsDropdown.classList.remove('open');
     }
 });
 
