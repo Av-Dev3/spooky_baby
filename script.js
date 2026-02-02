@@ -2369,6 +2369,79 @@ const giveaway = {
     }
 };
 
+// ===== HERO CAROUSEL =====
+const heroCarousel = {
+    currentSlide: 0,
+    slides: [],
+    indicators: [],
+    intervalId: null,
+    autoSwipeInterval: 4000, // 4 seconds
+
+    init() {
+        this.slides = document.querySelectorAll('.hero-slide');
+        this.indicators = document.querySelectorAll('.hero-indicator');
+        
+        if (this.slides.length === 0) return;
+        
+        // Set up indicator click handlers
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                this.goToSlide(index);
+            });
+        });
+        
+        // Start auto-swipe
+        this.startAutoSwipe();
+        
+        // Pause on hover
+        const heroCarousel = document.querySelector('.hero-carousel');
+        if (heroCarousel) {
+            heroCarousel.addEventListener('mouseenter', () => {
+                this.stopAutoSwipe();
+            });
+            
+            heroCarousel.addEventListener('mouseleave', () => {
+                this.startAutoSwipe();
+            });
+        }
+    },
+
+    goToSlide(index) {
+        // Remove active class from all slides and indicators
+        this.slides.forEach(slide => slide.classList.remove('active'));
+        this.indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Add active class to current slide and indicator
+        if (this.slides[index]) {
+            this.slides[index].classList.add('active');
+        }
+        if (this.indicators[index]) {
+            this.indicators[index].classList.add('active');
+        }
+        
+        this.currentSlide = index;
+    },
+
+    nextSlide() {
+        const nextIndex = (this.currentSlide + 1) % this.slides.length;
+        this.goToSlide(nextIndex);
+    },
+
+    startAutoSwipe() {
+        this.stopAutoSwipe(); // Clear any existing interval
+        this.intervalId = setInterval(() => {
+            this.nextSlide();
+        }, this.autoSwipeInterval);
+    },
+
+    stopAutoSwipe() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+    }
+};
+
 // Initialize giveaway functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing giveaway');
@@ -2377,5 +2450,8 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('giveaway-popup-seen');
     
     giveaway.init();
+    
+    // Initialize hero carousel
+    heroCarousel.init();
 });
 
