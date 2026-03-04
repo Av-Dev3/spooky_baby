@@ -2921,11 +2921,7 @@ const heroCarousel = {
         this.indicators = document.querySelectorAll('.hero-indicator');
         
         if (this.slides.length === 0) {
-            // Retry once if slides aren't found yet
-            setTimeout(() => {
-                this.init();
-            }, 50);
-            return;
+            return; // No carousel (e.g. text-based hero)
         }
         
         // Ensure first slide is active immediately
@@ -3028,11 +3024,9 @@ function initializeAll() {
     heroCarousel.init();
 }
 
-// Also initialize carousel on window load as backup
+// Also initialize carousel on window load as backup (only if carousel exists)
 window.addEventListener('load', () => {
-    // Re-initialize carousel if it hasn't started properly
-    if (heroCarousel.slides.length === 0 || !heroCarousel.intervalId) {
-        console.log('Re-initializing hero carousel on window load');
+    if (heroCarousel.slides.length > 0 && !heroCarousel.intervalId) {
         heroCarousel.init();
     }
 });
