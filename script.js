@@ -2353,34 +2353,27 @@ const scrollAnimations = {
     },
 
     initHeroAnimations() {
-        // Check if hero animations should play (once per session)
-        const hasPlayed = sessionStorage.getItem('heroAnimationsPlayed');
-        if (hasPlayed) return;
-
         const heroContent = document.querySelector('.hero-content');
         if (!heroContent) return;
 
-        // Animate words in headline with stagger
         const headlineWords = document.querySelectorAll('.hero .word-animate');
-        headlineWords.forEach((word, index) => {
-            const delay = parseInt(word.dataset.delay, 10) || index * 100;
-            setTimeout(() => {
+        const buttons = document.querySelectorAll('.hero .hero-btn-animate');
+        const hasPlayed = sessionStorage.getItem('heroAnimationsPlayed');
+
+        if (hasPlayed) {
+            // Return visit this session - show everything immediately (skip animation)
+            headlineWords.forEach(word => {
+                word.style.animation = 'none';
                 word.style.opacity = '1';
                 word.style.transform = 'translateY(0)';
-            }, delay);
-        });
-
-        // Animate buttons with stagger
-        const buttons = document.querySelectorAll('.hero-btn-animate');
-        buttons.forEach((button, index) => {
-            const delay = parseInt(button.dataset.delay, 10) || 1000 + (index * 200);
-            setTimeout(() => {
+            });
+            buttons.forEach(button => {
+                button.style.animation = 'none';
                 button.style.opacity = '1';
                 button.style.transform = 'translateY(0) scale(1)';
-            }, delay);
-        });
-
-        // Mark as played
+            });
+            return;
+        }
         sessionStorage.setItem('heroAnimationsPlayed', 'true');
     },
 
