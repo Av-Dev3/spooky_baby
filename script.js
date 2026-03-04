@@ -2360,26 +2360,23 @@ const scrollAnimations = {
         const heroContent = document.querySelector('.hero-content');
         if (!heroContent) return;
 
-        // Animate words in headline
-        const headlineWords = document.querySelectorAll('.word-animate');
+        // Animate words in headline with stagger
+        const headlineWords = document.querySelectorAll('.hero .word-animate');
         headlineWords.forEach((word, index) => {
-            const delay = word.dataset.delay || index * 100;
+            const delay = parseInt(word.dataset.delay, 10) || index * 100;
             setTimeout(() => {
                 word.style.opacity = '1';
                 word.style.transform = 'translateY(0)';
             }, delay);
         });
 
-        // Animate buttons
+        // Animate buttons with stagger
         const buttons = document.querySelectorAll('.hero-btn-animate');
         buttons.forEach((button, index) => {
-            const delay = button.dataset.delay || 1000 + (index * 200);
-            // Ensure buttons are visible immediately, then animate
-            button.style.opacity = '1';
-            button.style.transform = 'translateY(0) scale(1)';
-            // Add a subtle entrance animation
+            const delay = parseInt(button.dataset.delay, 10) || 1000 + (index * 200);
             setTimeout(() => {
-                button.style.animation = 'heroButtonReveal 0.6s ease-out forwards';
+                button.style.opacity = '1';
+                button.style.transform = 'translateY(0) scale(1)';
             }, delay);
         });
 
