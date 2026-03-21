@@ -2799,7 +2799,7 @@ select option {
 /* ===== PHOTO GALLERY SECTION ===== */
 .photo-gallery {
   padding: var(--section-padding);
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   text-align: center;
 }
 
