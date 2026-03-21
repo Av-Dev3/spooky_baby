@@ -3382,6 +3382,32 @@ select option {
   filter: none;
 }
 
+.review-response {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: rgba(246, 182, 207, 0.1);
+  border-left: 4px solid var(--accent-pink);
+  border-radius: 0 8px 8px 0;
+}
+
+.review-response strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--accent-pink);
+}
+
+.review-response-date {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: var(--text-secondary);
+}
+
+.review-response p {
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
 .review-text {
   color: var(--text-primary);
   line-height: 1.8;

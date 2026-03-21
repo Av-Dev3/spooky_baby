@@ -519,11 +519,11 @@
                             <input type="file" id="reviewPhoto" name="photo" accept="image/*" multiple class="photo-input">
                             <label for="reviewPhoto" class="photo-upload-label">
                                 <span class="photo-upload-icon">📷</span>
-                                <span class="photo-upload-text">Choose photos (up to 5)</span>
+                                <span class="photo-upload-text">Choose photos (up to 3)</span>
                             </label>
                             <div class="photo-preview-container" id="photoPreviewContainer"></div>
                         </div>
-                        <p class="photo-upload-hint">Max file size: 5MB per photo. Up to 5 photos. Supported formats: JPG, PNG, WebP</p>
+                        <p class="photo-upload-hint">Max 300KB per photo. Up to 3 photos. Supported formats: JPG, PNG, WebP</p>
                     </div>
                     
                     <button type="submit" class="btn btn-pink">Submit Review</button>
@@ -554,16 +554,7 @@
         </div>
     </footer>
 
-    <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Supabase Configuration -->
-    <script>
-        // Configure your Supabase credentials here
-        // Get these from your Supabase project settings: https://app.supabase.com/project/_/settings/api
-        window.SUPABASE_URL = 'https://ckccxrkymluiryrtolhg.supabase.co'; // Your Supabase project URL
-        window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrY2N4cmt5bWx1aXJ5cnRvbGhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNTYzODYsImV4cCI6MjA4MDYzMjM4Nn0.DQNY03yAGwwiVBP00EBOu6eWaHt84-L_4Ub1sYw9o2w'; // Your Supabase anon/public key
-    </script>
-    <script src="script.js?v=20"></script>
+    <script src="script.js?v=21"></script>
     <script src="drive-gallery.js?v=19"></script>
     <script src="reviews.js"></script>
 </body>

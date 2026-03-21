@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Spooky Baby Sweets</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-page { min-height: 100vh; background: var(--bg-primary); padding: 2rem; }
+        .admin-header { text-align: center; margin-bottom: 2rem; }
+        .admin-header h1 { font-family: var(--font-heading); color: var(--text-primary); font-size: 2rem; }
+        .admin-login { max-width: 400px; margin: 4rem auto; text-align: center; }
+        .admin-login .form-group { margin-bottom: 1.5rem; }
+        .admin-login input { width: 100%; padding: 1rem; border-radius: 12px; border: 2px solid rgba(246, 182, 207, 0.3); background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; }
+        .admin-login input:focus { outline: none; border-color: var(--accent-pink); }
+        .admin-login .btn { width: 100%; padding: 1rem; }
+        .admin-error { color: #f87171; margin-top: 1rem; }
+        .admin-content { display: none; max-width: 900px; margin: 0 auto; }
+        .admin-content.authenticated { display: block; }
+        .admin-reviews-list { display: flex; flex-direction: column; gap: 1.5rem; }
+        .admin-review-card { background: var(--bg-secondary); border-radius: 16px; padding: 1.5rem; border: 2px solid rgba(246, 182, 207, 0.2); }
+        .admin-review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+        .admin-review-name { font-weight: 700; color: var(--accent-pink); font-size: 1.1rem; }
+        .admin-review-date { font-size: 0.85rem; color: var(--text-secondary); }
+        .admin-review-rating { margin-bottom: 0.75rem; }
+        .admin-review-rating .star { color: var(--accent-yellow); }
+        .admin-review-rating .star.empty { color: rgba(255, 193, 7, 0.3); }
+        .admin-review-text { color: var(--text-primary); line-height: 1.6; margin-bottom: 1rem; white-space: pre-wrap; }
+        .admin-review-response { margin-top: 1rem; padding: 1rem; background: rgba(246, 182, 207, 0.1); border-radius: 8px; border-left: 4px solid var(--accent-pink); }
+        .admin-review-response p { margin: 0; color: var(--text-primary); }
+        .admin-respond-form { margin-top: 1rem; }
+        .admin-respond-form textarea { width: 100%; min-height: 80px; padding: 1rem; border-radius: 8px; border: 2px solid rgba(246, 182, 207, 0.3); background: var(--bg-primary); color: var(--text-primary); font-family: inherit; resize: vertical; }
+        .admin-respond-form textarea:focus { outline: none; border-color: var(--accent-pink); }
+        .admin-respond-form .btn { margin-top: 0.75rem; padding: 0.6rem 1.25rem; font-size: 0.95rem; }
+        .admin-no-reviews { text-align: center; color: var(--text-secondary); padding: 3rem; }
+        .admin-logout { display: block; text-align: center; margin-top: 2rem; color: var(--text-secondary); font-size: 0.9rem; }
+        .admin-logout:hover { color: var(--accent-pink); }
+    </style>
+</head>
+<body class="admin-page">
+    <div class="admin-header">
+        <h1>🧁 Reviews Admin</h1>
+    </div>
+
+    <div id="adminLogin" class="admin-login">
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="adminPassword" class="form-label">Password</label>
+                <input type="password" id="adminPassword" name="password" placeholder="Enter admin password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn-pink">Sign In</button>
+            <div id="loginError" class="admin-error"></div>
+        </form>
+    </div>
+
+    <div id="adminContent" class="admin-content">
+        <div id="reviewsList" class="admin-reviews-list"></div>
+        <a href="#" id="adminLogout" class="admin-logout">Sign out</a>
+    </div>
+
+    <script>
+        const API = '/.netlify/functions';
+        let password = '';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pwd = document.getElementById('adminPassword').value.trim();
+            const errEl = document.getElementById('loginError');
+            errEl.textContent = '';
+
+            try {
+                const res = await fetch(`${API}/admin-reviews?password=${encodeURIComponent(pwd)}`);
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.error || 'Invalid password');
+                }
+                password = pwd;
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminContent').classList.add('authenticated');
+                loadReviews();
+            } catch (err) {
+                errEl.textContent = err.message || 'Invalid password';
+            }
+        });
+
+        document.getElementById('adminLogout').addEventListener('click', (e) => {
+            e.preventDefault();
+            password = '';
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminContent').classList.remove('authenticated');
+            document.getElementById('adminPassword').value = '';
+        });
+
+        async function loadReviews() {
+            const list = document.getElementById('reviewsList');
+            list.innerHTML = '<div class="reviews-loading">Loading reviews...</div>';
+
+            try {
+                const res = await fetch(`${API}/admin-reviews?password=${encodeURIComponent(password)}`);
+                const data = await res.json();
+
+                if (!res.ok) throw new Error(data.error || 'Failed to load');
+
+                const reviews = data.reviews || [];
+                if (reviews.length === 0) {
+                    list.innerHTML = '<div class="admin-no-reviews">No reviews yet.</div>';
+                    return;
+                }
+
+                list.innerHTML = reviews.map((r) => renderReviewCard(r)).join('');
+
+                list.querySelectorAll('[data-action="respond"]').forEach((btn) => {
+                    btn.addEventListener('click', handleRespond);
+                });
+            } catch (err) {
+                list.innerHTML = `<div class="admin-no-reviews">${err.message}</div>`;
+            }
+        }
+
+        function renderReviewCard(r) {
+            const date = new Date(r.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += i <= r.rating ? '<span class="star">★</span>' : '<span class="star empty">★</span>';
+            }
+
+            const hasResponse = r.response && r.response.trim();
+            const responseDate = r.response_at ? new Date(r.response_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+
+            return `
+                <div class="admin-review-card" data-id="${r.id}">
+                    <div class="admin-review-header">
+                        <span class="admin-review-name">${escapeHtml(r.name)}</span>
+                        <span class="admin-review-date">${date}</span>
+                    </div>
+                    <div class="admin-review-rating">${stars}</div>
+                    <div class="admin-review-text">${escapeHtml(r.text)}</div>
+                    ${hasResponse ? `
+                        <div class="admin-review-response">
+                            <strong>Your response</strong> ${responseDate ? `<span style="font-size:0.85rem;color:var(--text-secondary)">${responseDate}</span>` : ''}
+                            <p>${escapeHtml(r.response)}</p>
+                        </div>
+                    ` : ''}
+                    <div class="admin-respond-form">
+                        <textarea id="resp-${r.id}" placeholder="Write a response to this review...">${hasResponse ? escapeHtml(r.response) : ''}</textarea>
+                        <button type="button" class="btn btn-pink" data-action="respond" data-id="${r.id}">${hasResponse ? 'Update Response' : 'Submit Response'}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function handleRespond(e) {
+            const btn = e.target;
+            const id = btn.dataset.id;
+            const textarea = document.getElementById(`resp-${id}`);
+            const text = (textarea?.value || '').trim();
+
+            if (!text) {
+                alert('Please enter a response.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            try {
+                const res = await fetch(`${API}/admin-reviews`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        password,
+                        action: 'respond',
+                        reviewId: id,
+                        response: text,
+                    }),
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Failed to save');
+
+                loadReviews();
+            } catch (err) {
+                alert(err.message || 'Failed to save response');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Submit Response';
+            }
+        }
+
+        function escapeHtml(t) {
+            const d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
+        }
+    </script>
+</body>
+</html>
