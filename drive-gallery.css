@@ -67,28 +67,23 @@
   flex: 0 0 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: var(--gallery-gap);
   padding: 0 1rem;
   min-height: 400px;
 }
 
-/* ===== DESKTOP GRID LAYOUT ===== */
+/* ===== DESKTOP GRID LAYOUT (6 photos: 3 cols x 2 rows) ===== */
 @media (min-width: 768px) {
   .drive-gallery-swipe-container {
-    display: block;
+    display: flex;
   }
   
   .drive-gallery-swipe-page {
-    display: grid;
-    grid-template-columns: repeat(var(--gallery-columns-tablet), 1fr);
-    flex: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    flex: 0 0 100%;
     padding: 0;
-  }
-}
-
-@media (min-width: 1024px) {
-  .drive-gallery-swipe-page {
-    grid-template-columns: repeat(var(--gallery-columns-desktop), 1fr);
   }
 }
 
@@ -121,12 +116,7 @@
   transform: scale(1.1);
 }
 
-/* Hide pagination on desktop */
-@media (min-width: 768px) {
-  .drive-gallery-pagination {
-    display: none;
-  }
-}
+/* Pagination visible on all screen sizes when multiple pages */
 
 /* ===== MOBILE NAVIGATION ARROWS ===== */
 .drive-gallery-nav {
@@ -172,12 +162,7 @@
   background: rgba(0, 0, 0, 0.7);
 }
 
-/* Hide navigation arrows on desktop */
-@media (min-width: 768px) {
-  .drive-gallery-nav {
-    display: none;
-  }
-}
+/* Navigation arrows visible on all screen sizes (hidden via JS when only 1 page) */
 
 /* ===== GALLERY ITEMS ===== */
 .drive-gallery-item {

@@ -34,10 +34,11 @@ class DriveGallery {
     this.config = {
       apiEndpoint: '/.netlify/functions/drive-photos',
       limit: 24,
+      photosPerPage: 6,
       columns: {
         mobile: 2,
         tablet: 3,
-        desktop: 4
+        desktop: 3
       },
       enableLazyLoading: true,
       enableLightbox: true,
@@ -366,29 +367,26 @@ class DriveGallery {
       return;
     }
 
-    if (this.isMobile) {
-      this.renderMobileGallery(images);
-    } else {
-      this.renderDesktopGallery(images);
-    }
+    this.renderCarouselGallery(images);
   }
 
-  renderMobileGallery(images) {
+  renderCarouselGallery(images) {
+    const perPage = this.config.photosPerPage || 6;
+    
     // Clear existing content
     this.swipeContainer.innerHTML = '';
     
-    // Calculate pages (4 photos per page)
-    this.totalPages = Math.ceil(images.length / 4);
+    // Calculate pages (6 photos per page max)
+    this.totalPages = Math.ceil(images.length / perPage);
     
-    // Create pages
+    // Create pages with max 6 photos each
     for (let page = 0; page < this.totalPages; page++) {
       const pageDiv = document.createElement('div');
       pageDiv.className = 'drive-gallery-swipe-page';
       pageDiv.setAttribute('data-page', page);
       
-      // Add 4 photos to this page
-      const startIndex = page * 4;
-      const endIndex = Math.min(startIndex + 4, images.length);
+      const startIndex = page * perPage;
+      const endIndex = Math.min(startIndex + perPage, images.length);
       
       for (let i = startIndex; i < endIndex; i++) {
         const photoElement = this.createPhotoElement(images[i], i);
@@ -398,35 +396,23 @@ class DriveGallery {
       this.swipeContainer.appendChild(pageDiv);
     }
     
-    // Create pagination dots
+    // Create pagination dots (show when more than 1 page)
     this.createPaginationDots();
     
-    // Update navigation buttons
+    // Update navigation buttons (always show for carousel)
     this.updateNavigationButtons();
+    
+    // Show/hide nav based on page count
+    if (this.totalPages > 1) {
+      this.prevButton.style.display = 'flex';
+      this.nextButton.style.display = 'flex';
+    } else {
+      this.prevButton.style.display = 'none';
+      this.nextButton.style.display = 'none';
+    }
     
     // Set initial position
     this.goToPage(0);
-  }
-
-  renderDesktopGallery(images) {
-    // Clear mobile content
-    this.swipeContainer.innerHTML = '';
-    
-    // Create single grid for desktop
-    const gridDiv = document.createElement('div');
-    gridDiv.className = 'drive-gallery-swipe-page';
-    
-    images.forEach((photo, index) => {
-      const photoElement = this.createPhotoElement(photo, index);
-      gridDiv.appendChild(photoElement);
-    });
-    
-    this.swipeContainer.appendChild(gridDiv);
-    
-    // Hide pagination and navigation on desktop
-    this.pagination.style.display = 'none';
-    this.prevButton.style.display = 'none';
-    this.nextButton.style.display = 'none';
   }
 
   createPhotoElement(photo, index) {
@@ -630,7 +616,7 @@ class DriveGallery {
   }
 
   goToPage(page) {
-    if (!this.isMobile || page < 0 || page >= this.totalPages) return;
+    if (page < 0 || page >= this.totalPages) return;
 
     this.currentPage = page;
     const translateX = -page * 100;
@@ -660,11 +646,7 @@ class DriveGallery {
   updateLayout() {
     if (this.currentImages.length === 0) return;
 
-    if (this.isMobile) {
-      this.renderMobileGallery(this.currentImages);
-    } else {
-      this.renderDesktopGallery(this.currentImages);
-    }
+    this.renderCarouselGallery(this.currentImages);
   }
 
   // Lightbox methods
@@ -675,20 +657,14 @@ class DriveGallery {
     // Get the clicked image position - search in both mobile and desktop structures
     let clickedImg = null;
     
-    // Try to find the image in the current structure
-    if (this.isMobile) {
-      // In mobile mode, search through all swipe pages
-      const allPages = this.swipeContainer.querySelectorAll('.drive-gallery-swipe-page');
-      for (const page of allPages) {
-        const img = page.querySelector(`[data-index="${index}"] img`);
-        if (img) {
-          clickedImg = img;
-          break;
-        }
+    // Find the image in the carousel pages
+    const allPages = this.swipeContainer.querySelectorAll('.drive-gallery-swipe-page');
+    for (const page of allPages) {
+      const img = page.querySelector(`[data-index="${index}"] img`);
+      if (img) {
+        clickedImg = img;
+        break;
       }
-    } else {
-      // In desktop mode, search in the single grid
-      clickedImg = this.swipeContainer.querySelector(`[data-index="${index}"] img`);
     }
     
     if (!clickedImg) {
