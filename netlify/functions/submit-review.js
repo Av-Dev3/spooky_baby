@@ -1,5 +1,3 @@
-const { getStore } = require('@netlify/blobs');
-
 /**
  * Netlify Function: Submit a new review (public)
  * POST /.netlify/functions/submit-review
@@ -13,7 +11,6 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-const MAX_IMAGE_SIZE = 300 * 1024; // 300KB per image
 const MAX_IMAGES = 3;
 
 async function processBody(event) {
@@ -25,6 +22,13 @@ async function processBody(event) {
     }
   }
   return null;
+}
+
+async function getReviewsFromStore(store) {
+  const reviewsJson = await store.get('reviews');
+  if (!reviewsJson) return [];
+  const data = typeof reviewsJson === 'string' ? JSON.parse(reviewsJson) : reviewsJson;
+  return Array.isArray(data) ? data : (data.reviews || []);
 }
 
 exports.handler = async (event) => {
@@ -70,15 +74,10 @@ exports.handler = async (event) => {
       newReview.image_url = JSON.stringify(imageUrls);
     }
 
-    const store = getStore({ name: 'reviews', consistency: 'strong' });
-    let reviewsJson = await store.get('reviews');
-
-    let reviews = [];
-    if (reviewsJson) {
-      const data = typeof reviewsJson === 'string' ? JSON.parse(reviewsJson) : reviewsJson;
-      reviews = Array.isArray(data) ? data : (data.reviews || []);
-    }
-
+    const { connectLambda, getStore } = require('@netlify/blobs');
+    connectLambda(event);
+    const store = getStore('reviews');
+    const reviews = await getReviewsFromStore(store);
     reviews.unshift(newReview);
     await store.set('reviews', JSON.stringify(reviews));
 
@@ -88,7 +87,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ success: true, id: newReview.id }),
     };
   } catch (error) {
-    console.error('submit-review error:', error);
+    console.error('submit-review error:', error.message || error);
     return {
       statusCode: 500,
       headers,

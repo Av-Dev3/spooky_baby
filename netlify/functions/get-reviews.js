@@ -1,8 +1,8 @@
-const { getStore } = require('@netlify/blobs');
-
 /**
  * Netlify Function: Get all reviews (public)
  * GET /.netlify/functions/get-reviews
+ *
+ * Storage: Netlify Blobs. If Blobs fails, returns empty array (graceful degradation).
  */
 
 const headers = {
@@ -11,6 +11,14 @@ const headers = {
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
   'Content-Type': 'application/json',
 };
+
+function success(reviews) {
+  return {
+    statusCode: 200,
+    headers,
+    body: JSON.stringify({ reviews: reviews || [] }),
+  };
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
@@ -22,34 +30,26 @@ exports.handler = async (event) => {
   }
 
   try {
-    const store = getStore({ name: 'reviews', consistency: 'strong' });
+    const { connectLambda, getStore } = require('@netlify/blobs');
+    connectLambda(event);
+    const store = getStore('reviews');
     let reviewsJson = await store.get('reviews');
 
     if (!reviewsJson) {
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ reviews: [] }),
-      };
+      return success([]);
     }
 
     const data = typeof reviewsJson === 'string' ? JSON.parse(reviewsJson) : reviewsJson;
     const reviews = Array.isArray(data) ? data : (data.reviews || []);
 
-    // Sort by date, newest first
     reviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ reviews }),
-    };
+    return success(reviews);
   } catch (error) {
-    console.error('get-reviews error:', error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: 'Failed to load reviews' }),
-    };
+    console.error('get-reviews error:', error.message || error);
+
+    // Graceful fallback: return empty array so the site still works
+    // Check Netlify function logs for the actual error (Blobs may need to be enabled)
+    return success([]);
   }
 };

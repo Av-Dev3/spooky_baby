@@ -1,5 +1,3 @@
-const { getStore } = require('@netlify/blobs');
-
 /**
  * Netlify Function: Admin reviews - password protected
  * GET with ?password=xxx - get all reviews
@@ -33,6 +31,13 @@ function checkPassword(event, body) {
   return password === envPassword;
 }
 
+async function getReviewsFromStore(store) {
+  const reviewsJson = await store.get('reviews');
+  if (!reviewsJson) return [];
+  const data = typeof reviewsJson === 'string' ? JSON.parse(reviewsJson) : reviewsJson;
+  return Array.isArray(data) ? data : (data.reviews || []);
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
@@ -60,14 +65,10 @@ exports.handler = async (event) => {
   }
 
   try {
-    const store = getStore({ name: 'reviews', consistency: 'strong' });
-    let reviewsJson = await store.get('reviews');
-
-    let reviews = [];
-    if (reviewsJson) {
-      const data = typeof reviewsJson === 'string' ? JSON.parse(reviewsJson) : reviewsJson;
-      reviews = Array.isArray(data) ? data : (data.reviews || []);
-    }
+    const { connectLambda, getStore } = require('@netlify/blobs');
+    connectLambda(event);
+    const store = getStore('reviews');
+    const reviews = await getReviewsFromStore(store);
 
     if (event.httpMethod === 'GET') {
       reviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -117,7 +118,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ error: 'Invalid action' }),
     };
   } catch (error) {
-    console.error('admin-reviews error:', error);
+    console.error('admin-reviews error:', error.message || error);
     return {
       statusCode: 500,
       headers,

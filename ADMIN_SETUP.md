@@ -2,6 +2,13 @@
 
 The reviews system no longer uses Supabase. Reviews are stored in Netlify Blobs.
 
+## Troubleshooting
+
+**If you see "No reviews yet" or reviews fail to load:**
+- Netlify Blobs may need to be enabled for your site. Check [Netlify Blobs docs](https://docs.netlify.com/blobs/overview/)
+- In **Netlify Dashboard** → your site → **Functions** → select `get-reviews` → **Logs** to see the actual error
+- Ensure `ADMIN_PASSWORD` is set in **Site settings** → **Environment variables** (needed for admin; not for public reviews)
+
 ## Setup
 
 ### 1. Environment Variable

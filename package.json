@@ -9,7 +9,7 @@
     "deploy": "netlify deploy --prod"
   },
   "dependencies": {
-    "@netlify/blobs": "^5.0.0",
+    "@netlify/blobs": "^10.0.0",
     "googleapis": "^128.0.0"
   },
   "devDependencies": {
