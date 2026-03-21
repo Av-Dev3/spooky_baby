@@ -61,6 +61,8 @@
 .drive-gallery-container {
   position: relative;
   overflow: hidden;
+  /* Only allow vertical pan (page scroll) - horizontal swipes go to carousel */
+  touch-action: pan-y;
 }
 
 .drive-gallery-swipe-container {

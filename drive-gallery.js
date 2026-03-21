@@ -513,12 +513,13 @@ class DriveGallery {
     let startY = 0;
     let isDragging = false;
 
+    // passive: false is required for preventDefault() to work on touch events
     this.swipeContainer.addEventListener('touchstart', (e) => {
       if (!this.isMobile) return;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
       isDragging = true;
-    });
+    }, { passive: true });
 
     this.swipeContainer.addEventListener('touchmove', (e) => {
       if (!this.isMobile || !isDragging) return;
@@ -528,12 +529,11 @@ class DriveGallery {
       const diffX = startX - currentX;
       const diffY = startY - currentY;
       
-      // Only prevent default if this is clearly a horizontal swipe
-      // Allow vertical scrolling to continue normally
-      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 20) {
-        e.preventDefault(); // Only prevent scrolling for horizontal swipes
+      // Prevent page scroll when horizontal swipe detected (carousel takes priority)
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 15) {
+        e.preventDefault();
       }
-    });
+    }, { passive: false });
 
     this.swipeContainer.addEventListener('touchend', (e) => {
       if (!this.isMobile || !isDragging) return;
