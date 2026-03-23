@@ -1,5 +1,13 @@
 // Cart Test Page - Menu with working Add to Cart, Bundle config modal
 
+function getItemIconHtml(item) {
+  const base = (typeof window !== 'undefined' && window.location.pathname.includes('test')) ? '../' : '';
+  if (item.image) {
+    return `<img src="${base}${item.image}" alt="${(item.name || '').replace(/"/g, '&quot;')}" class="item-icon-img" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='block';"><span class="item-icon-fallback" style="display:none">${item.icon || '🍬'}</span>`;
+  }
+  return `<span class="item-icon-emoji">${item.icon || '🍬'}</span>`;
+}
+
 // Parse pricing string into [{ label, price }] for buttons
 function parsePricingOptions(pricingStr) {
     if (!pricingStr || /contact|custom|seasonal|availability|edition|time/i.test(pricingStr)) return [];
@@ -72,7 +80,7 @@ function buildTestMenu() {
                     return `<div class="option-line"><span class="option-label">${o.icon} ${label}</span><span class="option-price">${o.pricing || ''}</span></div>`;
                 }).join('');
                 div.innerHTML = `
-                    <div class="item-icon">${item.icon}</div>
+                    <div class="item-icon">${getItemIconHtml(item)}</div>
                     <div class="item-name">${item.name}</div>
                     <div class="item-options-list">${optsHtml}</div>
                     <div class="item-actions"></div>
@@ -94,7 +102,7 @@ function buildTestMenu() {
             const desc = item.desc ? formatBundleText(item.desc) : '';
             const pricing = item.pricing ? formatBundleText(item.pricing) : '';
             div.innerHTML = `
-                <div class="item-icon">${item.icon}</div>
+                <div class="item-icon">${getItemIconHtml(item)}</div>
                 <div class="item-name">${item.name}</div>
                 ${desc ? `<div class="item-desc">${desc}</div>` : ''}
                 <div class="item-price">${pricing || ''}</div>

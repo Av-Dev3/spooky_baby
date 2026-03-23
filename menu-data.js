@@ -7,7 +7,7 @@ const MENU_DATA = {
       {
         name: 'Gourmet Heritage Line',
         items: [
-          { icon: '🍋', name: 'Lemon Burst', desc: 'Bright, buttery lemon cake with fresh zest and smooth lemon buttercream', pricing: '6-Pack: $20 · Dozen: $35', cart: [{ name: 'Lemon Burst Cupcakes (6-Pack)', price: 20 }, { name: 'Lemon Burst Cupcakes (Dozen)', price: 35 }] },
+          { icon: '🍋', name: 'Lemon Burst', desc: 'Bright, buttery lemon cake with fresh zest and smooth lemon buttercream', pricing: '6-Pack: $20 · Dozen: $35', cart: [{ name: 'Lemon Burst Cupcakes (6-Pack)', price: 20 }, { name: 'Lemon Burst Cupcakes (Dozen)', price: 35 }], image: 'assets/lemon_burst.png' },
           { icon: '🍊', name: 'Orange Cranberry', desc: 'Zesty orange cake with tart cranberry swirls and cream cheese frosting', pricing: '6-Pack: $20 · Dozen: $35' },
           { icon: '🥧', name: 'Key Lime Pie', desc: 'Tangy key lime cake with graham cracker crust and whipped topping', pricing: '6-Pack: $20 · Dozen: $35' },
           { icon: '🍫', name: 'Chocolate Crunch', desc: 'Rich chocolate cake with crunchy toffee bits and chocolate ganache', pricing: '6-Pack: $20 · Dozen: $35' }

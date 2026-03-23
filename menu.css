@@ -189,6 +189,14 @@ html, body {
 }
 
 .twopanel-item .item-icon { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+.twopanel-item .item-icon .item-icon-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+.twopanel-item .item-icon .item-icon-fallback { font-size: 1.8rem; display: block; }
 .twopanel-item .item-name { color: var(--accent-pink); font-weight: 600; font-size: 1rem; margin-bottom: 0.25rem; }
 .twopanel-item .item-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin: 0 0 0.5rem 0; }
 .twopanel-item .item-price { color: var(--accent-yellow); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }

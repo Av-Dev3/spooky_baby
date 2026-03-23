@@ -1,5 +1,14 @@
 // ===== MENU PAGE - Two-Panel Menu =====
 
+function getItemIconHtml(item) {
+  const base = (typeof window !== 'undefined' && window.location.pathname.includes('test')) ? '../' : '';
+  if (item.image) {
+    const fallback = (item.icon || '🍬').replace(/'/g, "\\'");
+    return `<img src="${base}${item.image}" alt="${(item.name || '').replace(/"/g, '&quot;')}" class="item-icon-img" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='block';"><span class="item-icon-fallback" style="display:none">${item.icon || '🍬'}</span>`;
+  }
+  return `<span class="item-icon-emoji">${item.icon || '🍬'}</span>`;
+}
+
 function buildTwoPanel() {
   const sidebar = document.getElementById('twopanelSidebar');
   const content = document.getElementById('twopanelContent');
@@ -25,7 +34,7 @@ function buildTwoPanel() {
           return `<div class="option-line"><span class="option-label">${o.icon} ${label}</span><span class="option-price">${o.pricing || ''}</span></div>`;
         }).join('');
         div.innerHTML = `
-          <div class="item-icon">${item.icon}</div>
+          <div class="item-icon">${getItemIconHtml(item)}</div>
           <div class="item-name">${item.name}</div>
           <div class="item-options-list">${optsHtml}</div>
           <div class="item-actions"></div>
@@ -47,7 +56,7 @@ function buildTwoPanel() {
       const formatBundleText = (s) => (isBundleSection && s) ? s.replace(/ · /g, '<br>') : (s || '');
       const desc = item.desc ? formatBundleText(item.desc) : '';
       const pricing = item.pricing ? formatBundleText(item.pricing) : '';
-      div.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div>${desc ? `<div class="item-desc">${desc}</div>` : ''}<div class="item-price">${pricing || ''}</div><div class="item-actions"></div>`;
+      div.innerHTML = `<div class="item-icon">${getItemIconHtml(item)}</div><div class="item-name">${item.name}</div>${desc ? `<div class="item-desc">${desc}</div>` : ''}<div class="item-price">${pricing || ''}</div><div class="item-actions"></div>`;
       const actions = div.querySelector('.item-actions');
 
       if (item.cart && typeof addToCart === 'function') {
