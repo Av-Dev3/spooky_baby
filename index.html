@@ -170,9 +170,7 @@
                             <div class="custom-option" data-value="cakes">🎂 Cakes</div>
                             <div class="custom-option" data-value="seasonal">🎃 Seasonal & Specialty</div>
                             <div class="custom-option" data-value="valentines-day">💝 Valentine's Day</div>
-                            <div class="custom-option" data-value="treat-box">🎁 Treat Box ($65)</div>
-                            <div class="custom-option" data-value="party-box">🎉 Party Box ($95)</div>
-                            <div class="custom-option" data-value="dessert-table">🍬 Dessert Table ($130)</div>
+                            <div class="custom-option" data-value="spooky-baby-bundles">👻 Spooky Baby Bundles</div>
                             <div class="custom-option" data-value="custom">✨ Custom Request</div>
                         </div>
                     </div>
@@ -291,7 +289,25 @@
                     </div>
                 </div>
 
-                <!-- Spooky Baby Box Options (Treat / Party / Dessert Table) -->
+                <!-- Spooky Baby Bundles: Pick box type first -->
+                <div class="form-group" id="boxTypeGroup" style="display: none;">
+                    <label for="spookyBabyBoxType" class="form-label">Pick your box *</label>
+                    <div class="custom-dropdown" id="boxTypeDropdown">
+                        <div class="custom-dropdown-trigger" id="boxTypeTrigger">
+                            <span class="dropdown-text">Select your box...</span>
+                            <span class="dropdown-arrow">🎁</span>
+                        </div>
+                        <div class="custom-dropdown-options" id="boxTypeOptions">
+                            <div class="custom-option" data-value="">Select your box...</div>
+                            <div class="custom-option" data-value="treat-box">🎁 Treat Box ($65) — 2 dozen</div>
+                            <div class="custom-option" data-value="party-box">🎉 Party Box ($95) — 3 dozen</div>
+                            <div class="custom-option" data-value="dessert-table">🍬 Dessert Table ($130) — 4 dozen</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="spookyBabyBoxType" name="spookyBabyBoxType" value="">
+                </div>
+
+                <!-- Spooky Baby Box Options: Pick treat dozens -->
                 <div class="form-group" id="boxOptionsGroup" style="display: none;">
                     <label class="form-label" id="boxOptionsLabel">Pick your treat dozens</label>
                     <div class="box-choices" id="boxChoicesContainer"></div>

@@ -547,20 +547,32 @@ const formHandler = {
             requiredFields.push('customFlavor');
         }
         
-        // Check if Spooky Baby Box options are visible
+        // Check if Spooky Baby Bundles: require box type and treat choices
+        const boxTypeGroup = document.getElementById('boxTypeGroup');
         const boxOptionsGroup = document.getElementById('boxOptionsGroup');
         const itemValue = data.item || '';
-        if (boxOptionsGroup && boxOptionsGroup.style.display !== 'none' && BOX_RULES[itemValue]) {
-            const rules = BOX_RULES[itemValue];
-            for (let i = 1; i <= rules.choicesCount; i++) {
-                const val = (data[`boxChoice${i}`] || '').trim();
-                if (!val) {
-                    utils.showMessage(
-                        elements.formMessage,
-                        `Please select all ${rules.choicesCount} treat choices (Choice ${i} is missing)`,
-                        'error'
-                    );
-                    return false;
+        if (itemValue === 'spooky-baby-bundles' && boxTypeGroup && boxTypeGroup.style.display !== 'none') {
+            const boxType = (data.spookyBabyBoxType || '').trim();
+            if (!boxType || !BOX_RULES[boxType]) {
+                utils.showMessage(
+                    elements.formMessage,
+                    'Please select your box (Treat Box, Party Box, or Dessert Table)',
+                    'error'
+                );
+                return false;
+            }
+            const rules = BOX_RULES[boxType];
+            if (boxOptionsGroup && boxOptionsGroup.style.display !== 'none') {
+                for (let i = 1; i <= rules.choicesCount; i++) {
+                    const val = (data[`boxChoice${i}`] || '').trim();
+                    if (!val) {
+                        utils.showMessage(
+                            elements.formMessage,
+                            `Please select all ${rules.choicesCount} treat choices (Choice ${i} is missing)`,
+                            'error'
+                        );
+                        return false;
+                    }
                 }
             }
         }
@@ -762,6 +774,7 @@ const customDropdown = {
         this.initItemDropdown();
         this.initFlavorDropdown();
         this.initValentinesDayDropdown();
+        this.initBoxTypeDropdown();
     },
 
     initItemDropdown() {
@@ -830,10 +843,11 @@ const customDropdown = {
             const flavorGroup = document.getElementById('flavorGroup');
             const valentinesDayGroup = document.getElementById('valentinesDayGroup');
             const breakableHeartsGroup = document.getElementById('breakableHeartsGroup');
+            const boxTypeGroup = document.getElementById('boxTypeGroup');
             const boxOptionsGroup = document.getElementById('boxOptionsGroup');
             
-            if (value === 'treat-box' || value === 'party-box' || value === 'dessert-table') {
-                // Spooky Baby Box: hide flavor/valentines, show box choices
+            if (value === 'spooky-baby-bundles') {
+                // Spooky Baby Bundles: show box type pick first, hide treat choices until they pick
                 if (flavorGroup) {
                     flavorGroup.classList.remove('show');
                     flavorGroup.style.display = 'none';
@@ -848,12 +862,23 @@ const customDropdown = {
                     breakableHeartsGroup.style.display = 'none';
                     breakableHeartsGroup.classList.remove('show');
                 }
+                if (boxTypeGroup) {
+                    boxTypeGroup.style.display = 'block';
+                    setTimeout(() => boxTypeGroup.classList.add('show'), 10);
+                    const boxTypeInput = document.getElementById('spookyBabyBoxType');
+                    const boxTypeTrigger = document.getElementById('boxTypeTrigger');
+                    if (boxTypeInput) boxTypeInput.value = '';
+                    if (boxTypeTrigger) boxTypeTrigger.querySelector('.dropdown-text').textContent = 'Select your box...';
+                }
                 if (boxOptionsGroup) {
-                    boxOptionsGroup.style.display = 'block';
-                    boxOptionsGroup.classList.add('show');
-                    boxOptions.buildChoices(value);
+                    boxOptionsGroup.style.display = 'none';
+                    boxOptionsGroup.classList.remove('show');
                 }
             } else if (value === 'valentines-day') {
+                if (boxTypeGroup) {
+                    boxTypeGroup.style.display = 'none';
+                    boxTypeGroup.classList.remove('show');
+                }
                 if (boxOptionsGroup) {
                     boxOptionsGroup.style.display = 'none';
                     boxOptionsGroup.classList.remove('show');
@@ -880,6 +905,10 @@ const customDropdown = {
                     breakableHeartsGroup.classList.remove('show');
                 }
             } else if (value && value !== 'custom') {
+                if (boxTypeGroup) {
+                    boxTypeGroup.style.display = 'none';
+                    boxTypeGroup.classList.remove('show');
+                }
                 if (boxOptionsGroup) {
                     boxOptionsGroup.style.display = 'none';
                     boxOptionsGroup.classList.remove('show');
@@ -903,6 +932,10 @@ const customDropdown = {
                     breakableHeartsGroup.classList.remove('show');
                 }
             } else {
+                if (boxTypeGroup) {
+                    boxTypeGroup.style.display = 'none';
+                    boxTypeGroup.classList.remove('show');
+                }
                 if (boxOptionsGroup) {
                     boxOptionsGroup.style.display = 'none';
                     boxOptionsGroup.classList.remove('show');
@@ -933,6 +966,50 @@ const customDropdown = {
                         flavorDropdownText.textContent = 'Select a flavor...';
                     }
                 }
+            }
+        });
+    },
+
+    initBoxTypeDropdown() {
+        const boxTypeDropdown = document.getElementById('boxTypeDropdown');
+        const boxTypeTrigger = document.getElementById('boxTypeTrigger');
+        const boxTypeOptions = document.getElementById('boxTypeOptions');
+        const boxTypeInput = document.getElementById('spookyBabyBoxType');
+        const boxOptionsGroup = document.getElementById('boxOptionsGroup');
+
+        if (!boxTypeDropdown || !boxTypeTrigger || !boxTypeOptions || !boxTypeInput) return;
+
+        boxTypeTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            boxTypeDropdown.classList.toggle('open');
+            const formGroup = boxTypeDropdown.closest('.form-group');
+            if (boxTypeDropdown.classList.contains('open')) {
+                formGroup?.classList.add('dropdown-open');
+            } else {
+                formGroup?.classList.remove('dropdown-open');
+            }
+        });
+
+        boxTypeOptions.addEventListener('click', (e) => {
+            const option = e.target.closest('.custom-option');
+            if (!option) return;
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            boxTypeTrigger.querySelector('.dropdown-text').textContent = text;
+            boxTypeInput.value = value || '';
+            boxTypeOptions.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            boxTypeDropdown.classList.remove('open');
+            boxTypeDropdown.closest('.form-group')?.classList.remove('dropdown-open');
+
+            if (value && BOX_RULES[value]) {
+                boxOptionsGroup.style.display = 'block';
+                setTimeout(() => boxOptionsGroup.classList.add('show'), 10);
+                boxOptions.buildChoices(value);
+            } else {
+                boxOptionsGroup.style.display = 'none';
+                boxOptionsGroup.classList.remove('show');
             }
         });
     },
