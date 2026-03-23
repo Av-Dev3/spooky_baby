@@ -3,67 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Ideas — Spooky Baby Sweets</title>
+    <title>Cart Test — Spooky Baby Sweets</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@400;600;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="test-styles.css">
+    <link rel="stylesheet" href="../menu.css">
+    <link rel="stylesheet" href="../cart.css">
+    <link rel="stylesheet" href="test.css">
 </head>
-<body class="test-page-body">
-    <div class="test-page">
-        <div class="test-header">
-            <h1>Product Menu Ideas — Pick Your Fave</h1>
-            <p>Scroll through each concept. Full menu loaded for testing.</p>
-        </div>
-
-        <!-- PRODUCT MENU OPTIONS -->
-        <section class="test-section">
-            <!-- Menu A: Accordion -->
-            <div class="demo-block">
-                <h3 class="demo-label">A. Accordion Menu</h3>
-                <p class="demo-desc">Click a category to expand. One at a time. Clean and focused.</p>
-                <div class="menu-demo menu-accordion-demo">
-                    <div class="accordion" id="accordionMenu"></div>
-                </div>
+<body class="test-cart-page">
+    <header class="header" id="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <a href="../index.html"><img src="../assets/logo_spooky.png" alt="Spooky Baby Sweets" class="logo"></a>
             </div>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">← Back to Site</a></li>
+                <li><a href="../cart.html" class="nav-link">View Cart</a></li>
+            </ul>
+        </nav>
+    </header>
 
-            <!-- Menu B: Two-Panel -->
-            <div class="demo-block">
-                <h3 class="demo-label">B. Two-panel (Master–Detail)</h3>
-                <p class="demo-desc">Categories always visible on the left. Click to see items. No hiding — you always know where you are.</p>
-                <div class="menu-demo menu-twopanel-demo">
+    <section class="test-hero">
+        <div class="container">
+            <h1>Cart Test</h1>
+            <p>Add items from the menu. Bundle boxes require selecting treat options before adding to cart.</p>
+        </div>
+    </section>
+
+    <div class="test-layout">
+        <section class="menu-section" id="menu">
+            <div class="container">
+                <div class="menu-twopanel">
                     <nav class="twopanel-sidebar" id="twopanelSidebar"></nav>
                     <div class="twopanel-content" id="twopanelContent"></div>
                 </div>
             </div>
-
-            <!-- Menu C: Featured + Categories -->
-            <div class="demo-block">
-                <h3 class="demo-label">C. Featured + Category cards</h3>
-                <p class="demo-desc">“Popular picks” up top, then category cards that expand inline. Guided and welcoming.</p>
-                <div class="menu-demo menu-featured-demo">
-                    <div class="featured-section" id="featuredSection"></div>
-                    <div class="featured-categories" id="featuredCategories"></div>
-                </div>
-            </div>
-
-            <!-- Menu D: Expandable Rows -->
-            <div class="demo-block">
-                <h3 class="demo-label">D. Expandable rows</h3>
-                <p class="demo-desc">Scan name + price in one glance. Click a row to expand description and add to cart.</p>
-                <div class="menu-demo menu-rows-demo">
-                    <div class="expandable-rows" id="expandableRows"></div>
-                </div>
-            </div>
         </section>
 
-        <footer class="test-footer">
-            <p><a href="../index.html">← Back to Spooky Baby</a></p>
-        </footer>
+        <aside class="test-cart-panel" id="cartPanel">
+            <div class="cart-panel-header">
+                <h2>🛒 Your Cart</h2>
+                <span class="cart-count" id="cartCount">0 items</span>
+            </div>
+            <div class="cart-panel-body" id="cartPanelBody">
+                <div class="cart-empty" id="cartEmpty">Your cart is empty</div>
+                <div class="cart-items-list" id="cartItemsList" style="display: none;"></div>
+            </div>
+            <div class="cart-panel-footer">
+                <div class="cart-total" id="cartTotal">$0.00</div>
+                <a href="../cart.html" class="btn btn-pink btn-full">Go to Checkout</a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Bundle config modal -->
+    <div class="bundle-modal" id="bundleModal">
+        <div class="bundle-modal-backdrop"></div>
+        <div class="bundle-modal-content">
+            <div class="bundle-modal-header">
+                <h3 id="bundleModalTitle">Configure your bundle</h3>
+                <button type="button" class="bundle-modal-close" id="bundleModalClose" aria-label="Close">×</button>
+            </div>
+            <div class="bundle-modal-body">
+                <div class="bundle-box-info" id="bundleBoxInfo"></div>
+                <div class="bundle-pick-label" id="bundlePickLabel">Pick your items</div>
+                <div class="bundle-options" id="bundleOptions"></div>
+                <div class="bundle-modal-error" id="bundleModalError" style="display: none;"></div>
+            </div>
+            <div class="bundle-modal-footer">
+                <button type="button" class="btn btn-yellow" id="bundleModalAdd">Add to Cart</button>
+            </div>
+        </div>
     </div>
 
     <script src="../menu-data.js"></script>
+    <script src="../cart.js"></script>
     <script src="test.js"></script>
 </body>
 </html>

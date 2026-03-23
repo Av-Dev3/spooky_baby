@@ -1,301 +1,287 @@
-// Test page - Product menu demos (populated from menu-data.js)
+// Cart Test Page - Menu with working Add to Cart, Bundle config modal
 
-function getAllMenuItems() {
-  const items = [];
-  const cats = MENU_DATA;
-  for (const key of Object.keys(cats)) {
-    const cat = cats[key];
-    if (cat.sublines) {
-      cat.sublines.forEach(sl => sl.items.forEach(i => items.push({ ...i, category: cat.title, icon: i.icon || cat.icon })));
-    }
-    if (cat.items) {
-      cat.items.forEach(i => items.push({ ...i, category: cat.title, icon: i.icon || cat.icon }));
-    }
-  }
-  return items;
+const BOX_RULES = {
+    'Treat Box': { price: 65, choicesCount: 2, maxOptionNum: 7 },
+    'Party Box': { price: 95, choicesCount: 3, maxOptionNum: 8 },
+    'Dessert Table': { price: 130, choicesCount: 4, maxOptionNum: 8 }
+};
+
+function getByTheDozenOptions() {
+    const cat = MENU_DATA?.spookyBabyBundles;
+    const opts = cat?.sublines?.[1]?.items?.[0]?.options;
+    return opts || [
+        { name: 'Dipped Oreos', optionNum: 1 }, { name: 'Dipped Rice Krispies', optionNum: 2 },
+        { name: 'Dipped Pretzel Rods', optionNum: 3 }, { name: 'Dipped Caramel Pretzel Rods', optionNum: 4 },
+        { name: 'Chocolate Strawberries', optionNum: 5 }, { name: 'Cake Pops', optionNum: 6 },
+        { name: 'Cupcakes', optionNum: 7 }, { name: 'Cake-sicles', optionNum: 8 }
+    ];
 }
 
-function buildAccordion() {
-  const container = document.getElementById('accordionMenu');
-  if (!container) return;
-  const keys = Object.keys(MENU_DATA);
-  let first = true;
-  keys.forEach(key => {
-    const cat = MENU_DATA[key];
-    const btn = document.createElement('button');
-    btn.className = 'accordion-trigger' + (first ? ' active' : '');
-    btn.textContent = `${cat.icon} ${cat.title}`;
-    const content = document.createElement('div');
-    content.className = 'accordion-content' + (first ? ' open' : '');
-    const ul = document.createElement('ul');
-    if (cat.sublines) {
-      cat.sublines.forEach(sl => {
-        sl.items.forEach(i => {
-          const li = document.createElement('li');
-          li.textContent = `${i.name} — ${i.pricing}`;
-          ul.appendChild(li);
-        });
-      });
-    } else if (cat.items) {
-      cat.items.forEach(i => {
-        const li = document.createElement('li');
-        li.textContent = `${i.name} — ${i.pricing}`;
-        ul.appendChild(li);
-      });
-    } else if (cat.desc) {
-      const li = document.createElement('li');
-      li.textContent = cat.desc;
-      ul.appendChild(li);
+function buildTestMenu() {
+    const sidebar = document.getElementById('twopanelSidebar');
+    const content = document.getElementById('twopanelContent');
+    if (!sidebar || !content || typeof MENU_DATA === 'undefined') return;
+
+    const keys = Object.keys(MENU_DATA);
+    let activeKey = keys[0];
+
+    function showCategory(key) {
+        activeKey = key;
+        sidebar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.key === key));
+
+        const cat = MENU_DATA[key];
+        const grid = document.createElement('div');
+        grid.className = 'twopanel-items' + (key === 'spookyBabyBundles' ? ' twopanel-items--baby' : '');
+
+        const addItem = (item, layoutRole = null) => {
+            if (item.options) {
+                const div = document.createElement('div');
+                div.className = 'twopanel-item twopanel-item--bundle twopanel-item--options-card twopanel-item--baby-dozen';
+                const optsHtml = item.options.map(o => {
+                    const label = (o.optionNum != null ? `Option ${o.optionNum} — ` : '') + o.name;
+                    return `<div class="option-line"><span class="option-label">${o.icon} ${label}</span><span class="option-price">${o.pricing || ''}</span></div>`;
+                }).join('');
+                div.innerHTML = `
+                    <div class="item-icon">${item.icon}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-options-list">${optsHtml}</div>
+                    <div class="item-actions"></div>
+                `;
+                grid.appendChild(div);
+                return;
+            }
+            const div = document.createElement('div');
+            const isBundleSection = key === 'spookyBundles' || key === 'spookyBabyBundles';
+            let extraClass = isBundleSection ? ' twopanel-item--bundle' : '';
+            if (layoutRole) extraClass += ' twopanel-item--baby-' + layoutRole;
+            div.className = 'twopanel-item' + extraClass;
+            const formatBundleText = (s) => (isBundleSection && s) ? s.replace(/ · /g, '<br>') : (s || '');
+            const desc = item.desc ? formatBundleText(item.desc) : '';
+            const pricing = item.pricing ? formatBundleText(item.pricing) : '';
+            div.innerHTML = `
+                <div class="item-icon">${item.icon}</div>
+                <div class="item-name">${item.name}</div>
+                ${desc ? `<div class="item-desc">${desc}</div>` : ''}
+                <div class="item-price">${pricing || ''}</div>
+                <div class="item-actions"></div>
+            `;
+            const actions = div.querySelector('.item-actions');
+
+            const isSpookyBabyBox = key === 'spookyBabyBundles' && layoutRole === 'box' && BOX_RULES[item.name];
+            if (isSpookyBabyBox) {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-pink add-to-cart-btn';
+                btn.textContent = 'Add to Cart';
+                btn.addEventListener('click', () => openBundleModal(item));
+                actions.appendChild(btn);
+            } else if (item.cart && typeof window.addToCart === 'function') {
+                item.cart.forEach(c => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-yellow add-to-cart-btn';
+                    btn.textContent = c.name.includes('6-Pack') ? 'Add 6-Pack' : 'Add Dozen';
+                    btn.addEventListener('click', () => addToCartAndRefresh({
+                        name: c.name,
+                        description: item.desc || '',
+                        price: c.price,
+                        icon: item.icon,
+                        category: key
+                    }));
+                    actions.appendChild(btn);
+                });
+            } else {
+                const priceMatch = (item.pricing || '').match(/\$(\d+)/);
+                if (priceMatch && !item.pricing?.toLowerCase().includes('contact')) {
+                    const price = parseInt(priceMatch[1], 10);
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-yellow add-to-cart-btn';
+                    btn.textContent = 'Add to Cart';
+                    btn.addEventListener('click', () => addToCartAndRefresh({
+                        name: item.name,
+                        description: item.desc || '',
+                        price,
+                        icon: item.icon,
+                        category: key
+                    }));
+                    actions.appendChild(btn);
+                } else {
+                    const a = document.createElement('a');
+                    a.href = '../index.html#order';
+                    a.className = 'btn btn-pink add-to-cart-btn';
+                    a.textContent = 'Order';
+                    actions.appendChild(a);
+                }
+            }
+            grid.appendChild(div);
+        };
+
+        if (cat.sublines) {
+            cat.sublines.forEach((sl, slIdx) => {
+                const subH = document.createElement('div');
+                subH.className = 'twopanel-subline';
+                subH.textContent = sl.name;
+                grid.appendChild(subH);
+                const role = key === 'spookyBabyBundles' ? (slIdx === 0 ? 'box' : 'dozen') : null;
+                sl.items.forEach(i => addItem(i, role));
+            });
+        }
+        if (cat.items) {
+            cat.items.forEach(i => addItem(i, key === 'spookyBabyBundles' ? 'upgrades' : null));
+        }
+        if (cat.note) {
+            const n = document.createElement('div');
+            n.className = 'twopanel-note';
+            n.textContent = cat.note;
+            grid.appendChild(n);
+        }
+
+        content.innerHTML = '';
+        content.appendChild(grid);
     }
-    if (cat.note) {
-      const li = document.createElement('li');
-      li.className = 'accordion-note';
-      li.textContent = cat.note;
-      ul.appendChild(li);
-    }
-    content.appendChild(ul);
-    container.appendChild(btn);
-    container.appendChild(content);
-    first = false;
-  });
-}
 
-function getPopularItems() {
-  const items = getAllMenuItems();
-  return items.slice(0, 6);
-}
-
-function buildTwoPanel() {
-  const sidebar = document.getElementById('twopanelSidebar');
-  const content = document.getElementById('twopanelContent');
-  if (!sidebar || !content) return;
-
-  const keys = Object.keys(MENU_DATA);
-  let activeKey = keys[0];
-
-  function showCategory(key) {
-    activeKey = key;
-    sidebar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.key === key));
-    const cat = MENU_DATA[key];
-    const grid = document.createElement('div');
-    grid.className = 'twopanel-items';
-    const addItem = (icon, name, pricing) => {
-      const div = document.createElement('div');
-      div.className = 'twopanel-item';
-      div.innerHTML = `<div class="item-icon">${icon}</div><div class="item-name">${name}</div><div class="item-price">${pricing}</div>`;
-      grid.appendChild(div);
-    };
-    if (cat.sublines) {
-      cat.sublines.forEach(sl => sl.items.forEach(i => addItem(i.icon, i.name, i.pricing)));
-    }
-    if (cat.items) cat.items.forEach(i => addItem(i.icon, i.name, i.pricing));
-    if (cat.note) {
-      const n = document.createElement('div');
-      n.className = 'accordion-note';
-      n.textContent = cat.note;
-      grid.appendChild(n);
-    }
-    content.innerHTML = '';
-    content.appendChild(grid);
-  }
-
-  keys.forEach(key => {
-    const cat = MENU_DATA[key];
-    const btn = document.createElement('button');
-    btn.textContent = `${cat.icon} ${cat.title}`;
-    btn.dataset.key = key;
-    btn.classList.toggle('active', key === activeKey);
-    btn.addEventListener('click', () => showCategory(key));
-    sidebar.appendChild(btn);
-  });
-  showCategory(activeKey);
-}
-
-function buildFeatured() {
-  const featSection = document.getElementById('featuredSection');
-  const featCats = document.getElementById('featuredCategories');
-  if (!featSection || !featCats) return;
-
-  const popular = getPopularItems();
-  featSection.innerHTML = `<div class="featured-label">✨ Popular picks</div><div class="featured-grid" id="featuredGrid"></div>`;
-  const grid = document.getElementById('featuredGrid');
-  popular.forEach(i => {
-    const card = document.createElement('div');
-    card.className = 'featured-card';
-    card.innerHTML = `<div class="card-icon">${i.icon}</div><div class="card-name">${i.name}</div><div class="card-price">${i.pricing}</div>`;
-    grid.appendChild(card);
-  });
-
-  const keys = Object.keys(MENU_DATA);
-  keys.forEach(key => {
-    const cat = MENU_DATA[key];
-    const wrap = document.createElement('div');
-    wrap.className = 'featured-cat';
-    const header = document.createElement('button');
-    header.className = 'featured-cat-header';
-    header.innerHTML = `<span>${cat.icon} ${cat.title}</span><span class="cat-arrow">▾</span>`;
-    const body = document.createElement('div');
-    body.className = 'featured-cat-body';
-    const itemsDiv = document.createElement('div');
-    itemsDiv.className = 'featured-cat-items';
-    const items = [];
-    if (cat.sublines) cat.sublines.forEach(sl => items.push(...sl.items));
-    if (cat.items) items.push(...cat.items);
-    items.forEach(i => {
-      const span = document.createElement('span');
-      span.className = 'featured-cat-item';
-      span.innerHTML = `<span class="item-name">${i.icon} ${i.name}</span> — <span class="item-price">${i.pricing}</span>`;
-      itemsDiv.appendChild(span);
+    keys.forEach(key => {
+        const cat = MENU_DATA[key];
+        const btn = document.createElement('button');
+        btn.textContent = `${cat.icon} ${cat.title}`;
+        btn.dataset.key = key;
+        btn.classList.toggle('active', key === activeKey);
+        btn.addEventListener('click', () => showCategory(key));
+        sidebar.appendChild(btn);
     });
-    body.appendChild(itemsDiv);
-    wrap.appendChild(header);
-    wrap.appendChild(body);
-    header.addEventListener('click', () => wrap.classList.toggle('open'));
-    featCats.appendChild(wrap);
-  });
+
+    showCategory(activeKey);
 }
 
-function buildExpandableRows() {
-  const container = document.getElementById('expandableRows');
-  if (!container) return;
-
-  const keys = Object.keys(MENU_DATA);
-  keys.forEach(key => {
-    const cat = MENU_DATA[key];
-    const title = document.createElement('div');
-    title.className = 'rows-section-title';
-    title.textContent = `${cat.icon} ${cat.title}`;
-    container.appendChild(title);
-
-    const items = [];
-    if (cat.sublines) cat.sublines.forEach(sl => items.push(...sl.items));
-    if (cat.items) items.push(...cat.items);
-
-    items.forEach(i => {
-      const row = document.createElement('div');
-      row.className = 'expandable-row';
-      row.innerHTML = `
-        <button class="row-trigger" type="button">
-          <span class="row-icon">${i.icon}</span>
-          <div class="row-main">
-            <div class="row-name">${i.name}</div>
-            <div class="row-price">${i.pricing}</div>
-          </div>
-          <span class="row-chevron">▾</span>
-        </button>
-        <div class="row-detail">
-          <div class="row-desc">${i.desc || ''}</div>
-          <button class="row-add" type="button">Add to cart</button>
-        </div>
-      `;
-      const trigger = row.querySelector('.row-trigger');
-      trigger.addEventListener('click', () => {
-        row.classList.toggle('open');
-      });
-      container.appendChild(row);
-    });
-  });
-}
-
-function _deadCode() { if (1) return;
-  const keys = [];
-  keys.forEach((key, idx) => {
-    const cat = MENU_DATA[key];
-    const a = document.createElement('a');
-    a.href = `#scroll-${key}`;
-    a.textContent = `${cat.icon} ${cat.title}`;
-    a.dataset.category = key;
-    sidebar.appendChild(a);
-
-    const section = document.createElement('div');
-    section.id = `scroll-${key}`;
-    section.className = 'scroll-section';
-    const h4 = document.createElement('h4');
-    h4.textContent = `${cat.icon} ${cat.title}`;
-    section.appendChild(h4);
-    const ul = document.createElement('ul');
-    if (cat.sublines) {
-      cat.sublines.forEach(sl => {
-        sl.items.forEach(i => {
-          const li = document.createElement('li');
-          li.innerHTML = `<span>${i.name}</span><span class="item-price">${i.pricing}</span>`;
-          ul.appendChild(li);
-        });
-      });
-    } else if (cat.items) {
-      cat.items.forEach(i => {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${i.name}</span><span class="item-price">${i.pricing}</span>`;
-        ul.appendChild(li);
-      });
+function addToCartAndRefresh(item) {
+    if (typeof window.addToCart === 'function') {
+        window.addToCart(item);
     }
-    if (cat.note) {
-      const li = document.createElement('li');
-      li.className = 'accordion-note';
-      li.textContent = cat.note;
-      ul.appendChild(li);
-    }
-    section.appendChild(ul);
-    main.appendChild(section);
-  });
-
-  main.addEventListener('scroll', () => {
-    const sections = main.querySelectorAll('.scroll-section');
-    let activeId = '';
-    sections.forEach(s => {
-      const rect = s.getBoundingClientRect();
-      if (rect.top <= 100) activeId = s.id;
-    });
-    sidebar.querySelectorAll('a').forEach(a => {
-      a.classList.toggle('active', a.getAttribute('href') === `#${activeId}`);
-    });
-  });
+    refreshCartPanel();
 }
 
-function buildBento() {
-  const container = document.getElementById('bentoGrid');
-  if (!container) return;
+function refreshCartPanel() {
+    const cart = JSON.parse(localStorage.getItem('spookyCart') || '[]');
+    const empty = document.getElementById('cartEmpty');
+    const list = document.getElementById('cartItemsList');
+    const countEl = document.getElementById('cartCount');
+    const totalEl = document.getElementById('cartTotal');
 
-  const keys = Object.keys(MENU_DATA);
-  keys.forEach((key, idx) => {
-    const cat = MENU_DATA[key];
-    const catCard = document.createElement('div');
-    catCard.className = 'bento-category' + (idx === 0 ? ' large' : '');
-    catCard.textContent = `${cat.icon} ${cat.title}`;
-    container.appendChild(catCard);
+    if (cart.length === 0) {
+        empty.style.display = 'block';
+        list.style.display = 'none';
+        countEl.textContent = '0 items';
+        totalEl.textContent = '$0.00';
+        return;
+    }
 
-    const items = [];
-    if (cat.sublines) cat.sublines.forEach(sl => items.push(...sl.items));
-    else if (cat.items) items.push(...cat.items);
+    empty.style.display = 'none';
+    list.style.display = 'block';
+    const totalItems = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
+    countEl.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
 
-    items.slice(0, idx === 0 ? 6 : 3).forEach(i => {
-      const item = document.createElement('div');
-      item.className = 'bento-item';
-      item.innerHTML = `<div class="bento-name">${i.icon} ${i.name}</div><div class="bento-price">${i.pricing}</div>`;
-      container.appendChild(item);
+    let total = 0;
+    list.innerHTML = cart.map(item => {
+        const qty = item.quantity || 1;
+        const sub = (item.price || 0) * qty;
+        total += sub;
+        return `
+            <div class="cart-panel-item">
+                <div>
+                    <div class="cart-panel-item-name">${item.icon || '🍬'} ${item.name}</div>
+                    ${item.description ? `<div class="cart-panel-item-desc">${item.description}</div>` : ''}
+                </div>
+                <div class="cart-panel-item-qty">${qty} × $${(item.price || 0).toFixed(2)}</div>
+            </div>
+        `;
+    }).join('');
+
+    totalEl.textContent = `$${total.toFixed(2)}`;
+}
+
+function openBundleModal(boxItem) {
+    const rules = BOX_RULES[boxItem.name];
+    if (!rules) return;
+
+    const modal = document.getElementById('bundleModal');
+    const title = document.getElementById('bundleModalTitle');
+    const boxInfo = document.getElementById('bundleBoxInfo');
+    const pickLabel = document.getElementById('bundlePickLabel');
+    const optionsContainer = document.getElementById('bundleOptions');
+    const errorEl = document.getElementById('bundleModalError');
+
+    title.textContent = boxItem.name;
+    boxInfo.textContent = `${boxItem.icon} ${boxItem.name} — $${rules.price}`;
+    pickLabel.textContent = `Pick ${rules.choicesCount} items`;
+    errorEl.style.display = 'none';
+
+    const allOptions = getByTheDozenOptions();
+    const allowed = allOptions.filter(o => o.optionNum <= rules.maxOptionNum);
+    optionsContainer.innerHTML = allowed.map(o => `
+        <label class="bundle-option" data-value="${o.name}">
+            <input type="checkbox" class="bundle-option-cb" value="${o.name}">
+            <span>${o.name}</span>
+        </label>
+    `).join('');
+
+    modal.classList.add('open');
+    modal._config = { boxItem, rules };
+}
+
+function closeBundleModal() {
+    document.getElementById('bundleModal').classList.remove('open');
+}
+
+function addBundleToCart() {
+    const modal = document.getElementById('bundleModal');
+    const config = modal._config;
+    if (!config) return;
+
+    const { boxItem, rules } = config;
+    const checkboxes = modal.querySelectorAll('.bundle-option-cb:checked');
+    const selected = Array.from(checkboxes).map(cb => cb.value);
+    const errorEl = document.getElementById('bundleModalError');
+
+    if (selected.length !== rules.choicesCount) {
+        errorEl.textContent = `Please select exactly ${rules.choicesCount} items`;
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    const description = `Includes: ${selected.join(', ')}`;
+    const name = `${boxItem.name} (${selected.join(', ')})`;
+    addToCartAndRefresh({
+        name,
+        description,
+        price: rules.price,
+        icon: boxItem.icon,
+        category: 'spookyBabyBundles'
     });
-  });
+    closeBundleModal();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  buildAccordion();
-  buildTwoPanel();
-  buildFeatured();
-  buildExpandableRows();
+    buildTestMenu();
+    refreshCartPanel();
 
-  // Accordion click handlers
-  document.querySelectorAll('.accordion-trigger').forEach(trigger => {
-    trigger.addEventListener('click', () => {
-      const wasActive = trigger.classList.contains('active');
-      const content = trigger.nextElementSibling;
+    document.getElementById('bundleModalClose')?.addEventListener('click', closeBundleModal);
+    document.querySelector('.bundle-modal-backdrop')?.addEventListener('click', closeBundleModal);
+    document.getElementById('bundleModalAdd')?.addEventListener('click', addBundleToCart);
 
-      document.querySelectorAll('.accordion-trigger').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
-
-      if (!wasActive) {
-        trigger.classList.add('active');
-        content?.classList.add('open');
-      }
+    document.getElementById('bundleOptions')?.addEventListener('change', (e) => {
+        if (!e.target.classList.contains('bundle-option-cb')) return;
+        const modal = document.getElementById('bundleModal');
+        const config = modal._config;
+        if (!config) return;
+        const checked = modal.querySelectorAll('.bundle-option-cb:checked').length;
+        modal.querySelectorAll('.bundle-option').forEach(opt => {
+            const cb = opt.querySelector('.bundle-option-cb');
+            const isChecked = cb.checked;
+            if (checked >= config.rules.choicesCount && !isChecked) {
+                opt.classList.add('disabled');
+                cb.disabled = true;
+            } else {
+                opt.classList.remove('disabled');
+                cb.disabled = false;
+            }
+        });
     });
-  });
 });
