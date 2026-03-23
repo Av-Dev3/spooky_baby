@@ -533,7 +533,7 @@ const formHandler = {
     },
 
     validateForm(data) {
-        const requiredFields = ['name', 'email', 'item'];
+        const requiredFields = ['name', 'email', 'item', 'orderDueDate'];
         
         // Check if flavor field is visible and add it to required fields
         const flavorGroup = document.getElementById('flavorGroup');
@@ -676,8 +676,9 @@ Name: ${data.name}
 Email: ${data.email}
 Phone: ${data.phone || 'Not provided'}
 Item: ${data.item}
-Quantity: ${data.quantity || 'Not specified'}
-Special Instructions: ${data.details || 'None'}
+Amount: ${data.amount || 'Not specified'}
+Order due date: ${data.orderDueDate || 'Not specified'}
+Special Instructions: ${data.notes || data.details || 'None'}
 
 This order was submitted via the website contact form.
         `.trim();
@@ -2773,6 +2774,11 @@ document.addEventListener('DOMContentLoaded', () => {
         activeNav.init();
         formHandler.init();
         customDropdown.init();
+        const orderDueDateInput = document.getElementById('orderDueDate');
+        if (orderDueDateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            orderDueDateInput.setAttribute('min', today);
+        }
         cardInteractions.init();
         scrollAnimations.init();
         photoGallery.init();
