@@ -47,6 +47,11 @@ function buildTestMenu() {
                     <div class="item-options-list">${optsHtml}</div>
                     <div class="item-actions"></div>
                 `;
+                const a = document.createElement('a');
+                a.href = '../index.html#order';
+                a.className = 'btn btn-pink add-to-cart-btn';
+                a.textContent = 'Order';
+                div.querySelector('.item-actions').appendChild(a);
                 grid.appendChild(div);
                 return;
             }
@@ -67,13 +72,22 @@ function buildTestMenu() {
             `;
             const actions = div.querySelector('.item-actions');
 
+            const addOrderBtn = () => {
+                const a = document.createElement('a');
+                a.href = '../index.html#order';
+                a.className = 'btn btn-pink add-to-cart-btn';
+                a.textContent = 'Order';
+                actions.appendChild(a);
+            };
+
             const isSpookyBabyBox = key === 'spookyBabyBundles' && layoutRole === 'box' && BOX_RULES[item.name];
             if (isSpookyBabyBox) {
                 const btn = document.createElement('button');
-                btn.className = 'btn btn-pink add-to-cart-btn';
+                btn.className = 'btn btn-yellow add-to-cart-btn';
                 btn.textContent = 'Add to Cart';
                 btn.addEventListener('click', () => openBundleModal(item));
                 actions.appendChild(btn);
+                addOrderBtn();
             } else if (item.cart && typeof window.addToCart === 'function') {
                 item.cart.forEach(c => {
                     const btn = document.createElement('button');
@@ -88,6 +102,7 @@ function buildTestMenu() {
                     }));
                     actions.appendChild(btn);
                 });
+                addOrderBtn();
             } else {
                 const priceMatch = (item.pricing || '').match(/\$(\d+)/);
                 if (priceMatch && !item.pricing?.toLowerCase().includes('contact')) {
@@ -103,13 +118,8 @@ function buildTestMenu() {
                         category: key
                     }));
                     actions.appendChild(btn);
-                } else {
-                    const a = document.createElement('a');
-                    a.href = '../index.html#order';
-                    a.className = 'btn btn-pink add-to-cart-btn';
-                    a.textContent = 'Order';
-                    actions.appendChild(a);
                 }
+                addOrderBtn();
             }
             grid.appendChild(div);
         };
