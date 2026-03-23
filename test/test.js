@@ -60,106 +60,142 @@ function buildAccordion() {
   });
 }
 
-function buildHorizontalScroll() {
-  const container = document.getElementById('horizontalScroll');
-  if (!container) return;
-  Object.keys(MENU_DATA).forEach(key => {
+function buildTabs() {
+  const bar = document.getElementById('tabsBar');
+  const content = document.getElementById('tabsContent');
+  if (!bar || !content) return;
+
+  const keys = Object.keys(MENU_DATA);
+  keys.forEach((key, idx) => {
     const cat = MENU_DATA[key];
-    const card = document.createElement('div');
-    card.className = 'scroll-card scroll-card-expand';
-    const title = document.createElement('div');
-    title.className = 'scroll-card-title';
-    title.textContent = `${cat.icon} ${cat.title}`;
-    card.appendChild(title);
-    const list = document.createElement('div');
-    list.className = 'scroll-card-items';
+    const btn = document.createElement('button');
+    btn.textContent = `${cat.icon} ${cat.title}`;
+    btn.dataset.category = key;
+    bar.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'tabs-panel' + (idx === 0 ? ' active' : '');
+    panel.dataset.category = key;
+    const grid = document.createElement('div');
+    grid.className = 'tabs-grid';
     if (cat.sublines) {
       cat.sublines.forEach(sl => {
         sl.items.forEach(i => {
-          const p = document.createElement('p');
-          p.textContent = `${i.name} — ${i.pricing}`;
-          list.appendChild(p);
+          const item = document.createElement('div');
+          item.className = 'tabs-grid-item';
+          item.innerHTML = `<span class="item-name">${i.icon} ${i.name}</span><span class="item-pricing">${i.pricing}</span>`;
+          grid.appendChild(item);
         });
       });
     } else if (cat.items) {
       cat.items.forEach(i => {
-        const p = document.createElement('p');
-        p.textContent = `${i.name} — ${i.pricing}`;
-        list.appendChild(p);
+        const item = document.createElement('div');
+        item.className = 'tabs-grid-item';
+        item.innerHTML = `<span class="item-name">${i.icon} ${i.name}</span><span class="item-pricing">${i.pricing}</span>`;
+        grid.appendChild(item);
       });
-    } else if (cat.desc) {
-      const p = document.createElement('p');
-      p.textContent = cat.desc;
-      list.appendChild(p);
     }
     if (cat.note) {
-      const p = document.createElement('p');
-      p.className = 'scroll-card-note';
-      p.textContent = cat.note;
-      list.appendChild(p);
+      const note = document.createElement('div');
+      note.className = 'tabs-grid-item accordion-note';
+      note.textContent = cat.note;
+      note.style.marginTop = '0.5rem';
+      grid.appendChild(note);
     }
-    card.appendChild(list);
-    container.appendChild(card);
+    panel.appendChild(grid);
+    content.appendChild(panel);
   });
 }
 
-function buildChalkboard() {
-  const container = document.getElementById('chalkboardMenu');
-  if (!container) return;
-  const h4 = document.createElement('h4');
-  h4.textContent = "Spooky Baby's Sweet Menu";
-  container.appendChild(h4);
-  const ul = document.createElement('ul');
-  ul.className = 'chalk-list';
-  getAllMenuItems().forEach(i => {
-    const li = document.createElement('li');
-    li.textContent = `${i.icon} ${i.name} — ${i.pricing}`;
-    ul.appendChild(li);
+function buildScrollSidebar() {
+  const sidebar = document.getElementById('scrollSidebar');
+  const main = document.getElementById('scrollMain');
+  if (!sidebar || !main) return;
+
+  const keys = Object.keys(MENU_DATA);
+  keys.forEach((key, idx) => {
+    const cat = MENU_DATA[key];
+    const a = document.createElement('a');
+    a.href = `#scroll-${key}`;
+    a.textContent = `${cat.icon} ${cat.title}`;
+    a.dataset.category = key;
+    sidebar.appendChild(a);
+
+    const section = document.createElement('div');
+    section.id = `scroll-${key}`;
+    section.className = 'scroll-section';
+    const h4 = document.createElement('h4');
+    h4.textContent = `${cat.icon} ${cat.title}`;
+    section.appendChild(h4);
+    const ul = document.createElement('ul');
+    if (cat.sublines) {
+      cat.sublines.forEach(sl => {
+        sl.items.forEach(i => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span>${i.name}</span><span class="item-price">${i.pricing}</span>`;
+          ul.appendChild(li);
+        });
+      });
+    } else if (cat.items) {
+      cat.items.forEach(i => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${i.name}</span><span class="item-price">${i.pricing}</span>`;
+        ul.appendChild(li);
+      });
+    }
+    if (cat.note) {
+      const li = document.createElement('li');
+      li.className = 'accordion-note';
+      li.textContent = cat.note;
+      ul.appendChild(li);
+    }
+    section.appendChild(ul);
+    main.appendChild(section);
   });
-  container.appendChild(ul);
-  const footer = document.createElement('p');
-  footer.className = 'chalk-footer';
-  footer.textContent = 'Custom orders available ✨ More flavors & seasonal items!';
-  container.appendChild(footer);
+
+  main.addEventListener('scroll', () => {
+    const sections = main.querySelectorAll('.scroll-section');
+    let activeId = '';
+    sections.forEach(s => {
+      const rect = s.getBoundingClientRect();
+      if (rect.top <= 100) activeId = s.id;
+    });
+    sidebar.querySelectorAll('a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === `#${activeId}`);
+    });
+  });
 }
 
-function buildFlipCards() {
-  const container = document.getElementById('flipGrid');
+function buildBento() {
+  const container = document.getElementById('bentoGrid');
   if (!container) return;
-  const items = getAllMenuItems();
-  items.forEach(i => {
-    const card = document.createElement('div');
-    card.className = 'flip-card';
-    const inner = document.createElement('div');
-    inner.className = 'flip-inner';
-    const front = document.createElement('div');
-    front.className = 'flip-front';
-    front.textContent = `${i.icon} ${i.name}`;
-    const back = document.createElement('div');
-    back.className = 'flip-back';
-    const p = document.createElement('p');
-    p.textContent = i.pricing;
-    const desc = document.createElement('span');
-    desc.className = 'flip-desc';
-    desc.textContent = i.desc;
-    const btn = document.createElement('button');
-    btn.className = 'flip-btn';
-    btn.textContent = 'Add to Cart';
-    back.appendChild(p);
-    back.appendChild(desc);
-    back.appendChild(btn);
-    inner.appendChild(front);
-    inner.appendChild(back);
-    card.appendChild(inner);
-    container.appendChild(card);
+
+  const keys = Object.keys(MENU_DATA);
+  keys.forEach((key, idx) => {
+    const cat = MENU_DATA[key];
+    const catCard = document.createElement('div');
+    catCard.className = 'bento-category' + (idx === 0 ? ' large' : '');
+    catCard.textContent = `${cat.icon} ${cat.title}`;
+    container.appendChild(catCard);
+
+    const items = [];
+    if (cat.sublines) cat.sublines.forEach(sl => items.push(...sl.items));
+    else if (cat.items) items.push(...cat.items);
+
+    items.slice(0, idx === 0 ? 6 : 3).forEach(i => {
+      const item = document.createElement('div');
+      item.className = 'bento-item';
+      item.innerHTML = `<div class="bento-name">${i.icon} ${i.name}</div><div class="bento-price">${i.pricing}</div>`;
+      container.appendChild(item);
+    });
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   buildAccordion();
-  buildHorizontalScroll();
-  buildChalkboard();
-  buildFlipCards();
+  buildTabs();
+  buildScrollSidebar();
+  buildBento();
 
   // Accordion click handlers
   document.querySelectorAll('.accordion-trigger').forEach(trigger => {
@@ -175,5 +211,30 @@ document.addEventListener('DOMContentLoaded', () => {
         content?.classList.add('open');
       }
     });
+  });
+
+  // Tabs click handlers
+  const tabsBar = document.getElementById('tabsBar');
+  const tabsContent = document.getElementById('tabsContent');
+  if (tabsBar) {
+    tabsBar.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const cat = btn.dataset.category;
+      tabsBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabsContent.querySelectorAll('.tabs-panel').forEach(p => {
+        p.classList.toggle('active', p.dataset.category === cat);
+      });
+    });
+  }
+
+  // Scroll sidebar anchor clicks
+  document.getElementById('scrollSidebar')?.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (!a || !a.hash) return;
+    e.preventDefault();
+    const target = document.querySelector(a.hash);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });

@@ -126,216 +126,191 @@ body.test-page-body,
     color: var(--accent-yellow);
 }
 
-/* ----- Menu: Horizontal Scroll ----- */
-.menu-horizontal-demo {
-    overflow: hidden;
-}
-
-.horizontal-scroll {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding: 1rem 0;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-}
-
-.horizontal-scroll::-webkit-scrollbar {
-    height: 6px;
-}
-
-.horizontal-scroll::-webkit-scrollbar-track {
-    background: var(--bg-primary);
-    border-radius: 3px;
-}
-
-.horizontal-scroll::-webkit-scrollbar-thumb {
-    background: var(--accent-pink);
-    border-radius: 3px;
-}
-
-.scroll-card {
-    flex: 0 0 180px;
-    height: 120px;
-    background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    color: var(--bg-primary);
-    scroll-snap-align: start;
-    box-shadow: 0 4px 20px rgba(246, 182, 207, 0.3);
-}
-
-.scroll-card-expand {
-    flex: 0 0 260px;
-    height: auto;
-    min-height: 140px;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1rem;
-}
-
-.scroll-card-title {
-    font-size: 1.2rem;
-    margin-bottom: 0.75rem;
-}
-
-.scroll-card-items {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    text-align: left;
-}
-
-.scroll-card-items p {
-    margin: 0.2rem 0;
-    font-size: 0.8rem;
-}
-
-.scroll-card-note {
-    margin-top: 0.5rem;
-    font-style: italic;
-}
-
-/* ----- Menu: Chalkboard ----- */
-.menu-chalkboard-demo {
-    padding: 0.5rem;
-}
-
-.chalkboard {
-    background: #2d3a2d;
-    border: 8px solid #5a4a3a;
-    border-radius: 8px;
-    padding: 2rem;
-    font-family: 'Caveat', 'Comic Sans MS', cursive;
-    position: relative;
-}
-
-.chalkboard::before {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 4px;
-    pointer-events: none;
-}
-
-.chalkboard h4 {
-    font-size: 1.8rem;
-    color: #e8e8e8;
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.chalk-list {
-    list-style: none;
-    padding: 0;
-}
-
-.chalk-list li {
-    font-size: 1.4rem;
-    color: #e0e0e0;
-    padding: 0.4rem 0;
-    border-bottom: 1px dashed rgba(255,255,255,0.2);
-}
-
-.chalk-footer {
-    margin-top: 1rem;
-    font-size: 1.2rem;
-    color: var(--accent-yellow);
-    text-align: center;
-}
-
-/* ----- Menu: Flip Cards ----- */
-.menu-flip-demo {
-    padding: 1rem;
-}
-
-.flip-grid {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.flip-card {
-    width: 160px;
-    height: 180px;
-    perspective: 600px;
-}
-
-.flip-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-}
-
-.flip-card:hover .flip-inner {
-    transform: rotateY(180deg);
-}
-
-.flip-front,
-.flip-back {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.flip-front {
-    background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
-    color: var(--bg-primary);
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-}
-
-.flip-back {
-    background: var(--bg-primary);
-    border: 2px solid var(--accent-pink);
-    transform: rotateY(180deg);
-    padding: 0.75rem;
-}
-
 .accordion-note {
     font-style: italic;
     color: var(--accent-yellow);
     margin-top: 0.5rem;
 }
 
-.flip-back p {
-    font-size: 0.85rem;
-    color: var(--accent-yellow);
-    margin-bottom: 0.5rem;
+/* ----- Menu: Tabs + Grid ----- */
+.menu-tabs-demo {
+    min-height: 280px;
 }
 
-.flip-desc {
-    display: block;
-    font-size: 0.75rem;
+.tabs-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tabs-bar button {
+    padding: 0.5rem 1rem;
+    background: var(--bg-primary);
+    border: 2px solid var(--accent-pink);
     color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s;
 }
 
-.flip-btn {
+.tabs-bar button:hover,
+.tabs-bar button.active {
     background: var(--accent-pink);
     color: var(--bg-primary);
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
 }
 
-.flip-btn:hover {
-    background: var(--accent-yellow);
+#tabsContent .tabs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.tabs-grid-item {
+    padding: 0.75rem;
+    background: var(--bg-primary);
+    border: 1px solid rgba(246, 182, 207, 0.3);
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.tabs-grid-item .item-name {
+    color: var(--accent-pink);
+    font-weight: 600;
+}
+
+.tabs-grid-item .item-pricing {
+    color: var(--accent-yellow);
+    font-size: 0.85rem;
+}
+
+.tabs-panel {
+    display: none;
+}
+
+.tabs-panel.active {
+    display: block;
+}
+
+/* ----- Menu: Scroll with sidebar ----- */
+.menu-scroll-sidebar-demo {
+    display: flex;
+    gap: 1.5rem;
+    min-height: 360px;
+}
+
+.scroll-sidebar {
+    flex: 0 0 140px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.scroll-sidebar a {
+    padding: 0.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.scroll-sidebar a:hover,
+.scroll-sidebar a.active {
+    background: rgba(246, 182, 207, 0.15);
+    color: var(--accent-pink);
+}
+
+.scroll-main {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 360px;
+}
+
+.scroll-section {
+    padding-bottom: 1.5rem;
+}
+
+.scroll-section h4 {
+    font-family: var(--font-heading);
+    color: var(--accent-pink);
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+.scroll-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.scroll-section li {
+    padding: 0.35rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.scroll-section .item-price {
+    color: var(--accent-yellow);
+}
+
+/* ----- Menu: Bento grid ----- */
+.menu-bento-demo {
+    overflow: hidden;
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 80px;
+    gap: 0.75rem;
+}
+
+.bento-category {
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    color: var(--bg-primary);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bento-category.large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.bento-item {
+    padding: 0.6rem;
+    background: var(--bg-primary);
+    border: 1px solid rgba(246, 182, 207, 0.3);
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+.bento-item .bento-name {
+    color: var(--accent-pink);
+    font-weight: 600;
+}
+
+.bento-item .bento-price {
+    color: var(--accent-yellow);
+    font-size: 0.75rem;
+}
+
+@media (max-width: 600px) {
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* ----- Test Footer ----- */
