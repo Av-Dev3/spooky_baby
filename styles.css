@@ -684,10 +684,11 @@ body {
 .twopanel-options-box {
   grid-column: 1 / -1;
   padding: 1.25rem;
-  background: rgba(246, 182, 207, 0.08);
+  background: var(--bg-primary);
   border: 2px solid rgba(246, 182, 207, 0.3);
   border-radius: 12px;
   margin-bottom: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .twopanel-options-box .twopanel-subline {
@@ -695,15 +696,28 @@ body {
   margin-bottom: 1rem;
 }
 
-.twopanel-options-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 0.75rem;
+.twopanel-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.twopanel-item--option .item-name {
-  font-size: 0.9rem;
+.twopanel-option-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(246, 182, 207, 0.15);
+  font-size: 0.95rem;
 }
+
+.twopanel-option-row:nth-last-child(2) {
+  border-bottom: none;
+}
+
+.twopanel-option-row .option-label { color: var(--text-primary); }
+.twopanel-option-row .option-price { color: var(--accent-yellow); font-weight: 600; }
+.twopanel-option-order { margin-top: 1rem; padding-top: 0.75rem; }
 
 @media (max-width: 600px) {
   .menu-twopanel { flex-direction: column; min-height: 320px; }
