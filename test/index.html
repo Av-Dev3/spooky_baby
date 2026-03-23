@@ -28,34 +28,32 @@
                 </div>
             </div>
 
-            <!-- Menu B: Carousel -->
+            <!-- Menu B: Two-Panel -->
             <div class="demo-block">
-                <h3 class="demo-label">B. Carousel</h3>
-                <p class="demo-desc">One category at a time. Prev/next arrows to cycle through.</p>
-                <div class="menu-demo menu-carousel-demo">
-                    <button class="carousel-btn carousel-prev" id="carouselPrev" aria-label="Previous">←</button>
-                    <div class="carousel-viewport">
-                        <div class="carousel-track" id="carouselTrack"></div>
-                    </div>
-                    <button class="carousel-btn carousel-next" id="carouselNext" aria-label="Next">→</button>
+                <h3 class="demo-label">B. Two-panel (Master–Detail)</h3>
+                <p class="demo-desc">Categories always visible on the left. Click to see items. No hiding — you always know where you are.</p>
+                <div class="menu-demo menu-twopanel-demo">
+                    <nav class="twopanel-sidebar" id="twopanelSidebar"></nav>
+                    <div class="twopanel-content" id="twopanelContent"></div>
                 </div>
             </div>
 
-            <!-- Menu C: Price bands -->
+            <!-- Menu C: Featured + Categories -->
             <div class="demo-block">
-                <h3 class="demo-label">C. Price bands</h3>
-                <p class="demo-desc">Grouped by price range instead of product type. Shop by budget.</p>
-                <div class="menu-demo menu-pricebands-demo">
-                    <div id="pricebands"></div>
+                <h3 class="demo-label">C. Featured + Category cards</h3>
+                <p class="demo-desc">“Popular picks” up top, then category cards that expand inline. Guided and welcoming.</p>
+                <div class="menu-demo menu-featured-demo">
+                    <div class="featured-section" id="featuredSection"></div>
+                    <div class="featured-categories" id="featuredCategories"></div>
                 </div>
             </div>
 
-            <!-- Menu D: Simple table -->
+            <!-- Menu D: Expandable Rows -->
             <div class="demo-block">
-                <h3 class="demo-label">D. Simple table</h3>
-                <p class="demo-desc">Minimal two-column list. Scannable, like a printed menu.</p>
-                <div class="menu-demo menu-table-demo">
-                    <table class="menu-table" id="menuTable"></table>
+                <h3 class="demo-label">D. Expandable rows</h3>
+                <p class="demo-desc">Scan name + price in one glance. Click a row to expand description and add to cart.</p>
+                <div class="menu-demo menu-rows-demo">
+                    <div class="expandable-rows" id="expandableRows"></div>
                 </div>
             </div>
         </section>

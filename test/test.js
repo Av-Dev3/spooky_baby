@@ -60,135 +60,141 @@ function buildAccordion() {
   });
 }
 
-function getItemsByBand() {
-  const bands = {
-    quick: { title: 'Quick bites ($3–4 each)', items: [] },
-    shareable: { title: 'Shareable (6-packs & dozens)', items: [] },
-    custom: { title: 'Custom & seasonal', items: [] }
-  };
+function getPopularItems() {
   const items = getAllMenuItems();
-  items.forEach(i => {
-    const p = (i.pricing || '').toLowerCase();
-    if (p.includes('$3') || p.includes('individual') || p.includes('$4 each')) {
-      bands.quick.items.push(i);
-    } else if (p.includes('6-pack') || p.includes('dozen') || p.includes('$18') || p.includes('$20') || p.includes('$30') || p.includes('$32') || p.includes('$35') || p.includes('$36')) {
-      bands.shareable.items.push(i);
-    } else {
-      bands.custom.items.push(i);
-    }
-  });
-  return bands;
+  return items.slice(0, 6);
 }
 
-function buildCarousel() {
-  const track = document.getElementById('carouselTrack');
-  const prev = document.getElementById('carouselPrev');
-  const next = document.getElementById('carouselNext');
-  if (!track) return;
+function buildTwoPanel() {
+  const sidebar = document.getElementById('twopanelSidebar');
+  const content = document.getElementById('twopanelContent');
+  if (!sidebar || !content) return;
 
   const keys = Object.keys(MENU_DATA);
-  keys.forEach((key, idx) => {
+  let activeKey = keys[0];
+
+  function showCategory(key) {
+    activeKey = key;
+    sidebar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.key === key));
     const cat = MENU_DATA[key];
-    const slide = document.createElement('div');
-    slide.className = 'carousel-slide';
-    const h4 = document.createElement('h4');
-    h4.textContent = `${cat.icon} ${cat.title}`;
-    slide.appendChild(h4);
-    const ul = document.createElement('ul');
+    const grid = document.createElement('div');
+    grid.className = 'twopanel-items';
+    const addItem = (icon, name, pricing) => {
+      const div = document.createElement('div');
+      div.className = 'twopanel-item';
+      div.innerHTML = `<div class="item-icon">${icon}</div><div class="item-name">${name}</div><div class="item-price">${pricing}</div>`;
+      grid.appendChild(div);
+    };
     if (cat.sublines) {
-      cat.sublines.forEach(sl => sl.items.forEach(i => {
-        const li = document.createElement('li');
-        li.textContent = `${i.name} — ${i.pricing}`;
-        ul.appendChild(li);
-      }));
-    } else if (cat.items) {
-      cat.items.forEach(i => {
-        const li = document.createElement('li');
-        li.textContent = `${i.name} — ${i.pricing}`;
-        ul.appendChild(li);
-      });
+      cat.sublines.forEach(sl => sl.items.forEach(i => addItem(i.icon, i.name, i.pricing)));
     }
+    if (cat.items) cat.items.forEach(i => addItem(i.icon, i.name, i.pricing));
     if (cat.note) {
-      const li = document.createElement('li');
-      li.className = 'accordion-note';
-      li.textContent = cat.note;
-      ul.appendChild(li);
+      const n = document.createElement('div');
+      n.className = 'accordion-note';
+      n.textContent = cat.note;
+      grid.appendChild(n);
     }
-    slide.appendChild(ul);
-    track.appendChild(slide);
-  });
+    content.innerHTML = '';
+    content.appendChild(grid);
+  }
 
-  let idx = 0;
-  const update = () => {
-    track.style.transform = `translateX(-${idx * 100}%)`;
-  };
-  prev?.addEventListener('click', () => {
-    idx = Math.max(0, idx - 1);
-    update();
+  keys.forEach(key => {
+    const cat = MENU_DATA[key];
+    const btn = document.createElement('button');
+    btn.textContent = `${cat.icon} ${cat.title}`;
+    btn.dataset.key = key;
+    btn.classList.toggle('active', key === activeKey);
+    btn.addEventListener('click', () => showCategory(key));
+    sidebar.appendChild(btn);
   });
-  next?.addEventListener('click', () => {
-    idx = Math.min(keys.length - 1, idx + 1);
-    update();
-  });
+  showCategory(activeKey);
 }
 
-function buildPriceBands() {
-  const container = document.getElementById('pricebands');
-  if (!container) return;
-  const bands = getItemsByBand();
-  ['quick', 'shareable', 'custom'].forEach(key => {
-    const band = bands[key];
-    if (band.items.length === 0) return;
-    const div = document.createElement('div');
-    div.className = 'priceband';
-    div.innerHTML = `<div class="priceband-header">${band.title}</div><ul class="priceband-items"></ul>`;
-    const ul = div.querySelector('ul');
-    band.items.forEach(i => {
-      const li = document.createElement('li');
-      li.textContent = `${i.icon} ${i.name} — ${i.pricing}`;
-      ul.appendChild(li);
-    });
-    container.appendChild(div);
+function buildFeatured() {
+  const featSection = document.getElementById('featuredSection');
+  const featCats = document.getElementById('featuredCategories');
+  if (!featSection || !featCats) return;
+
+  const popular = getPopularItems();
+  featSection.innerHTML = `<div class="featured-label">✨ Popular picks</div><div class="featured-grid" id="featuredGrid"></div>`;
+  const grid = document.getElementById('featuredGrid');
+  popular.forEach(i => {
+    const card = document.createElement('div');
+    card.className = 'featured-card';
+    card.innerHTML = `<div class="card-icon">${i.icon}</div><div class="card-name">${i.name}</div><div class="card-price">${i.pricing}</div>`;
+    grid.appendChild(card);
   });
-}
-
-function buildTable() {
-  const table = document.getElementById('menuTable');
-  if (!table) return;
-
-  const thead = document.createElement('thead');
-  thead.innerHTML = '<tr><th>Item</th><th>Price</th></tr>';
-  table.appendChild(thead);
-  const tbody = document.createElement('tbody');
 
   const keys = Object.keys(MENU_DATA);
   keys.forEach(key => {
     const cat = MENU_DATA[key];
-    const catRow = document.createElement('tr');
-    catRow.className = 'category-row';
-    catRow.innerHTML = `<td colspan="2">${cat.icon} ${cat.title}</td>`;
-    tbody.appendChild(catRow);
-
-    const addItem = (name, pricing) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${name}</td><td>${pricing}</td>`;
-      tbody.appendChild(tr);
-    };
-    if (cat.sublines) {
-      cat.sublines.forEach(sl => {
-        sl.items.forEach(i => addItem(`${i.icon} ${i.name}`, i.pricing));
-      });
-    }
-    if (cat.items) {
-      cat.items.forEach(i => addItem(`${i.icon} ${i.name}`, i.pricing));
-    }
-    if (cat.note) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td colspan="2" class="accordion-note">${cat.note}</td>`;
-      tbody.appendChild(tr);
-    }
+    const wrap = document.createElement('div');
+    wrap.className = 'featured-cat';
+    const header = document.createElement('button');
+    header.className = 'featured-cat-header';
+    header.innerHTML = `<span>${cat.icon} ${cat.title}</span><span class="cat-arrow">▾</span>`;
+    const body = document.createElement('div');
+    body.className = 'featured-cat-body';
+    const itemsDiv = document.createElement('div');
+    itemsDiv.className = 'featured-cat-items';
+    const items = [];
+    if (cat.sublines) cat.sublines.forEach(sl => items.push(...sl.items));
+    if (cat.items) items.push(...cat.items);
+    items.forEach(i => {
+      const span = document.createElement('span');
+      span.className = 'featured-cat-item';
+      span.innerHTML = `<span class="item-name">${i.icon} ${i.name}</span> — <span class="item-price">${i.pricing}</span>`;
+      itemsDiv.appendChild(span);
+    });
+    body.appendChild(itemsDiv);
+    wrap.appendChild(header);
+    wrap.appendChild(body);
+    header.addEventListener('click', () => wrap.classList.toggle('open'));
+    featCats.appendChild(wrap);
   });
-  table.appendChild(tbody);
+}
+
+function buildExpandableRows() {
+  const container = document.getElementById('expandableRows');
+  if (!container) return;
+
+  const keys = Object.keys(MENU_DATA);
+  keys.forEach(key => {
+    const cat = MENU_DATA[key];
+    const title = document.createElement('div');
+    title.className = 'rows-section-title';
+    title.textContent = `${cat.icon} ${cat.title}`;
+    container.appendChild(title);
+
+    const items = [];
+    if (cat.sublines) cat.sublines.forEach(sl => items.push(...sl.items));
+    if (cat.items) items.push(...cat.items);
+
+    items.forEach(i => {
+      const row = document.createElement('div');
+      row.className = 'expandable-row';
+      row.innerHTML = `
+        <button class="row-trigger" type="button">
+          <span class="row-icon">${i.icon}</span>
+          <div class="row-main">
+            <div class="row-name">${i.name}</div>
+            <div class="row-price">${i.pricing}</div>
+          </div>
+          <span class="row-chevron">▾</span>
+        </button>
+        <div class="row-detail">
+          <div class="row-desc">${i.desc || ''}</div>
+          <button class="row-add" type="button">Add to cart</button>
+        </div>
+      `;
+      const trigger = row.querySelector('.row-trigger');
+      trigger.addEventListener('click', () => {
+        row.classList.toggle('open');
+      });
+      container.appendChild(row);
+    });
+  });
 }
 
 function _deadCode() { if (1) return;
@@ -273,9 +279,9 @@ function buildBento() {
 
 document.addEventListener('DOMContentLoaded', () => {
   buildAccordion();
-  buildCarousel();
-  buildPriceBands();
-  buildTable();
+  buildTwoPanel();
+  buildFeatured();
+  buildExpandableRows();
 
   // Accordion click handlers
   document.querySelectorAll('.accordion-trigger').forEach(trigger => {
