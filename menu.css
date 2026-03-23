@@ -141,6 +141,37 @@ html, body {
     align-items: start;
 }
 
+.twopanel-items--baby {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.twopanel-items--baby .twopanel-subline { grid-column: 1 / -1; }
+
+.twopanel-items--baby .twopanel-item--baby-box {
+    grid-column: span 2;
+    min-height: 220px;
+    padding: 1.5rem 1.5rem;
+}
+
+.twopanel-items--baby .twopanel-item--baby-box .item-icon { font-size: 2.2rem; }
+.twopanel-items--baby .twopanel-item--baby-box .item-name { font-size: 1.15rem; }
+.twopanel-items--baby .twopanel-item--baby-box .item-desc { font-size: 0.95rem; }
+.twopanel-items--baby .twopanel-item--baby-box .item-price { font-size: 1rem; }
+
+.twopanel-items--baby .twopanel-item--baby-dozen {
+    grid-column: 1 / -1;
+}
+
+.twopanel-items--baby .twopanel-item--baby-upgrades {
+    grid-column: 1 / 4;
+}
+
+@media (max-width: 768px) {
+    .twopanel-items--baby { grid-template-columns: 1fr; }
+    .twopanel-items--baby .twopanel-item--baby-box { grid-column: 1; }
+    .twopanel-items--baby .twopanel-item--baby-upgrades { grid-column: 1; }
+}
+
 .twopanel-item {
     display: flex;
     flex-direction: column;

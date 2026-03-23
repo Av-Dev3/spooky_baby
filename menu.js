@@ -14,12 +14,12 @@ function buildTwoPanel() {
 
     const cat = MENU_DATA[key];
     const grid = document.createElement('div');
-    grid.className = 'twopanel-items';
+    grid.className = 'twopanel-items' + (key === 'spookyBabyBundles' ? ' twopanel-items--baby' : '');
 
-    const addItem = (item) => {
+    const addItem = (item, layoutRole = null) => {
       if (item.options) {
         const div = document.createElement('div');
-        div.className = 'twopanel-item twopanel-item--bundle twopanel-item--options-card';
+        div.className = 'twopanel-item twopanel-item--bundle twopanel-item--options-card' + (key === 'spookyBabyBundles' ? ' twopanel-item--baby-dozen' : '');
         const optsHtml = item.options.map(o => {
           const label = (o.optionNum != null ? `Option ${o.optionNum} — ` : '') + o.name;
           return `<div class="option-line"><span class="option-label">${o.icon} ${label}</span><span class="option-price">${o.pricing || ''}</span></div>`;
@@ -41,7 +41,9 @@ function buildTwoPanel() {
       }
       const div = document.createElement('div');
       const isBundleSection = key === 'spookyBundles' || key === 'spookyBabyBundles';
-      div.className = 'twopanel-item' + (isBundleSection ? ' twopanel-item--bundle' : '');
+      let extraClass = isBundleSection ? ' twopanel-item--bundle' : '';
+      if (layoutRole) extraClass += ' twopanel-item--baby-' + layoutRole;
+      div.className = 'twopanel-item' + extraClass;
       const formatBundleText = (s) => (isBundleSection && s) ? s.replace(/ · /g, '<br>') : (s || '');
       const desc = item.desc ? formatBundleText(item.desc) : '';
       const pricing = item.pricing ? formatBundleText(item.pricing) : '';
@@ -74,16 +76,17 @@ function buildTwoPanel() {
     };
 
     if (cat.sublines) {
-      cat.sublines.forEach(sl => {
+      cat.sublines.forEach((sl, slIdx) => {
         const subH = document.createElement('div');
         subH.className = 'twopanel-subline';
         subH.textContent = sl.name;
         grid.appendChild(subH);
-        sl.items.forEach(i => addItem(i));
+        const role = key === 'spookyBabyBundles' ? (slIdx === 0 ? 'box' : 'dozen') : null;
+        sl.items.forEach(i => addItem(i, role));
       });
     }
     if (cat.items) {
-      cat.items.forEach(i => addItem(i));
+      cat.items.forEach(i => addItem(i, key === 'spookyBabyBundles' ? 'upgrades' : null));
     }
     if (cat.note) {
       const n = document.createElement('div');
