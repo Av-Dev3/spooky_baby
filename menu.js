@@ -52,6 +52,11 @@ function buildTwoPanel() {
       grid.appendChild(div);
     };
 
+    const isSpookyBaby = key === 'spookyBabyBundles';
+
+    if (isSpookyBaby && cat.items) {
+      cat.items.slice(0, 3).forEach(i => addItem(i));
+    }
     if (cat.sublines) {
       cat.sublines.forEach(sl => {
         if (sl.optionsBox) {
@@ -91,7 +96,11 @@ function buildTwoPanel() {
       });
     }
     if (cat.items) {
-      cat.items.forEach(i => addItem(i));
+      if (isSpookyBaby) {
+        cat.items.slice(3).forEach(i => addItem(i));
+      } else {
+        cat.items.forEach(i => addItem(i));
+      }
     }
     if (cat.note) {
       const n = document.createElement('div');
