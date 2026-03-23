@@ -18,8 +18,9 @@ function buildTwoPanel() {
 
     const addItem = (item) => {
       const div = document.createElement('div');
-      div.className = 'twopanel-item' + (key === 'spookyBundles' ? ' twopanel-item--bundle' : '');
-      const formatBundleText = (s) => (key === 'spookyBundles' && s) ? s.replace(/ · /g, '<br>') : (s || '');
+      const isBundleSection = key === 'spookyBundles' || key === 'spookyBabyBundles';
+      div.className = 'twopanel-item' + (isBundleSection ? ' twopanel-item--bundle' : '');
+      const formatBundleText = (s) => (isBundleSection && s) ? s.replace(/ · /g, '<br>') : (s || '');
       const desc = item.desc ? formatBundleText(item.desc) : '';
       const pricing = item.pricing ? formatBundleText(item.pricing) : '';
       div.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div>${desc ? `<div class="item-desc">${desc}</div>` : ''}<div class="item-price">${pricing || ''}</div><div class="item-actions"></div>`;
