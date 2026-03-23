@@ -723,7 +723,7 @@ const boxOptions = {
         container.innerHTML = '';
         const allowed = BY_THE_DOZEN_OPTIONS.filter(o => o.num <= rules.maxOptionNum);
         const optionsHtml = allowed.map(o => `
-            <div class="multi-select-option box-option" data-value="${o.name}" data-name="${o.name}">
+            <div class="custom-option box-option" data-value="${o.name}" data-name="${o.name}">
                 <label class="box-option-label">
                     <input type="checkbox" class="box-option-checkbox" value="${o.name}">
                     <span>${o.name} ($${o.price})</span>
@@ -731,15 +731,13 @@ const boxOptions = {
             </div>
         `).join('');
         container.innerHTML = `
-            <div class="multi-select-container box-options-dropdown">
-                <div class="multi-select-dropdown" id="boxOptionsDropdown">
-                    <div class="multi-select-trigger" id="boxOptionsTrigger">
-                        <span class="dropdown-text">Select ${rules.choicesCount} items...</span>
-                        <span class="dropdown-arrow">👻</span>
-                    </div>
-                    <div class="multi-select-options" id="boxOptionsOptions">
-                        ${optionsHtml}
-                    </div>
+            <div class="custom-dropdown" id="boxOptionsDropdown">
+                <div class="custom-dropdown-trigger" id="boxOptionsTrigger">
+                    <span class="dropdown-text">Select ${rules.choicesCount} items...</span>
+                    <span class="dropdown-arrow">👻</span>
+                </div>
+                <div class="custom-dropdown-options" id="boxOptionsOptions">
+                    ${optionsHtml}
                 </div>
                 <input type="hidden" name="boxChoices" id="boxChoicesInput" value="">
             </div>
@@ -787,6 +785,12 @@ const boxOptions = {
             e.preventDefault();
             e.stopPropagation();
             dropdown.classList.toggle('open');
+            const formGroup = dropdown.closest('.form-group');
+            if (dropdown.classList.contains('open')) {
+                formGroup?.classList.add('dropdown-open');
+            } else {
+                formGroup?.classList.remove('dropdown-open');
+            }
         });
 
         optionsContainer.querySelectorAll('.box-option-checkbox').forEach(cb => {
@@ -2908,6 +2912,7 @@ document.addEventListener('click', (e) => {
     const boxOptionsDropdown = document.getElementById('boxOptionsDropdown');
     if (boxOptionsDropdown && !boxOptionsDropdown.contains(e.target)) {
         boxOptionsDropdown.classList.remove('open');
+        boxOptionsDropdown.closest('.form-group')?.classList.remove('dropdown-open');
     }
 });
 

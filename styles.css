@@ -2401,12 +2401,33 @@ select.form-select option:hover,
   cursor: not-allowed;
 }
 
-.box-options-dropdown .box-option-label {
+/* Box options dropdown - matches custom-dropdown, options with checkboxes */
+#boxOptionsOptions .custom-option.box-option {
+  opacity: 1;
+  font-style: normal;
+}
+
+#boxOptionsOptions .custom-option.box-option:first-child {
+  opacity: 1;
+  font-style: normal;
+}
+
+.box-option-label {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
   width: 100%;
+  color: inherit;
+  font-weight: inherit;
+}
+
+.box-option-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-pink);
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .multi-select-option input[type="checkbox"] {
