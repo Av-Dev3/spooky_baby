@@ -1,5 +1,35 @@
 // Cart Test Page - Menu with working Add to Cart, Bundle config modal
 
+// Parse pricing string into [{ label, price }] for buttons
+function parsePricingOptions(pricingStr) {
+    if (!pricingStr || /contact|custom|seasonal|availability|edition|time/i.test(pricingStr)) return [];
+    const options = [];
+    const segments = pricingStr.split(/\s*·\s*/);
+    for (const seg of segments) {
+        const trimmed = seg.trim();
+        if (!trimmed || trimmed.includes('+$')) continue; // Skip add-on pricing
+        // "6-Pack: $20" or "Individual: $3" or "Dozen: $35"
+        const colonMatch = trimmed.match(/([^:]+):\s*\$(\d+)/);
+        if (colonMatch) {
+            options.push({ label: colonMatch[1].trim(), price: parseInt(colonMatch[2], 10) });
+            continue;
+        }
+        // "$4 each" or "$36/dozen"
+        const eachMatch = trimmed.match(/\$(\d+)\s*\/?\s*(each|dozen)/i);
+        if (eachMatch) {
+            const unit = eachMatch[2].toLowerCase() === 'dozen' ? 'Dozen' : 'Each';
+            options.push({ label: unit, price: parseInt(eachMatch[1], 10) });
+            continue;
+        }
+        // "$45" or "$120" standalone
+        const simpleMatch = trimmed.match(/\$(\d+)/);
+        if (simpleMatch && !trimmed.includes('+')) {
+            options.push({ label: 'Add', price: parseInt(simpleMatch[1], 10) });
+        }
+    }
+    return options;
+}
+
 const BOX_RULES = {
     'Treat Box': { price: 65, choicesCount: 2, maxOptionNum: 7 },
     'Party Box': { price: 95, choicesCount: 3, maxOptionNum: 8 },
@@ -90,9 +120,10 @@ function buildTestMenu() {
                 addOrderBtn();
             } else if (item.cart && typeof window.addToCart === 'function') {
                 item.cart.forEach(c => {
+                    const label = c.name.includes('6-Pack') ? '6-Pack' : c.name.includes('Dozen') ? 'Dozen' : 'Add';
                     const btn = document.createElement('button');
                     btn.className = 'btn btn-yellow add-to-cart-btn';
-                    btn.textContent = c.name.includes('6-Pack') ? 'Add 6-Pack' : 'Add Dozen';
+                    btn.textContent = 'Add ' + label;
                     btn.addEventListener('click', () => addToCartAndRefresh({
                         name: c.name,
                         description: item.desc || '',
@@ -104,20 +135,21 @@ function buildTestMenu() {
                 });
                 addOrderBtn();
             } else {
-                const priceMatch = (item.pricing || '').match(/\$(\d+)/);
-                if (priceMatch && !item.pricing?.toLowerCase().includes('contact')) {
-                    const price = parseInt(priceMatch[1], 10);
-                    const btn = document.createElement('button');
-                    btn.className = 'btn btn-yellow add-to-cart-btn';
-                    btn.textContent = 'Add to Cart';
-                    btn.addEventListener('click', () => addToCartAndRefresh({
-                        name: item.name,
-                        description: item.desc || '',
-                        price,
-                        icon: item.icon,
-                        category: key
-                    }));
-                    actions.appendChild(btn);
+                const priceOptions = parsePricingOptions(item.pricing);
+                if (priceOptions.length > 0) {
+                    priceOptions.forEach(opt => {
+                        const btn = document.createElement('button');
+                        btn.className = 'btn btn-yellow add-to-cart-btn';
+                        btn.textContent = opt.label === 'Add' ? 'Add to Cart' : `Add ${opt.label}`;
+                        btn.addEventListener('click', () => addToCartAndRefresh({
+                            name: `${item.name} (${opt.label})`,
+                            description: item.desc || '',
+                            price: opt.price,
+                            icon: item.icon,
+                            category: key
+                        }));
+                        actions.appendChild(btn);
+                    });
                 }
                 addOrderBtn();
             }
