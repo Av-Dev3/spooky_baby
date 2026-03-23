@@ -2420,14 +2420,20 @@ select.form-select option:hover,
   width: 100%;
   color: inherit;
   font-weight: inherit;
+  pointer-events: auto;
+  user-select: none;
 }
 
 .box-option-label input[type="checkbox"] {
   width: 18px;
   height: 18px;
+  min-width: 18px;
   accent-color: var(--accent-pink);
   flex-shrink: 0;
   cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .multi-select-option input[type="checkbox"] {

@@ -793,21 +793,19 @@ const boxOptions = {
             }
         });
 
-        optionsContainer.querySelectorAll('.box-option-checkbox').forEach(cb => {
-            cb.addEventListener('change', (e) => {
-                e.stopPropagation();
-                updateState();
-            });
-        });
-
         optionsContainer.addEventListener('click', (e) => {
             const opt = e.target.closest('.box-option');
             if (!opt || opt.classList.contains('box-option-disabled')) return;
             const cb = opt.querySelector('.box-option-checkbox');
-            if (cb && !cb.disabled) {
-                cb.checked = !cb.checked;
-                updateState();
-            }
+            if (!cb || cb.disabled) return;
+            // Don't manually toggle when checkbox/label clicked - let native behavior handle it
+            if (e.target === cb || e.target.closest('label')) return;
+            cb.checked = !cb.checked;
+            updateState();
+        });
+
+        optionsContainer.querySelectorAll('.box-option-checkbox').forEach(cb => {
+            cb.addEventListener('change', () => updateState());
         });
     }
 };
