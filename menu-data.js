@@ -86,24 +86,34 @@ const MENU_DATA = {
     title: 'Spooky Baby Bundles',
     sublines: [
       {
-        name: '🍫 By the Dozen',
-        optionsBox: true,
+        name: 'Step 1: Pick your box',
         items: [
-          { icon: '🍪', name: 'Dipped Oreos', desc: '', pricing: '$20', optionNum: 1 },
-          { icon: '🍘', name: 'Dipped Rice Krispies', desc: '', pricing: '$20', optionNum: 2 },
-          { icon: '🥨', name: 'Dipped Pretzel Rods', desc: '', pricing: '$20', optionNum: 3 },
-          { icon: '🥨', name: 'Dipped Caramel Pretzel Rods', desc: '', pricing: '$26', optionNum: 4 },
-          { icon: '🍓', name: 'Chocolate Strawberries', desc: '', pricing: '$30', optionNum: 5 },
-          { icon: '🍭', name: 'Cake Pops', desc: '', pricing: '$32', optionNum: 6 },
-          { icon: '🧁', name: 'Cupcakes', desc: '', pricing: '$32', optionNum: 7 },
-          { icon: '🍰', name: 'Cake-sicles', desc: '', pricing: '$38', optionNum: 8 }
+          { icon: '🎁', name: 'Treat Box', desc: '2 dozen treats. Pick your choice of 2 treat dozens. Options 1–7 available. 24 pieces.', pricing: '$65' },
+          { icon: '🎉', name: 'Party Box', desc: '3 dozen treats. Pick your choice of 3 treat dozens. Options 1–8 available. 36 pieces.', pricing: '$95' },
+          { icon: '🍬', name: 'Dessert Table', desc: '4 dozen treats. Pick your choice of 4 treat dozens. Options 1–8 available. 48 pieces.', pricing: '$130' }
+        ]
+      },
+      {
+        name: 'Step 2: Pick your options',
+        items: [
+          {
+            icon: '🍫',
+            name: 'By the Dozen',
+            options: [
+              { icon: '🍪', name: 'Dipped Oreos', pricing: '$20', optionNum: 1 },
+              { icon: '🍘', name: 'Dipped Rice Krispies', pricing: '$20', optionNum: 2 },
+              { icon: '🥨', name: 'Dipped Pretzel Rods', pricing: '$20', optionNum: 3 },
+              { icon: '🥨', name: 'Dipped Caramel Pretzel Rods', pricing: '$26', optionNum: 4 },
+              { icon: '🍓', name: 'Chocolate Strawberries', pricing: '$30', optionNum: 5 },
+              { icon: '🍭', name: 'Cake Pops', pricing: '$32', optionNum: 6 },
+              { icon: '🧁', name: 'Cupcakes', pricing: '$32', optionNum: 7 },
+              { icon: '🍰', name: 'Cake-sicles', pricing: '$38', optionNum: 8 }
+            ]
+          }
         ]
       }
     ],
     items: [
-      { icon: '🎁', name: 'Treat Box', desc: '2 dozen treats. Pick your choice of 2 treat dozens. Options 1–7 available. 24 pieces.', pricing: '$65' },
-      { icon: '🎉', name: 'Party Box', desc: '3 dozen treats. Pick your choice of 3 treat dozens. Options 1–8 available. 36 pieces.', pricing: '$95' },
-      { icon: '🍬', name: 'Dessert Table', desc: '4 dozen treats. Pick your choice of 4 treat dozens. Options 1–8 available. 48 pieces.', pricing: '$130' },
       { icon: '➕', name: 'Upgrades', desc: 'Extra chocolate drizzles — $5 per dozen · Chocolate molded toppers — $5 per dozen · Edible glitter or shimmer — $10 · Individually wrapped — $10 · Custom thematic colors — $15 · Edible decorations — $15+ · Edible printed images — $15+ · Themed decor (plastic) — $15+ · Fondant decorations — $15+', pricing: '' }
     ],
     note: 'Orders must be placed at least 10 days in advance or $10 rush fee applies. 50% deposit required (non-refundable) to book. Remaining balance due upon arrival. Prices listed are starting prices; upgrades and time may increase cost.'

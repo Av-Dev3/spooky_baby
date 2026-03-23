@@ -187,60 +187,24 @@ html, body {
 
 .twopanel-subline:first-child { margin-top: 0; }
 
-.twopanel-options-box {
-    grid-column: 1 / -1;
-    width: 100%;
-    max-width: 100%;
-    padding: 1rem 1.25rem;
-    background: var(--bg-primary);
-    border: 2px solid rgba(246, 182, 207, 0.3);
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    overflow-x: hidden;
+.twopanel-item--options-card .item-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin: 0.5rem 0 0.75rem;
+    font-size: 0.85rem;
 }
 
-.twopanel-options-box .twopanel-subline {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
-}
-
-.twopanel-options-list {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.5rem 1rem;
-}
-
-.twopanel-option-row {
+.twopanel-item--options-card .option-line {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.35rem 0;
-    font-size: 0.9rem;
-    min-width: 0;
+    padding: 0.2rem 0;
 }
 
-.twopanel-option-row .option-label {
-    flex: 0 1 auto;
-    min-width: 0;
-}
-
-.twopanel-option-row .option-label { color: var(--text-primary); }
-.twopanel-option-row .option-price { color: var(--accent-yellow); font-weight: 600; white-space: nowrap; }
-.twopanel-option-order {
-    grid-column: 1 / -1;
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid rgba(246, 182, 207, 0.2);
-    display: flex;
-    justify-content: center;
-}
-
-@media (max-width: 768px) {
-    .twopanel-options-list { grid-template-columns: repeat(2, 1fr); }
-}
+.twopanel-item--options-card .option-label { color: var(--text-primary); }
+.twopanel-item--options-card .option-price { color: var(--accent-yellow); font-weight: 600; flex-shrink: 0; }
 
 @media (max-width: 600px) {
     .menu-twopanel { flex-direction: column; min-height: 320px; }
