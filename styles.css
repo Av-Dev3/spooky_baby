@@ -657,6 +657,10 @@ body {
 .twopanel-item .item-price { color: var(--accent-yellow); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
 .twopanel-item .item-actions { margin-top: auto; padding-top: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
+.twopanel-item--bundle .item-desc,
+.twopanel-item--bundle .item-price { font-size: 0.82rem; line-height: 1.5; }
+.twopanel-item--bundle .item-price { margin-top: 0.25rem; }
+
 .twopanel-content .twopanel-note {
   grid-column: 1 / -1;
   margin-top: 1rem;

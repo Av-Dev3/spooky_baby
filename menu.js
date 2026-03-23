@@ -18,8 +18,11 @@ function buildTwoPanel() {
 
     const addItem = (item) => {
       const div = document.createElement('div');
-      div.className = 'twopanel-item';
-      div.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div>${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}<div class="item-price">${item.pricing}</div><div class="item-actions"></div>`;
+      div.className = 'twopanel-item' + (key === 'spookyBundles' ? ' twopanel-item--bundle' : '');
+      const formatBundleText = (s) => (key === 'spookyBundles' && s) ? s.replace(/ · /g, '<br>') : (s || '');
+      const desc = item.desc ? formatBundleText(item.desc) : '';
+      const pricing = item.pricing ? formatBundleText(item.pricing) : '';
+      div.innerHTML = `<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div>${desc ? `<div class="item-desc">${desc}</div>` : ''}<div class="item-price">${pricing || ''}</div><div class="item-actions"></div>`;
       const actions = div.querySelector('.item-actions');
 
       if (item.cart && typeof addToCart === 'function') {
