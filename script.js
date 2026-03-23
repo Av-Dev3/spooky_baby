@@ -4,6 +4,24 @@ const CONFIG = {
     EMAIL_FALLBACK: 'spookybabysweets@gmail.com'
 };
 
+// Spooky Baby Box rules: { choicesCount, maxOptionNum } — options 1 through maxOptionNum
+const BOX_RULES = {
+    'treat-box': { choicesCount: 2, maxOptionNum: 7, label: 'Pick your 2 treat dozens (Options 1–7)' },
+    'party-box': { choicesCount: 3, maxOptionNum: 8, label: 'Pick your 3 treat dozens (Options 1–8)' },
+    'dessert-table': { choicesCount: 4, maxOptionNum: 8, label: 'Pick your 4 treat dozens (Options 1–8)' }
+};
+
+const BY_THE_DOZEN_OPTIONS = [
+    { num: 1, name: 'Dipped Oreos', price: 20 },
+    { num: 2, name: 'Dipped Rice Krispies', price: 20 },
+    { num: 3, name: 'Dipped Pretzel Rods', price: 20 },
+    { num: 4, name: 'Dipped Caramel Pretzel Rods', price: 26 },
+    { num: 5, name: 'Chocolate Strawberries', price: 30 },
+    { num: 6, name: 'Cake Pops', price: 32 },
+    { num: 7, name: 'Cupcakes', price: 32 },
+    { num: 8, name: 'Cake-sicles', price: 38 }
+];
+
 // ===== DOM ELEMENTS =====
 const elements = {
     navLinks: document.querySelectorAll('.nav-link'),
@@ -529,6 +547,24 @@ const formHandler = {
             requiredFields.push('customFlavor');
         }
         
+        // Check if Spooky Baby Box options are visible
+        const boxOptionsGroup = document.getElementById('boxOptionsGroup');
+        const itemValue = data.item || '';
+        if (boxOptionsGroup && boxOptionsGroup.style.display !== 'none' && BOX_RULES[itemValue]) {
+            const rules = BOX_RULES[itemValue];
+            for (let i = 1; i <= rules.choicesCount; i++) {
+                const val = (data[`boxChoice${i}`] || '').trim();
+                if (!val) {
+                    utils.showMessage(
+                        elements.formMessage,
+                        `Please select all ${rules.choicesCount} treat choices (Choice ${i} is missing)`,
+                        'error'
+                    );
+                    return false;
+                }
+            }
+        }
+
         // Check if Valentine's Day option field is visible and add it to required fields
         const valentinesDayGroup = document.getElementById('valentinesDayGroup');
         if (valentinesDayGroup && valentinesDayGroup.style.display !== 'none') {
@@ -662,6 +698,64 @@ This order was submitted via the website contact form.
     }
 };
 
+// ===== BOX OPTIONS (Spooky Baby Bundles) =====
+const boxOptions = {
+    buildChoices(boxType) {
+        const rules = BOX_RULES[boxType];
+        if (!rules) return;
+        const container = document.getElementById('boxChoicesContainer');
+        const labelEl = document.getElementById('boxOptionsLabel');
+        if (!container || !labelEl) return;
+        labelEl.textContent = rules.label;
+        container.innerHTML = '';
+        const allowed = BY_THE_DOZEN_OPTIONS.filter(o => o.num <= rules.maxOptionNum);
+        for (let i = 1; i <= rules.choicesCount; i++) {
+            const row = document.createElement('div');
+            row.className = 'box-choice-row';
+            row.innerHTML = `
+                <label class="box-choice-label">Choice ${i} *</label>
+                <div class="custom-dropdown box-choice-dropdown" data-choice="${i}">
+                    <div class="custom-dropdown-trigger">
+                        <span class="dropdown-text">Select option...</span>
+                        <span class="dropdown-arrow">👻</span>
+                    </div>
+                    <div class="custom-dropdown-options">
+                        <div class="custom-option" data-value="">Select option...</div>
+                        ${allowed.map(o => `<div class="custom-option" data-value="option-${o.num}" data-name="${o.name}">${o.name} ($${o.price})</div>`).join('')}
+                    </div>
+                </div>
+                <input type="hidden" name="boxChoice${i}" id="boxChoice${i}" value="">
+            `;
+            container.appendChild(row);
+            this.initChoiceDropdown(row, i);
+        }
+    },
+    initChoiceDropdown(row, choiceNum) {
+        const dd = row.querySelector('.custom-dropdown');
+        const trigger = dd.querySelector('.custom-dropdown-trigger');
+        const options = dd.querySelector('.custom-dropdown-options');
+        const hidden = row.querySelector(`input[name="boxChoice${choiceNum}"]`);
+        if (!trigger || !options || !hidden) return;
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dd.classList.toggle('open');
+            document.getElementById('itemDropdown')?.classList.remove('open');
+        });
+        options.addEventListener('click', (e) => {
+            const opt = e.target.closest('.custom-option');
+            if (!opt) return;
+            const val = opt.getAttribute('data-value');
+            const name = opt.getAttribute('data-name') || opt.textContent.trim();
+            trigger.querySelector('.dropdown-text').textContent = name || opt.textContent;
+            hidden.value = val ? name : '';
+            options.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            dd.classList.remove('open');
+        });
+    }
+};
+
 // ===== CUSTOM DROPDOWN =====
 const customDropdown = {
     init() {
@@ -736,8 +830,34 @@ const customDropdown = {
             const flavorGroup = document.getElementById('flavorGroup');
             const valentinesDayGroup = document.getElementById('valentinesDayGroup');
             const breakableHeartsGroup = document.getElementById('breakableHeartsGroup');
+            const boxOptionsGroup = document.getElementById('boxOptionsGroup');
             
-            if (value === 'valentines-day') {
+            if (value === 'treat-box' || value === 'party-box' || value === 'dessert-table') {
+                // Spooky Baby Box: hide flavor/valentines, show box choices
+                if (flavorGroup) {
+                    flavorGroup.classList.remove('show');
+                    flavorGroup.style.display = 'none';
+                    const flavorInput = document.getElementById('flavor');
+                    if (flavorInput) flavorInput.value = '';
+                }
+                if (valentinesDayGroup) {
+                    valentinesDayGroup.style.display = 'none';
+                    valentinesDayGroup.classList.remove('show');
+                }
+                if (breakableHeartsGroup) {
+                    breakableHeartsGroup.style.display = 'none';
+                    breakableHeartsGroup.classList.remove('show');
+                }
+                if (boxOptionsGroup) {
+                    boxOptionsGroup.style.display = 'block';
+                    boxOptionsGroup.classList.add('show');
+                    boxOptions.buildChoices(value);
+                }
+            } else if (value === 'valentines-day') {
+                if (boxOptionsGroup) {
+                    boxOptionsGroup.style.display = 'none';
+                    boxOptionsGroup.classList.remove('show');
+                }
                 // Hide flavor dropdown, show Valentine's Day dropdown
                 flavorGroup.classList.remove('show');
                 setTimeout(() => {
@@ -760,6 +880,10 @@ const customDropdown = {
                     breakableHeartsGroup.classList.remove('show');
                 }
             } else if (value && value !== 'custom') {
+                if (boxOptionsGroup) {
+                    boxOptionsGroup.style.display = 'none';
+                    boxOptionsGroup.classList.remove('show');
+                }
                 // Show flavor dropdown and populate options
                 if (flavorGroup) {
                     flavorGroup.style.display = 'block';
@@ -779,6 +903,10 @@ const customDropdown = {
                     breakableHeartsGroup.classList.remove('show');
                 }
             } else {
+                if (boxOptionsGroup) {
+                    boxOptionsGroup.style.display = 'none';
+                    boxOptionsGroup.classList.remove('show');
+                }
                 // Hide all dropdowns
                 if (flavorGroup) {
                     flavorGroup.classList.remove('show');
