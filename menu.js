@@ -38,7 +38,8 @@ function buildTwoPanel() {
         });
       } else {
         const a = document.createElement('a');
-        a.href = 'index.html#order';
+        const isHome = !window.location.pathname.includes('menu.html') && window.location.pathname !== '/menu';
+        a.href = isHome ? '#order' : 'index.html#order';
         a.className = 'btn btn-pink add-to-cart-btn';
         a.textContent = 'Order';
         actions.appendChild(a);

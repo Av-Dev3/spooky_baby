@@ -1431,19 +1431,10 @@ const customDropdown = {
 };
 
 // ===== CARD INTERACTIONS =====
+// Legacy: menu uses two-panel layout (menu.js). Old card/swipe/popup code removed.
 const cardInteractions = {
     init() {
-        const cards = document.querySelectorAll('.menu-card');
-        cards.forEach(card => {
-            card.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
-            card.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
-        });
-        
-        // Initialize mobile swipe menu
-        this.initMobileSwipeMenu();
-        
-        // Initialize menu item popups
-        this.initMenuItemPopups();
+        // Two-panel menu is built by menu.js; no card/swipe/popup elements exist.
     },
     
     initMobileSwipeMenu() {
