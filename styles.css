@@ -683,8 +683,7 @@ body {
 
 .twopanel-options-box {
   grid-column: 1 / -1;
-  max-width: 520px;
-  margin: 0 auto;
+  width: 100%;
   padding: 1rem 1.25rem;
   background: var(--bg-primary);
   border: 2px solid rgba(246, 182, 207, 0.3);
@@ -700,9 +699,8 @@ body {
 
 .twopanel-options-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.25rem 2rem;
-  column-gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem 1.5rem;
 }
 
 .twopanel-option-row {
@@ -711,12 +709,23 @@ body {
   align-items: center;
   gap: 0.75rem;
   padding: 0.35rem 0;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
-.twopanel-option-row .option-label { color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.twopanel-option-row .option-label { color: var(--text-primary); }
 .twopanel-option-row .option-price { color: var(--accent-yellow); font-weight: 600; white-space: nowrap; }
-.twopanel-option-order { grid-column: 1 / -1; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(246, 182, 207, 0.2); }
+.twopanel-option-order {
+  grid-column: 1 / -1;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(246, 182, 207, 0.2);
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .twopanel-options-list { grid-template-columns: repeat(2, 1fr); }
+}
 
 @media (max-width: 600px) {
   .menu-twopanel { flex-direction: column; min-height: 320px; }
