@@ -635,11 +635,6 @@ body {
   align-items: start;
 }
 
-.twopanel-items--bundles {
-  grid-template-columns: 1fr;
-  max-width: 560px;
-}
-
 .twopanel-item {
   display: flex;
   flex-direction: column;

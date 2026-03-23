@@ -14,7 +14,7 @@ function buildTwoPanel() {
 
     const cat = MENU_DATA[key];
     const grid = document.createElement('div');
-    grid.className = 'twopanel-items' + (key === 'spookyBundles' ? ' twopanel-items--bundles' : '');
+    grid.className = 'twopanel-items';
 
     const addItem = (item) => {
       const div = document.createElement('div');
