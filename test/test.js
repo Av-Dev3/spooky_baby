@@ -60,59 +60,139 @@ function buildAccordion() {
   });
 }
 
-function buildTabs() {
-  const bar = document.getElementById('tabsBar');
-  const content = document.getElementById('tabsContent');
-  if (!bar || !content) return;
+function getItemsByBand() {
+  const bands = {
+    quick: { title: 'Quick bites ($3–4 each)', items: [] },
+    shareable: { title: 'Shareable (6-packs & dozens)', items: [] },
+    custom: { title: 'Custom & seasonal', items: [] }
+  };
+  const items = getAllMenuItems();
+  items.forEach(i => {
+    const p = (i.pricing || '').toLowerCase();
+    if (p.includes('$3') || p.includes('individual') || p.includes('$4 each')) {
+      bands.quick.items.push(i);
+    } else if (p.includes('6-pack') || p.includes('dozen') || p.includes('$18') || p.includes('$20') || p.includes('$30') || p.includes('$32') || p.includes('$35') || p.includes('$36')) {
+      bands.shareable.items.push(i);
+    } else {
+      bands.custom.items.push(i);
+    }
+  });
+  return bands;
+}
+
+function buildCarousel() {
+  const track = document.getElementById('carouselTrack');
+  const prev = document.getElementById('carouselPrev');
+  const next = document.getElementById('carouselNext');
+  if (!track) return;
 
   const keys = Object.keys(MENU_DATA);
   keys.forEach((key, idx) => {
     const cat = MENU_DATA[key];
-    const btn = document.createElement('button');
-    btn.textContent = `${cat.icon} ${cat.title}`;
-    btn.dataset.category = key;
-    bar.appendChild(btn);
-
-    const panel = document.createElement('div');
-    panel.className = 'tabs-panel' + (idx === 0 ? ' active' : '');
-    panel.dataset.category = key;
-    const grid = document.createElement('div');
-    grid.className = 'tabs-grid';
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    const h4 = document.createElement('h4');
+    h4.textContent = `${cat.icon} ${cat.title}`;
+    slide.appendChild(h4);
+    const ul = document.createElement('ul');
     if (cat.sublines) {
-      cat.sublines.forEach(sl => {
-        sl.items.forEach(i => {
-          const item = document.createElement('div');
-          item.className = 'tabs-grid-item';
-          item.innerHTML = `<span class="item-name">${i.icon} ${i.name}</span><span class="item-pricing">${i.pricing}</span>`;
-          grid.appendChild(item);
-        });
-      });
+      cat.sublines.forEach(sl => sl.items.forEach(i => {
+        const li = document.createElement('li');
+        li.textContent = `${i.name} — ${i.pricing}`;
+        ul.appendChild(li);
+      }));
     } else if (cat.items) {
       cat.items.forEach(i => {
-        const item = document.createElement('div');
-        item.className = 'tabs-grid-item';
-        item.innerHTML = `<span class="item-name">${i.icon} ${i.name}</span><span class="item-pricing">${i.pricing}</span>`;
-        grid.appendChild(item);
+        const li = document.createElement('li');
+        li.textContent = `${i.name} — ${i.pricing}`;
+        ul.appendChild(li);
       });
     }
     if (cat.note) {
-      const note = document.createElement('div');
-      note.className = 'tabs-grid-item accordion-note';
-      note.textContent = cat.note;
-      note.style.marginTop = '0.5rem';
-      grid.appendChild(note);
+      const li = document.createElement('li');
+      li.className = 'accordion-note';
+      li.textContent = cat.note;
+      ul.appendChild(li);
     }
-    panel.appendChild(grid);
-    content.appendChild(panel);
+    slide.appendChild(ul);
+    track.appendChild(slide);
+  });
+
+  let idx = 0;
+  const update = () => {
+    track.style.transform = `translateX(-${idx * 100}%)`;
+  };
+  prev?.addEventListener('click', () => {
+    idx = Math.max(0, idx - 1);
+    update();
+  });
+  next?.addEventListener('click', () => {
+    idx = Math.min(keys.length - 1, idx + 1);
+    update();
   });
 }
 
-function buildScrollSidebar() {
-  const sidebar = document.getElementById('scrollSidebar');
-  const main = document.getElementById('scrollMain');
-  if (!sidebar || !main) return;
+function buildPriceBands() {
+  const container = document.getElementById('pricebands');
+  if (!container) return;
+  const bands = getItemsByBand();
+  ['quick', 'shareable', 'custom'].forEach(key => {
+    const band = bands[key];
+    if (band.items.length === 0) return;
+    const div = document.createElement('div');
+    div.className = 'priceband';
+    div.innerHTML = `<div class="priceband-header">${band.title}</div><ul class="priceband-items"></ul>`;
+    const ul = div.querySelector('ul');
+    band.items.forEach(i => {
+      const li = document.createElement('li');
+      li.textContent = `${i.icon} ${i.name} — ${i.pricing}`;
+      ul.appendChild(li);
+    });
+    container.appendChild(div);
+  });
+}
+
+function buildTable() {
+  const table = document.getElementById('menuTable');
+  if (!table) return;
+
+  const thead = document.createElement('thead');
+  thead.innerHTML = '<tr><th>Item</th><th>Price</th></tr>';
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
 
   const keys = Object.keys(MENU_DATA);
+  keys.forEach(key => {
+    const cat = MENU_DATA[key];
+    const catRow = document.createElement('tr');
+    catRow.className = 'category-row';
+    catRow.innerHTML = `<td colspan="2">${cat.icon} ${cat.title}</td>`;
+    tbody.appendChild(catRow);
+
+    const addItem = (name, pricing) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${name}</td><td>${pricing}</td>`;
+      tbody.appendChild(tr);
+    };
+    if (cat.sublines) {
+      cat.sublines.forEach(sl => {
+        sl.items.forEach(i => addItem(`${i.icon} ${i.name}`, i.pricing));
+      });
+    }
+    if (cat.items) {
+      cat.items.forEach(i => addItem(`${i.icon} ${i.name}`, i.pricing));
+    }
+    if (cat.note) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td colspan="2" class="accordion-note">${cat.note}</td>`;
+      tbody.appendChild(tr);
+    }
+  });
+  table.appendChild(tbody);
+}
+
+function _deadCode() { if (1) return;
+  const keys = [];
   keys.forEach((key, idx) => {
     const cat = MENU_DATA[key];
     const a = document.createElement('a');
@@ -193,9 +273,9 @@ function buildBento() {
 
 document.addEventListener('DOMContentLoaded', () => {
   buildAccordion();
-  buildTabs();
-  buildScrollSidebar();
-  buildBento();
+  buildCarousel();
+  buildPriceBands();
+  buildTable();
 
   // Accordion click handlers
   document.querySelectorAll('.accordion-trigger').forEach(trigger => {
@@ -211,30 +291,5 @@ document.addEventListener('DOMContentLoaded', () => {
         content?.classList.add('open');
       }
     });
-  });
-
-  // Tabs click handlers
-  const tabsBar = document.getElementById('tabsBar');
-  const tabsContent = document.getElementById('tabsContent');
-  if (tabsBar) {
-    tabsBar.addEventListener('click', (e) => {
-      const btn = e.target.closest('button');
-      if (!btn) return;
-      const cat = btn.dataset.category;
-      tabsBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      tabsContent.querySelectorAll('.tabs-panel').forEach(p => {
-        p.classList.toggle('active', p.dataset.category === cat);
-      });
-    });
-  }
-
-  // Scroll sidebar anchor clicks
-  document.getElementById('scrollSidebar')?.addEventListener('click', (e) => {
-    const a = e.target.closest('a');
-    if (!a || !a.hash) return;
-    e.preventDefault();
-    const target = document.querySelector(a.hash);
-    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });

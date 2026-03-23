@@ -162,155 +162,121 @@ body.test-page-body,
     color: var(--bg-primary);
 }
 
-#tabsContent .tabs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.75rem;
-}
-
-.tabs-grid-item {
-    padding: 0.75rem;
-    background: var(--bg-primary);
-    border: 1px solid rgba(246, 182, 207, 0.3);
-    border-radius: 10px;
-    font-size: 0.9rem;
-}
-
-.tabs-grid-item .item-name {
-    color: var(--accent-pink);
-    font-weight: 600;
-}
-
-.tabs-grid-item .item-pricing {
-    color: var(--accent-yellow);
-    font-size: 0.85rem;
-}
-
-.tabs-panel {
-    display: none;
-}
-
-.tabs-panel.active {
-    display: block;
-}
-
-/* ----- Menu: Scroll with sidebar ----- */
-.menu-scroll-sidebar-demo {
+/* ----- Menu: Carousel ----- */
+.menu-carousel-demo {
     display: flex;
-    gap: 1.5rem;
-    min-height: 360px;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.scroll-sidebar {
-    flex: 0 0 140px;
-    position: sticky;
-    top: 0;
-    align-self: flex-start;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.scroll-sidebar a {
-    padding: 0.5rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 0.9rem;
+.carousel-btn {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-pink);
+    color: var(--bg-primary);
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
     transition: all 0.2s;
 }
 
-.scroll-sidebar a:hover,
-.scroll-sidebar a.active {
-    background: rgba(246, 182, 207, 0.15);
-    color: var(--accent-pink);
+.carousel-btn:hover {
+    background: var(--accent-yellow);
 }
 
-.scroll-main {
+.carousel-viewport {
     flex: 1;
-    overflow-y: auto;
-    max-height: 360px;
+    overflow: hidden;
 }
 
-.scroll-section {
-    padding-bottom: 1.5rem;
+.carousel-track {
+    display: flex;
+    transition: transform 0.3s ease;
 }
 
-.scroll-section h4 {
+.carousel-slide {
+    flex: 0 0 100%;
+    padding: 1rem 0.5rem;
+    min-height: 240px;
+}
+
+.carousel-slide h4 {
     font-family: var(--font-heading);
     color: var(--accent-pink);
     font-size: 1.2rem;
     margin-bottom: 0.75rem;
 }
 
-.scroll-section ul {
+.carousel-slide ul {
     list-style: none;
     padding: 0;
 }
 
-.scroll-section li {
+.carousel-slide li {
     padding: 0.35rem 0;
     color: var(--text-secondary);
     font-size: 0.9rem;
-    display: flex;
-    justify-content: space-between;
 }
 
-.scroll-section .item-price {
-    color: var(--accent-yellow);
+/* ----- Menu: Price bands ----- */
+.priceband {
+    margin-bottom: 1.5rem;
 }
 
-/* ----- Menu: Bento grid ----- */
-.menu-bento-demo {
-    overflow: hidden;
-}
-
-.bento-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 80px;
-    gap: 0.75rem;
-}
-
-.bento-category {
-    padding: 1rem;
-    background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
-    border-radius: 12px;
+.priceband-header {
     font-family: var(--font-heading);
-    color: var(--bg-primary);
+    color: var(--accent-yellow);
     font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-bottom: 0.5rem;
 }
 
-.bento-category.large {
-    grid-column: span 2;
-    grid-row: span 2;
+.priceband-items {
+    list-style: none;
+    padding: 0;
 }
 
-.bento-item {
-    padding: 0.6rem;
-    background: var(--bg-primary);
-    border: 1px solid rgba(246, 182, 207, 0.3);
-    border-radius: 8px;
-    font-size: 0.8rem;
+.priceband-items li {
+    padding: 0.35rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 }
 
-.bento-item .bento-name {
+/* ----- Menu: Simple table ----- */
+.menu-table-demo {
+    overflow-x: auto;
+}
+
+.menu-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.menu-table th,
+.menu-table td {
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(246, 182, 207, 0.2);
+}
+
+.menu-table th {
     color: var(--accent-pink);
     font-weight: 600;
 }
 
-.bento-item .bento-price {
-    color: var(--accent-yellow);
-    font-size: 0.75rem;
+.menu-table td:first-child {
+    color: var(--text-primary);
 }
 
-@media (max-width: 600px) {
-    .bento-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.menu-table td:last-child {
+    color: var(--accent-yellow);
+}
+
+.menu-table tr.category-row td {
+    font-family: var(--font-heading);
+    color: var(--accent-pink);
+    padding-top: 1rem;
 }
 
 /* ----- Test Footer ----- */
