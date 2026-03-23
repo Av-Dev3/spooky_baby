@@ -2388,6 +2388,27 @@ select.form-select option:hover,
   font-weight: normal;
 }
 
+.box-option-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: rgba(30, 30, 30, 0.6);
+}
+
+.box-option-disabled:hover {
+  opacity: 0.45;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.box-options-dropdown .box-option-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  width: 100%;
+}
+
 .multi-select-option input[type="checkbox"] {
   width: 18px;
   height: 18px;

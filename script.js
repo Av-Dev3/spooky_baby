@@ -563,16 +563,15 @@ const formHandler = {
             }
             const rules = BOX_RULES[boxType];
             if (boxOptionsGroup && boxOptionsGroup.style.display !== 'none') {
-                for (let i = 1; i <= rules.choicesCount; i++) {
-                    const val = (data[`boxChoice${i}`] || '').trim();
-                    if (!val) {
-                        utils.showMessage(
-                            elements.formMessage,
-                            `Please select all ${rules.choicesCount} treat choices (Choice ${i} is missing)`,
-                            'error'
-                        );
-                        return false;
-                    }
+                const boxChoicesStr = (data.boxChoices || '').trim();
+                const choices = boxChoicesStr ? boxChoicesStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+                if (choices.length !== rules.choicesCount) {
+                    utils.showMessage(
+                        elements.formMessage,
+                        `Please pick exactly ${rules.choicesCount} items`,
+                        'error'
+                    );
+                    return false;
                 }
             }
         }
@@ -712,58 +711,99 @@ This order was submitted via the website contact form.
 
 // ===== BOX OPTIONS (Spooky Baby Bundles) =====
 const boxOptions = {
+    maxAllowed: 0,
     buildChoices(boxType) {
         const rules = BOX_RULES[boxType];
         if (!rules) return;
         const container = document.getElementById('boxChoicesContainer');
         const labelEl = document.getElementById('boxOptionsLabel');
         if (!container || !labelEl) return;
-        labelEl.textContent = rules.label;
+        this.maxAllowed = rules.choicesCount;
+        labelEl.textContent = `Pick ${rules.choicesCount} items`;
         container.innerHTML = '';
         const allowed = BY_THE_DOZEN_OPTIONS.filter(o => o.num <= rules.maxOptionNum);
-        for (let i = 1; i <= rules.choicesCount; i++) {
-            const row = document.createElement('div');
-            row.className = 'box-choice-row';
-            row.innerHTML = `
-                <label class="box-choice-label">Choice ${i} *</label>
-                <div class="custom-dropdown box-choice-dropdown" data-choice="${i}">
-                    <div class="custom-dropdown-trigger">
-                        <span class="dropdown-text">Select option...</span>
+        const optionsHtml = allowed.map(o => `
+            <div class="multi-select-option box-option" data-value="${o.name}" data-name="${o.name}">
+                <label class="box-option-label">
+                    <input type="checkbox" class="box-option-checkbox" value="${o.name}">
+                    <span>${o.name} ($${o.price})</span>
+                </label>
+            </div>
+        `).join('');
+        container.innerHTML = `
+            <div class="multi-select-container box-options-dropdown">
+                <div class="multi-select-dropdown" id="boxOptionsDropdown">
+                    <div class="multi-select-trigger" id="boxOptionsTrigger">
+                        <span class="dropdown-text">Select ${rules.choicesCount} items...</span>
                         <span class="dropdown-arrow">👻</span>
                     </div>
-                    <div class="custom-dropdown-options">
-                        <div class="custom-option" data-value="">Select option...</div>
-                        ${allowed.map(o => `<div class="custom-option" data-value="option-${o.num}" data-name="${o.name}">${o.name} ($${o.price})</div>`).join('')}
+                    <div class="multi-select-options" id="boxOptionsOptions">
+                        ${optionsHtml}
                     </div>
                 </div>
-                <input type="hidden" name="boxChoice${i}" id="boxChoice${i}" value="">
-            `;
-            container.appendChild(row);
-            this.initChoiceDropdown(row, i);
-        }
+                <input type="hidden" name="boxChoices" id="boxChoicesInput" value="">
+            </div>
+        `;
+        this.initBoxOptionsDropdown();
     },
-    initChoiceDropdown(row, choiceNum) {
-        const dd = row.querySelector('.custom-dropdown');
-        const trigger = dd.querySelector('.custom-dropdown-trigger');
-        const options = dd.querySelector('.custom-dropdown-options');
-        const hidden = row.querySelector(`input[name="boxChoice${choiceNum}"]`);
-        if (!trigger || !options || !hidden) return;
+    initBoxOptionsDropdown() {
+        const dropdown = document.getElementById('boxOptionsDropdown');
+        const trigger = document.getElementById('boxOptionsTrigger');
+        const optionsContainer = document.getElementById('boxOptionsOptions');
+        const hiddenInput = document.getElementById('boxChoicesInput');
+        if (!dropdown || !trigger || !optionsContainer || !hiddenInput) return;
+
+        const updateState = () => {
+            const checkboxes = optionsContainer.querySelectorAll('.box-option-checkbox:checked');
+            const selected = Array.from(checkboxes).map(cb => cb.value);
+            const count = selected.length;
+            const max = this.maxAllowed;
+
+            hiddenInput.value = selected.join(',');
+
+            optionsContainer.querySelectorAll('.box-option').forEach(opt => {
+                const cb = opt.querySelector('.box-option-checkbox');
+                const isChecked = cb?.checked;
+                if (count >= max && !isChecked) {
+                    opt.classList.add('box-option-disabled');
+                    if (cb) cb.disabled = true;
+                } else {
+                    opt.classList.remove('box-option-disabled');
+                    if (cb) cb.disabled = false;
+                }
+            });
+
+            const selectedNames = Array.from(checkboxes).map(cb => cb.closest('.box-option')?.dataset.name || cb.value);
+            if (count > 0) {
+                trigger.querySelector('.dropdown-text').textContent = count >= max
+                    ? selectedNames.join(', ')
+                    : `${count} of ${max} selected`;
+            } else {
+                trigger.querySelector('.dropdown-text').textContent = `Select ${max} items...`;
+            }
+        };
+
         trigger.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            dd.classList.toggle('open');
-            document.getElementById('itemDropdown')?.classList.remove('open');
+            dropdown.classList.toggle('open');
         });
-        options.addEventListener('click', (e) => {
-            const opt = e.target.closest('.custom-option');
-            if (!opt) return;
-            const val = opt.getAttribute('data-value');
-            const name = opt.getAttribute('data-name') || opt.textContent.trim();
-            trigger.querySelector('.dropdown-text').textContent = name || opt.textContent;
-            hidden.value = val ? name : '';
-            options.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
-            opt.classList.add('selected');
-            dd.classList.remove('open');
+
+        optionsContainer.querySelectorAll('.box-option-checkbox').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                e.stopPropagation();
+                updateState();
+            });
+        });
+
+        optionsContainer.addEventListener('click', (e) => {
+            const opt = e.target.closest('.box-option');
+            if (!opt || opt.classList.contains('box-option-disabled')) return;
+            const cb = opt.querySelector('.box-option-checkbox');
+            if (cb && !cb.disabled) {
+                cb.checked = !cb.checked;
+                updateState();
+            }
         });
     }
 };
@@ -2857,6 +2897,17 @@ document.addEventListener('click', (e) => {
     
     if (breakableHeartsDropdown && !breakableHeartsDropdown.contains(e.target)) {
         breakableHeartsDropdown.classList.remove('open');
+    }
+
+    const boxTypeDropdown = document.getElementById('boxTypeDropdown');
+    if (boxTypeDropdown && !boxTypeDropdown.contains(e.target)) {
+        boxTypeDropdown.classList.remove('open');
+        boxTypeDropdown.closest('.form-group')?.classList.remove('dropdown-open');
+    }
+
+    const boxOptionsDropdown = document.getElementById('boxOptionsDropdown');
+    if (boxOptionsDropdown && !boxOptionsDropdown.contains(e.target)) {
+        boxOptionsDropdown.classList.remove('open');
     }
 });
 
