@@ -67,5 +67,18 @@ const MENU_DATA = {
       { icon: '🎁', name: 'Seasonal Variety Packs', desc: 'Mixed selection of seasonal treats and flavors', pricing: 'Limited time' }
     ],
     note: 'Requests open for custom creations! Seasonal items available during specific times.'
+  },
+  spookyBundles: {
+    icon: '🎃',
+    title: 'Spooky Party Bundles',
+    items: [
+      { icon: '🍰', name: 'Bento Cakes', desc: 'Perfect for small celebrations. 5–6" mini cake with a simple buttercream design. Writing included.', pricing: '$45 · Add edible image: +$10' },
+      { icon: '🎂', name: 'Classic', desc: '8" cake, 2 layers with a simple buttercream design. Writing included.', pricing: '$65 · Custom theme: +$20 · Edible image: +$15' },
+      { icon: '🎉', name: 'Cake Bundle', desc: 'Perfect for birthdays. Includes: 6" cake, 1 dozen cupcakes, 1 dozen cake pops.', pricing: '$120' },
+      { icon: '✨', name: 'Deluxe', desc: '"The party stopper". Includes: 8" cake, 1 dozen cupcakes, 1 dozen cake pops, 1 dozen dipped treats (Oreos or Pretzels).', pricing: '$170' },
+      { icon: '👑', name: 'Ultimate', desc: '"The ultimate package". Includes: 8–10" cake, 2 dozen cupcakes, 2 dozen cake pops, 2 dozen dipped treats.', pricing: '$220' },
+      { icon: '➕', name: 'Upgrades', desc: 'Custom theme design — $20+ · Edible image topper — $15 · Fondant decorations — $15+ · Gold leaf or shimmers — $10', pricing: '' }
+    ],
+    note: 'Orders must be placed 10 days in advance. 50% deposit required to secure order. Remaining balance due at pickup.'
   }
 };
