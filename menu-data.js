@@ -87,15 +87,16 @@ const MENU_DATA = {
     sublines: [
       {
         name: '🍫 By the Dozen',
+        optionsBox: true,
         items: [
-          { icon: '🍪', name: 'Dipped Oreos', desc: '', pricing: '$20' },
-          { icon: '🍘', name: 'Dipped Rice Krispies', desc: '', pricing: '$20' },
-          { icon: '🥨', name: 'Dipped Pretzel Rods', desc: '', pricing: '$20' },
-          { icon: '🥨', name: 'Dipped Caramel Pretzel Rods', desc: '', pricing: '$26' },
-          { icon: '🍓', name: 'Chocolate Strawberries', desc: '', pricing: '$30' },
-          { icon: '🍭', name: 'Cake Pops', desc: '', pricing: '$32' },
-          { icon: '🧁', name: 'Cupcakes', desc: '', pricing: '$32' },
-          { icon: '🍰', name: 'Cake-sicles', desc: '', pricing: '$38' }
+          { icon: '🍪', name: 'Dipped Oreos', desc: '', pricing: '$20', optionNum: 1 },
+          { icon: '🍘', name: 'Dipped Rice Krispies', desc: '', pricing: '$20', optionNum: 2 },
+          { icon: '🥨', name: 'Dipped Pretzel Rods', desc: '', pricing: '$20', optionNum: 3 },
+          { icon: '🥨', name: 'Dipped Caramel Pretzel Rods', desc: '', pricing: '$26', optionNum: 4 },
+          { icon: '🍓', name: 'Chocolate Strawberries', desc: '', pricing: '$30', optionNum: 5 },
+          { icon: '🍭', name: 'Cake Pops', desc: '', pricing: '$32', optionNum: 6 },
+          { icon: '🧁', name: 'Cupcakes', desc: '', pricing: '$32', optionNum: 7 },
+          { icon: '🍰', name: 'Cake-sicles', desc: '', pricing: '$38', optionNum: 8 }
         ]
       }
     ],
