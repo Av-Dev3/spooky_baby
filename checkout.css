@@ -198,16 +198,77 @@ html, body {
 /* Square payment section (checkout) */
 .square-payment-section {
     margin-top: 1.5rem;
+    padding: 1.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(246, 182, 207, 0.3);
+    background: rgba(38, 38, 38, 0.5);
+    border: 1px solid rgba(255, 193, 7, 0.25);
+    border-radius: 16px;
+}
+
+.square-payment-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.square-lock-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(76, 175, 80, 0.2);
+    border-radius: 10px;
+    color: #4ade80;
+}
+
+.square-lock-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.square-payment-header-text {
+    flex: 1;
+}
+
+.square-payment-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.square-payment-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
 }
 
 .square-payment-instruction {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-primary);
-    text-align: center;
     margin-bottom: 1rem;
+}
+
+.square-powered-by {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0.75rem 0 0;
+    text-align: center;
+}
+
+.square-powered-by a {
+    color: var(--accent-yellow);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.square-powered-by a:hover {
+    text-decoration: underline;
 }
 
 .square-payment-divider {

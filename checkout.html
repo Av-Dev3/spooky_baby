@@ -156,9 +156,19 @@
                         </div>
 
                         <div class="square-payment-section" id="checkoutSquareSection">
-                            <p class="square-payment-instruction">Pay 50% deposit to place your order</p>
+                            <div class="square-payment-header">
+                                <span class="square-lock-icon" aria-hidden="true">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <div class="square-payment-header-text">
+                                    <h3 class="square-payment-title">Pay securely with Square</h3>
+                                    <p class="square-payment-subtitle">Your card details are secure. Payment is processed by Square—we never see or store your card number.</p>
+                                </div>
+                            </div>
+                            <p class="square-payment-instruction">Enter your card below to pay your 50% deposit and place your order</p>
                             <div id="checkoutSquareCardContainer" class="square-card-container"></div>
                             <button type="button" class="btn btn-pink btn-full" id="checkoutSquarePayBtn" disabled>Pay 50% deposit & place order</button>
+                            <p class="square-powered-by">Powered by <a href="https://squareup.com" target="_blank" rel="noopener">Square</a></p>
                             <div class="square-payment-message" id="checkoutSquareMessage"></div>
                         </div>
                     </form>
