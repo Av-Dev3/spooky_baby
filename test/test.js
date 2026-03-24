@@ -44,6 +44,17 @@ const BOX_RULES = {
     'Dessert Table': { price: 130, choicesCount: 4, maxOptionNum: 8 }
 };
 
+// Test-only menu section (2¢ item for payment testing)
+const TEST_MENU_EXTRA = {
+    test: {
+        icon: '🧪',
+        title: 'Test',
+        items: [
+            { icon: '🧪', name: 'Test', desc: 'Test item for payment flow', pricing: '$0.02', cart: [{ name: 'Test', price: 0.02 }] }
+        ]
+    }
+};
+
 function getByTheDozenOptions() {
     const cat = MENU_DATA?.spookyBabyBundles;
     const opts = cat?.sublines?.[1]?.items?.[0]?.options;
@@ -60,14 +71,15 @@ function buildTestMenu() {
     const content = document.getElementById('twopanelContent');
     if (!sidebar || !content || typeof MENU_DATA === 'undefined') return;
 
-    const keys = Object.keys(MENU_DATA);
+    const menuData = { ...MENU_DATA, ...TEST_MENU_EXTRA };
+    const keys = Object.keys(menuData);
     let activeKey = keys[0];
 
     function showCategory(key) {
         activeKey = key;
         sidebar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.key === key));
 
-        const cat = MENU_DATA[key];
+        const cat = menuData[key];
         const grid = document.createElement('div');
         grid.className = 'twopanel-items' + (key === 'spookyBabyBundles' ? ' twopanel-items--baby' : '');
 
@@ -189,7 +201,7 @@ function buildTestMenu() {
     }
 
     keys.forEach(key => {
-        const cat = MENU_DATA[key];
+        const cat = menuData[key];
         const btn = document.createElement('button');
         btn.textContent = `${cat.icon} ${cat.title}`;
         btn.dataset.key = key;
