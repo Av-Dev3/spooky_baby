@@ -84,12 +84,26 @@
     const section = document.getElementById('squarePaymentSection');
     const cart = JSON.parse(localStorage.getItem('spookyCart') || '[]');
     const hasItems = cart.length > 0 && cart.reduce((s, i) => s + (i.price || 0) * (i.quantity || 1), 0) > 0;
+    const msgEl = document.getElementById('squarePaymentMessage');
+    const cardContainer = document.getElementById('squareCardContainer');
+    const payBtn = document.getElementById('squarePayBtn');
 
-    if (section) {
-      section.style.display = hasItems && isConfigured ? 'block' : 'none';
-      if (hasItems && isConfigured && !card) {
-        initSquare();
+    if (!section) return;
+
+    if (isConfigured) {
+      section.style.display = 'block';
+      if (hasItems) {
+        if (msgEl) msgEl.textContent = '';
+        if (payBtn) payBtn.style.display = 'block';
+        if (cardContainer) cardContainer.style.display = 'block';
+        if (!card) initSquare();
+      } else {
+        if (msgEl) { msgEl.textContent = 'Add items to cart to pay with Square'; msgEl.className = 'square-payment-message'; }
+        if (payBtn) { payBtn.style.display = 'none'; payBtn.disabled = true; }
+        if (cardContainer) cardContainer.style.display = 'none';
       }
+    } else {
+      section.style.display = 'none';
     }
   }
 
