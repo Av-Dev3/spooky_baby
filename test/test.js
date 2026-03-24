@@ -243,7 +243,7 @@ function refreshCartPanel() {
     countEl.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
 
     let total = 0;
-    list.innerHTML = cart.map(item => {
+    list.innerHTML = cart.map((item, idx) => {
         const qty = item.quantity || 1;
         const sub = (item.price || 0) * qty;
         total += sub;
@@ -253,16 +253,32 @@ function refreshCartPanel() {
                     <div class="cart-panel-item-name">${item.icon || '🍬'} ${item.name}</div>
                     ${item.description ? `<div class="cart-panel-item-desc">${item.description}</div>` : ''}
                 </div>
-                <div class="cart-panel-item-qty">${qty} × $${(item.price || 0).toFixed(2)}</div>
+                <div class="cart-panel-item-right">
+                    <span class="cart-panel-item-qty">${qty} × $${(item.price || 0).toFixed(2)}</span>
+                    <button type="button" class="cart-panel-remove-btn" title="Remove" data-index="${idx}" aria-label="Remove item">×</button>
+                </div>
             </div>
         `;
     }).join('');
+
+    list.querySelectorAll('.cart-panel-remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => removeFromCart(parseInt(btn.dataset.index, 10)));
+    });
 
     const depositDue = total * 0.5;
     totalEl.textContent = `$${total.toFixed(2)}`;
     if (depositEl) depositEl.textContent = `$${depositDue.toFixed(2)}`;
 }
 window.refreshCartPanel = refreshCartPanel;
+
+function removeFromCart(index) {
+    const cart = JSON.parse(localStorage.getItem('spookyCart') || '[]');
+    if (index >= 0 && index < cart.length) {
+        cart.splice(index, 1);
+        localStorage.setItem('spookyCart', JSON.stringify(cart));
+        refreshCartPanel();
+    }
+}
 
 function openBundleModal(boxItem) {
     const rules = BOX_RULES[boxItem.name];

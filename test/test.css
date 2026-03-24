@@ -107,8 +107,37 @@
     margin-top: 0.25rem;
 }
 
+.cart-panel-item-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
 .cart-panel-item-qty {
     font-size: 0.85rem;
+}
+
+.cart-panel-remove-btn {
+    background: rgba(255, 107, 107, 0.3);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 107, 107, 0.5);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cart-panel-remove-btn:hover {
+    background: #ff6b6b;
+    color: white;
 }
 
 .cart-panel-footer {
