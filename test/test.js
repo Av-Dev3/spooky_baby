@@ -214,12 +214,14 @@ function refreshCartPanel() {
     const list = document.getElementById('cartItemsList');
     const countEl = document.getElementById('cartCount');
     const totalEl = document.getElementById('cartTotal');
+    const depositEl = document.getElementById('cartDepositDue');
 
     if (cart.length === 0) {
         empty.style.display = 'block';
         list.style.display = 'none';
         countEl.textContent = '0 items';
         totalEl.textContent = '$0.00';
+        if (depositEl) depositEl.textContent = '$0.00';
         return;
     }
 
@@ -244,7 +246,9 @@ function refreshCartPanel() {
         `;
     }).join('');
 
+    const depositDue = total * 0.5;
     totalEl.textContent = `$${total.toFixed(2)}`;
+    if (depositEl) depositEl.textContent = `$${depositDue.toFixed(2)}`;
 
     if (typeof window.squareShowOrHide === 'function') {
         window.squareShowOrHide();

@@ -52,7 +52,17 @@
                 <div class="cart-items-list" id="cartItemsList" style="display: none;"></div>
             </div>
             <div class="cart-panel-footer">
-                <div class="cart-total" id="cartTotal">$0.00</div>
+                <div class="cart-panel-totals">
+                    <div class="cart-panel-total-row">
+                        <span>Total:*</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                    <div class="cart-panel-deposit-row">
+                        <span>Deposit (50%):</span>
+                        <span id="cartDepositDue">$0.00</span>
+                    </div>
+                    <p class="cart-panel-deposit-note">* Half due as non-refundable deposit. Rest due at pickup or delivery.</p>
+                </div>
                 <a href="../cart.html" class="btn btn-pink btn-full">Go to Checkout</a>
                 <!-- Square payment section - shown when cart has items -->
                 <div class="square-payment-section" id="squarePaymentSection" style="display: none;">

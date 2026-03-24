@@ -293,7 +293,8 @@ html, body {
 }
 
 .cart-subtotal,
-.cart-total {
+.cart-total,
+.cart-deposit-due {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -302,7 +303,16 @@ html, body {
 
 .cart-subtotal {
     border-bottom: 1px solid rgba(255, 193, 7, 0.2);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.cart-deposit-due {
+    margin-bottom: 0.5rem;
+}
+
+.cart-deposit-due .cart-amount {
+    color: var(--accent-pink);
+    font-weight: 700;
 }
 
 .cart-label {

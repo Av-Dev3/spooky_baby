@@ -150,10 +150,36 @@
 .square-payment-message.success { color: #4ade80; }
 .square-payment-message.error { color: var(--accent-pink); }
 
-.cart-total {
-    font-size: 1.25rem;
+.cart-panel-totals {
+    margin-bottom: 1rem;
+}
+
+.cart-panel-total-row,
+.cart-panel-deposit-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.35rem 0;
+}
+
+.cart-panel-total-row {
+    font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 0.75rem;
+}
+
+.cart-panel-deposit-row {
+    font-weight: 600;
+}
+
+.cart-panel-deposit-row span:last-child {
+    color: var(--accent-pink);
+}
+
+.cart-panel-deposit-note {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin: 0.5rem 0 0;
+    line-height: 1.4;
 }
 
 /* Bundle modal */

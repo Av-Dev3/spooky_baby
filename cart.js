@@ -112,9 +112,12 @@ class CartPage {
     updateTotals() {
         const subtotal = this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
         const total = subtotal; // No tax for now
+        const depositDue = total * 0.5; // 50% non-refundable deposit
         
         document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
         document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+        const depositEl = document.getElementById('cartDepositDue');
+        if (depositEl) depositEl.textContent = `$${depositDue.toFixed(2)}`;
     }
     
     proceedToCheckout() {
