@@ -80,17 +80,10 @@ class CheckoutPage {
     }
     
     setupFormHandling() {
-        // Pre-populate cart data in hidden field
+        // Pre-populate cart data in hidden field (Square flow will refresh before submit)
         const cartDataField = document.getElementById('cartData');
         if (cartDataField) {
             cartDataField.value = JSON.stringify(this.cart);
-        }
-        
-        // Add cart summary to notes if there are items
-        if (this.cart.length > 0) {
-            const notesField = document.getElementById('notes');
-            const cartSummary = this.createCartSummary();
-            notesField.value = `Cart Order:\n${cartSummary}\n\n` + notesField.value;
         }
     }
     
@@ -107,33 +100,19 @@ class CheckoutPage {
     }
     
     handleFormSubmission(e) {
-        // Don't prevent default - let the form submit naturally
-        // This avoids CORS issues with Formspree
-        
-        // Add cart data to hidden field before submission
+        // Form only submits via Square payment flow - Square populates notes & cartData before requestSubmit
+        // Add cart data if not already set (belt-and-suspenders)
         const cartDataField = document.getElementById('cartData');
-        if (cartDataField) {
+        if (cartDataField && !cartDataField.value) {
             cartDataField.value = JSON.stringify(this.cart);
         }
         
-        // Add cart summary to notes
-        const notesField = document.getElementById('notes');
-        if (notesField && this.cart.length > 0) {
-            const cartSummary = this.createCartSummary();
-            const existingNotes = notesField.value.replace(/Cart Order:[\s\S]*?Total: \$\d+\.\d+\n\n/, '');
-            notesField.value = `Cart Order:\n${cartSummary}\n\n${existingNotes}`;
+        // Show loading state on pay button if present
+        const payBtn = document.getElementById('checkoutSquarePayBtn');
+        if (payBtn) {
+            payBtn.textContent = 'Submitting...';
+            payBtn.disabled = true;
         }
-        
-        // Show loading state
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Submitting...';
-        submitBtn.disabled = true;
-        
-        // Clear cart after form submission starts
-        setTimeout(() => {
-            localStorage.removeItem('spookyCart');
-        }, 1000);
     }
     
     

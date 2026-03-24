@@ -99,9 +99,16 @@
       const cartSummary = cart.map(i => `• ${i.name} x${i.quantity} - $${((i.price||0)*(i.quantity||1)).toFixed(2)}`).join('\n');
       const total = cart.reduce((s,i) => s + (i.price||0)*(i.quantity||1), 0);
       const depositNote = `[50% deposit of $${(depositCents/100).toFixed(2)} paid via Square. Remaining $${(total - depositCents/100).toFixed(2)} due at pickup/delivery.]`;
-      if (notesField) {
-        notesField.value = (notesField.value ? notesField.value + '\n\n' : '') + 'Cart:\n' + cartSummary + '\n\nTotal: $' + total.toFixed(2) + '\n\n' + depositNote;
-      }
+      const userInstructions = (notesField && notesField.value.trim()) ? notesField.value.trim() : '';
+      const fullNotes = [
+        '=== ORDER ===',
+        cartSummary,
+        '',
+        'Total: $' + total.toFixed(2),
+        depositNote,
+        userInstructions ? '\n=== SPECIAL INSTRUCTIONS ===\n' + userInstructions : ''
+      ].filter(Boolean).join('\n');
+      if (notesField) notesField.value = fullNotes;
 
       const cartDataField = form.querySelector('#cartData');
       if (cartDataField) cartDataField.value = JSON.stringify(cart);

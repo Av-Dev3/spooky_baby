@@ -28,7 +28,7 @@
     <section class="test-hero">
         <div class="container">
             <h1>Cart Test</h1>
-            <p>Add items from the menu. Bundle boxes require selecting treat options before adding to cart. Pay with Square in the cart panel (right side).</p>
+            <p>Add items from the menu. Bundle boxes require selecting treat options before adding to cart. Go to checkout to complete your order and pay.</p>
         </div>
     </section>
 
@@ -63,14 +63,7 @@
                     </div>
                     <p class="cart-panel-deposit-note">* Half due as non-refundable deposit. Rest due at pickup or delivery.</p>
                 </div>
-                <a href="../cart.html" class="btn btn-pink btn-full">Go to Checkout</a>
-                <!-- Square payment section - shown when cart has items -->
-                <div class="square-payment-section" id="squarePaymentSection" style="display: none;">
-                    <div class="square-payment-divider">— or pay with Square —</div>
-                    <div id="squareCardContainer" class="square-card-container"></div>
-                    <button type="button" class="btn btn-yellow btn-full" id="squarePayBtn" disabled>Pay with Card</button>
-                    <div class="square-payment-message" id="squarePaymentMessage"></div>
-                </div>
+                <a href="../checkout.html" class="btn btn-pink btn-full">Go to Checkout</a>
             </div>
         </aside>
     </div>
@@ -95,11 +88,8 @@
         </div>
     </div>
 
-    <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
-    <script src="square-config.js"></script>
     <script src="../menu-data.js"></script>
     <script src="../cart.js"></script>
     <script src="test.js"></script>
-    <script src="square-payment.js"></script>
 </body>
 </html>

@@ -103,7 +103,7 @@
                     <h2 class="form-title">Complete Your Order</h2>
                     <p class="form-subtitle">Fill in your details and we'll coordinate pickup or delivery</p>
                     
-                    <form class="order-form" id="checkoutForm" action="https://formspree.io/f/xovkawkn" method="POST">
+                    <form class="order-form" id="checkoutForm" action="https://formspree.io/f/xaqprbqr" method="POST">
                         <div class="form-group">
                             <label for="name" class="form-label">Name *</label>
                             <input type="text" id="name" name="name" class="form-input" required>
@@ -153,13 +153,12 @@
                         
                         <div class="form-actions">
                             <a href="cart.html" class="btn btn-yellow">Back to Cart</a>
-                            <button type="submit" class="btn btn-pink btn-full">Submit Order</button>
                         </div>
 
                         <div class="square-payment-section" id="checkoutSquareSection">
-                            <div class="square-payment-divider">— or pay 50% deposit with Square —</div>
+                            <p class="square-payment-instruction">Pay 50% deposit to place your order</p>
                             <div id="checkoutSquareCardContainer" class="square-card-container"></div>
-                            <button type="button" class="btn btn-yellow btn-full" id="checkoutSquarePayBtn" disabled>Pay 50% deposit & place order</button>
+                            <button type="button" class="btn btn-pink btn-full" id="checkoutSquarePayBtn" disabled>Pay 50% deposit & place order</button>
                             <div class="square-payment-message" id="checkoutSquareMessage"></div>
                         </div>
                     </form>

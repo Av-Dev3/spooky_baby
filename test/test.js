@@ -249,10 +249,6 @@ function refreshCartPanel() {
     const depositDue = total * 0.5;
     totalEl.textContent = `$${total.toFixed(2)}`;
     if (depositEl) depositEl.textContent = `$${depositDue.toFixed(2)}`;
-
-    if (typeof window.squareShowOrHide === 'function') {
-        window.squareShowOrHide();
-    }
 }
 window.refreshCartPanel = refreshCartPanel;
 
