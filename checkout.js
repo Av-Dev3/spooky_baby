@@ -49,6 +49,8 @@ class CheckoutPage {
             summaryItems.innerHTML = '<p class="empty-cart-message">No items in cart</p>';
             summarySubtotal.textContent = '$0.00';
             summaryTotal.textContent = '$0.00';
+            const depositEl = document.getElementById('summaryDepositDue');
+            if (depositEl) depositEl.textContent = '$0.00';
             return;
         }
         
@@ -68,9 +70,13 @@ class CheckoutPage {
         // Calculate totals
         const subtotal = this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
         const total = subtotal; // No tax for now
+        const depositDue = total * 0.5; // 50% non-refundable deposit
         
         summarySubtotal.textContent = `$${subtotal.toFixed(2)}`;
         summaryTotal.textContent = `$${total.toFixed(2)}`;
+        
+        const summaryDepositDue = document.getElementById('summaryDepositDue');
+        if (summaryDepositDue) summaryDepositDue.textContent = `$${depositDue.toFixed(2)}`;
     }
     
     setupFormHandling() {

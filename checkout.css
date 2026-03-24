@@ -146,7 +146,8 @@ html, body {
 }
 
 .summary-subtotal,
-.summary-total {
+.summary-total,
+.summary-deposit-due {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -155,7 +156,16 @@ html, body {
 
 .summary-subtotal {
     border-bottom: 1px solid rgba(255, 193, 7, 0.2);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-deposit-due {
+    margin-bottom: 0.5rem;
+}
+
+.summary-deposit-due .summary-amount {
+    color: var(--accent-pink);
+    font-weight: 700;
 }
 
 .summary-label {

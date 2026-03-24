@@ -115,8 +115,16 @@
     } catch (err) {
       if (msgEl) { msgEl.textContent = err.message || 'Payment failed'; msgEl.className = 'square-payment-message error'; }
       btn.disabled = false;
-      btn.textContent = 'Pay 50% deposit & place order';
+      updatePayButtonAmount();
     }
+  }
+
+  function updatePayButtonAmount() {
+    const btn = document.getElementById('checkoutSquarePayBtn');
+    if (!btn) return;
+    const depositCents = getDepositCents();
+    const depositDollars = (depositCents / 100).toFixed(2);
+    btn.textContent = `Pay $${depositDollars} (50% deposit) & place order`;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -126,6 +134,7 @@
     if (isConfigured && getTotalCents() > 0) {
       section.style.display = 'block';
       initSquare();
+      updatePayButtonAmount();
     } else {
       section.style.display = 'none';
     }
