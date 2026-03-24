@@ -87,9 +87,10 @@
                             <span class="summary-amount" id="summarySubtotal">$0.00</span>
                         </div>
                         <div class="summary-total">
-                            <span class="summary-label">Total:</span>
+                            <span class="summary-label">Total:*</span>
                             <span class="summary-amount" id="summaryTotal">$0.00</span>
                         </div>
+                        <p class="summary-deposit-note">* Half due as non-refundable deposit when order is placed. Rest due at pickup or delivery.</p>
                     </div>
                 </div>
 
@@ -150,6 +151,13 @@
                             <a href="cart.html" class="btn btn-yellow">Back to Cart</a>
                             <button type="submit" class="btn btn-pink btn-full">Submit Order</button>
                         </div>
+
+                        <div class="square-payment-section" id="checkoutSquareSection">
+                            <div class="square-payment-divider">— or pay 50% deposit with Square —</div>
+                            <div id="checkoutSquareCardContainer" class="square-card-container"></div>
+                            <button type="button" class="btn btn-yellow btn-full" id="checkoutSquarePayBtn" disabled>Pay 50% deposit & place order</button>
+                            <div class="square-payment-message" id="checkoutSquareMessage"></div>
+                        </div>
                     </form>
                     
                     <div class="form-message" id="formMessage"></div>
@@ -165,7 +173,10 @@
         </div>
     </footer>
 
+    <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <script src="square-config.js"></script>
     <script src="script.js?v=20"></script>
     <script src="checkout.js"></script>
+    <script src="checkout-square.js"></script>
 </body>
 </html>

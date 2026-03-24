@@ -178,6 +178,41 @@ html, body {
     color: var(--accent-pink);
 }
 
+.summary-deposit-note {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+    line-height: 1.5;
+}
+
+/* Square payment section (checkout) */
+.square-payment-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(246, 182, 207, 0.3);
+}
+
+.square-payment-divider {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.square-card-container {
+    min-height: 120px;
+    margin-bottom: 1rem;
+}
+
+.square-payment-message {
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.square-payment-message.success { color: #4ade80; }
+.square-payment-message.error { color: var(--accent-pink); }
+
 /* Checkout Form Section */
 .checkout-form-section {
     background: transparent;
