@@ -54,6 +54,13 @@
             <div class="cart-panel-footer">
                 <div class="cart-total" id="cartTotal">$0.00</div>
                 <a href="../cart.html" class="btn btn-pink btn-full">Go to Checkout</a>
+                <!-- Square payment section - shown when cart has items -->
+                <div class="square-payment-section" id="squarePaymentSection" style="display: none;">
+                    <div class="square-payment-divider">— or pay with Square —</div>
+                    <div id="squareCardContainer" class="square-card-container"></div>
+                    <button type="button" class="btn btn-yellow btn-full" id="squarePayBtn" disabled>Pay with Card</button>
+                    <div class="square-payment-message" id="squarePaymentMessage"></div>
+                </div>
             </div>
         </aside>
     </div>
@@ -78,8 +85,11 @@
         </div>
     </div>
 
+    <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <script src="square-config.js"></script>
     <script src="../menu-data.js"></script>
     <script src="../cart.js"></script>
     <script src="test.js"></script>
+    <script src="square-payment.js"></script>
 </body>
 </html>

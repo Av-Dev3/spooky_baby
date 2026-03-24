@@ -116,6 +116,40 @@
     border-top: 2px solid rgba(246, 182, 207, 0.3);
 }
 
+.square-payment-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(246, 182, 207, 0.3);
+}
+
+.square-payment-divider {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+.square-card-container {
+    min-height: 120px;
+    margin-bottom: 0.75rem;
+}
+
+.square-card-container iframe {
+    border-radius: 8px;
+}
+
+#squarePayBtn {
+    margin-bottom: 0.5rem;
+}
+
+.square-payment-message {
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.square-payment-message.success { color: #4ade80; }
+.square-payment-message.error { color: var(--accent-pink); }
+
 .cart-total {
     font-size: 1.25rem;
     font-weight: 700;

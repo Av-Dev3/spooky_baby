@@ -245,7 +245,12 @@ function refreshCartPanel() {
     }).join('');
 
     totalEl.textContent = `$${total.toFixed(2)}`;
+
+    if (typeof window.squareShowOrHide === 'function') {
+        window.squareShowOrHide();
+    }
 }
+window.refreshCartPanel = refreshCartPanel;
 
 function openBundleModal(boxItem) {
     const rules = BOX_RULES[boxItem.name];
