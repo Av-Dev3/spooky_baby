@@ -827,8 +827,7 @@ const customDropdown = {
         const itemInput = document.getElementById('item');
         
         if (!itemDropdown || !itemTrigger || !itemOptions || !itemInput) {
-            console.error('Custom dropdown elements not found');
-            return;
+            return; // Order form not on this page (e.g. checkout)
         }
         
         // Toggle dropdown

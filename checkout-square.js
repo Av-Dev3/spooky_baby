@@ -76,6 +76,28 @@
         throw new Error(tokenResult.errors?.[0]?.message || 'Tokenization failed');
       }
 
+      const cart = JSON.parse(localStorage.getItem('spookyCart') || '[]');
+      const total = cart.reduce((s, i) => s + (i.price || 0) * (i.quantity || 1), 0);
+      const depositPaid = depositCents / 100;
+      const deliveryRadio = form.querySelector('input[name="delivery"]:checked');
+      const phoneEl = form.querySelector('#phone');
+      const addrEl = form.querySelector('#address');
+      const dateEl = form.querySelector('#preferredDate');
+      const notesEl = form.querySelector('#notes');
+      const orderEmail = {
+        customerName: form.querySelector('#name').value.trim(),
+        customerEmail: form.querySelector('#email').value.trim(),
+        phone: phoneEl ? phoneEl.value.trim() : '',
+        delivery: deliveryRadio ? deliveryRadio.value : '',
+        address: addrEl ? addrEl.value.trim() : '',
+        preferredDate: dateEl ? dateEl.value : '',
+        notes: notesEl ? notesEl.value.trim() : '',
+        cart: cart,
+        orderTotal: total,
+        depositPaid: depositPaid,
+        balanceDue: Math.max(0, total - depositPaid)
+      };
+
       const res = await fetch('/.netlify/functions/square-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -83,7 +105,8 @@
           sourceId: tokenResult.token,
           amount: depositCents,
           currency: 'USD',
-          locationId: locationId
+          locationId: locationId,
+          orderEmail: orderEmail
         })
       });
 
@@ -92,12 +115,21 @@
         throw new Error(data.error || data.message || `Payment failed (${res.status})`);
       }
 
-      if (msgEl) { msgEl.textContent = 'Deposit paid! Submitting order...'; msgEl.className = 'square-payment-message success'; }
+      if (data.emailSent === false && data.emailError) {
+        console.warn('Order confirmation email:', data.emailError);
+      }
+
+      if (msgEl) {
+        let doneMsg = 'Deposit paid! Submitting order...';
+        if (data.emailSent === false && data.emailError) {
+          doneMsg += ' (If you do not receive a confirmation email shortly, contact us.)';
+        }
+        msgEl.textContent = doneMsg;
+        msgEl.className = 'square-payment-message success';
+      }
 
       const notesField = form.querySelector('#notes');
-      const cart = JSON.parse(localStorage.getItem('spookyCart') || '[]');
       const cartSummary = cart.map(i => `• ${i.name} x${i.quantity} - $${((i.price||0)*(i.quantity||1)).toFixed(2)}`).join('\n');
-      const total = cart.reduce((s,i) => s + (i.price||0)*(i.quantity||1), 0);
       const depositNote = `[50% deposit of $${(depositCents/100).toFixed(2)} paid via Square. Remaining $${(total - depositCents/100).toFixed(2)} due at pickup/delivery.]`;
       const userInstructions = (notesField && notesField.value.trim()) ? notesField.value.trim() : '';
       const fullNotes = [
