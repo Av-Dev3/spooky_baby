@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy, Terms &amp; Payments (draft) — Spooky Baby Sweets</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="legal.css">
+</head>
+<body>
+    <header class="header" id="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <a href="../index.html"><img src="../assets/logo_spooky.png" alt="Spooky Baby Sweets" class="logo"></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-link">← Home</a></li>
+                <li><a href="index.html" class="nav-link">Cart test</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="legal-draft-hero">
+        <div class="container">
+            <h1>Policies &amp; payments (draft)</h1>
+            <p>Edit this file (<code>test/legal.html</code>) before moving these sections to live pages. Footer links across the site point here for now.</p>
+        </div>
+    </section>
+
+    <nav class="legal-draft-nav" aria-label="On this page">
+        <a href="#privacy">Privacy</a>
+        <a href="#disclosure">Disclosure</a>
+        <a href="#terms">Terms</a>
+        <a href="#payments">Square &amp; payments</a>
+    </nav>
+
+    <main class="legal-draft-content legal-draft-page">
+        <p class="legal-note">This is a working draft. Replace the placeholder text below with your final policies and have a qualified professional review if needed.</p>
+
+        <section id="privacy" class="legal-section">
+            <h2>Privacy policy</h2>
+            <p><strong>[Draft]</strong> Spooky Baby Sweets (“we,” “us”) respects your privacy. This section describes what information we may collect when you use our website, how we use it, and your choices.</p>
+            <ul>
+                <li><strong>Information you provide:</strong> For example, name, email, phone, delivery details, and order details when you place an order or contact us.</li>
+                <li><strong>How we use it:</strong> To fulfill orders, communicate about your order, and improve our services.</li>
+                <li><strong>Third parties:</strong> Payment processing is handled by Square (see “Square &amp; payments” below). We may use email services (e.g. Resend) to send order-related messages.</li>
+                <li><strong>Cookies / analytics:</strong> [Add whether you use analytics or cookies.]</li>
+                <li><strong>Contact:</strong> For privacy questions, email <a href="mailto:spookybabysweets@gmail.com">spookybabysweets@gmail.com</a>.</li>
+            </ul>
+        </section>
+
+        <section id="disclosure" class="legal-section">
+            <h2>Disclosure</h2>
+            <p><strong>[Draft]</strong> We may disclose information when required by law, to protect our rights, or in connection with a business transfer. We do not sell your personal information to third parties for their marketing purposes. [Adjust to match your practices.]</p>
+        </section>
+
+        <section id="terms" class="legal-section">
+            <h2>Terms of use</h2>
+            <p><strong>[Draft]</strong> By using this website and placing an order, you agree to these terms. Orders are subject to availability, scheduling, and our confirmation. Pricing, deposits, and pickup/delivery policies apply as described at checkout and in communications.</p>
+            <ul>
+                <li><strong>Orders &amp; deposits:</strong> A non-refundable deposit may be required to secure your order; remaining balance is due at pickup or delivery unless stated otherwise.</li>
+                <li><strong>Cancellations / changes:</strong> [Add your policy.]</li>
+                <li><strong>Limitation of liability:</strong> [Add standard limitations appropriate for your business after legal review.]</li>
+            </ul>
+        </section>
+
+        <section id="payments" class="legal-section">
+            <h2>Square &amp; payments</h2>
+            <p><strong>[Draft]</strong> Card payments on our checkout are processed by <strong>Square, Inc.</strong> We do not store your full card number on our servers. When you pay, your card details are handled securely by Square according to their terms and privacy policy.</p>
+            <ul>
+                <li><strong>Deposits:</strong> We may charge a percentage of your order total (e.g. 50%) as a deposit when you place your order; the remainder is due at pickup or delivery as shown in your order summary and confirmation.</li>
+                <li><strong>Receipts:</strong> You may receive confirmation from Square and/or email from us about your order.</li>
+                <li><strong>More information:</strong> See Square’s documentation and legal notices at <a href="https://squareup.com/us/en/legal" target="_blank" rel="noopener noreferrer">squareup.com/legal</a>.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© <span id="legalYear"></span> Spooky Baby Sweets</p>
+            <nav class="footer-legal" aria-label="Legal">
+                <a href="#privacy">Privacy</a>
+                <span aria-hidden="true"> · </span>
+                <a href="#disclosure">Disclosure</a>
+                <span aria-hidden="true"> · </span>
+                <a href="#terms">Terms</a>
+                <span aria-hidden="true"> · </span>
+                <a href="#payments">Square &amp; payments</a>
+            </nav>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('legalYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

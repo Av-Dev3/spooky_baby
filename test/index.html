@@ -88,6 +88,24 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© <span id="testFooterYear"></span> Spooky Baby Sweets</p>
+            <nav class="footer-legal" aria-label="Legal">
+                <a href="legal.html#privacy">Privacy</a>
+                <span aria-hidden="true"> · </span>
+                <a href="legal.html#disclosure">Disclosure</a>
+                <span aria-hidden="true"> · </span>
+                <a href="legal.html#terms">Terms</a>
+                <span aria-hidden="true"> · </span>
+                <a href="legal.html#payments">Square &amp; payments</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('testFooterYear').textContent = new Date().getFullYear();
+    </script>
     <script src="../menu-data.js"></script>
     <script src="../cart.js"></script>
     <script src="test.js"></script>
