@@ -31,7 +31,7 @@ In Netlify: Site settings → Environment variables:
 |----------|-------|
 | `SQUARE_ACCESS_TOKEN` | Your Square sandbox access token |
 | `SQUARE_LOCATION_ID` | (Optional) Location ID if not sent from frontend |
-| `SQUARE_SANDBOX` | `true` for sandbox, `false` for production |
+| `SQUARE_SANDBOX` | Set to `true` only for sandbox API; omit or leave unset for **production** (default) |
 
 ## 4. Production
 

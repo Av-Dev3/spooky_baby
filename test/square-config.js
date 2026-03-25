@@ -1,7 +1,7 @@
-// Square payment configuration - Get these from https://developer.squareup.com/
-// Use sandbox credentials for testing, production for live payments
+// Square (optional; test page no longer loads Square — keep for reference or local experiments)
+// Production location YS4H002QAY208 — use Production app ID + https://web.squarecdn.com/v1/square.js
 const SQUARE_CONFIG = {
-  applicationId: 'sandbox-sq0idb-iXi7oV2eR0e3XnovoNlzcQ',
+  applicationId: 'sq0idp-XWy6rIyCVHhL4lmFsfvRfw',
   locationId: 'YS4H002QAY208',
-  useSandbox: true
+  useSandbox: false
 };

@@ -56,7 +56,8 @@ exports.handler = async (event) => {
       };
     }
 
-    const useSandbox = process.env.SQUARE_SANDBOX !== 'false';
+    // Production: set SQUARE_SANDBOX=false and use Production access token in Netlify
+    const useSandbox = process.env.SQUARE_SANDBOX === 'true';
     const base = useSandbox ? SQUARE_SANDBOX : SQUARE_PROD;
 
     const res = await fetch(`${base}/v2/payments`, {
